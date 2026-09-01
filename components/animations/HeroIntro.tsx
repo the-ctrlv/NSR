@@ -1,0 +1,95 @@
+"use client";
+
+import { useLayoutEffect, useRef } from "react";
+import type { ReactNode } from "react";
+import { gsap, registerGsap, prefersReducedMotion } from "@/lib/gsap";
+
+/**
+ * Staged hero entrance, matching the Figma storyboard (Frame 1000001971→1973):
+ * background settles first, then chrome (header/labels) fades in, then the
+ * transient "Complex matters in Mallorca" line reads clearly for a beat before
+ * the real headline rolls in to replace it, then subtext/CTA follow.
+ */
+export function HeroIntro({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const root = ref.current;
+    if (!root) return;
+
+    const bgLines = root.querySelector<HTMLElement>('[data-hero="bg-lines"]');
+    const portrait = root.querySelector<HTMLElement>('[data-hero="portrait"]');
+    const chrome = root.querySelectorAll<HTMLElement>('[data-hero="chrome"]');
+    const ghost = root.querySelector<HTMLElement>('[data-hero="ghost"]');
+    const headline = root.querySelector<HTMLElement>('[data-hero="headline"]');
+    const rest = root.querySelectorAll<HTMLElement>('[data-hero="subtext"], [data-hero="cta"]');
+
+    if (prefersReducedMotion()) {
+      if (ghost) ghost.style.display = "none";
+      return;
+    }
+
+    registerGsap();
+    const ctx = gsap.context(() => {
+      // Ambient background motion — slow, endless, independent of the entrance timeline.
+      if (bgLines) {
+        gsap.to(bgLines, {
+          rotation: 360,
+          duration: 180,
+          repeat: -1,
+          ease: "none",
+          transformOrigin: "50% 50%",
+        });
+      }
+
+      // Portrait starts oversized and settles to rest size immediately,
+      // ahead of (and independent from) the delayed chrome/headline timeline.
+      if (portrait) {
+        gsap.fromTo(
+          portrait,
+          { scale: 1.42, transformOrigin: "50% 15%" },
+          { scale: 1, duration: 1.4, ease: "power3.out", delay: 0.5 },
+        );
+      }
+
+      gsap.set(chrome, { opacity: 0, y: 12 });
+      if (ghost) gsap.set(ghost, { opacity: 0, y: 24 });
+      if (headline) gsap.set(headline, { opacity: 0, y: 24 });
+      gsap.set(rest, { opacity: 0, y: 20 });
+
+      const tl = gsap.timeline({ delay: 1, defaults: { ease: "power3.out" } });
+
+      tl.to(chrome, { opacity: 1, y: 0, duration: 0.8, stagger: 0.08 });
+
+      if (ghost) {
+        // First line rolls in and reads clearly on its own for a beat.
+        tl.to(ghost, { opacity: 1, y: 0, duration: 0.6 }, "<0.1").to(
+          ghost,
+          { opacity: 0, y: -28, duration: 0.75, ease: "sine.inOut" },
+          "+=0.55",
+        );
+      }
+
+      if (headline) {
+        // Second line rolls in just after the first starts rolling out, so
+        // both are briefly on screen together during the crossfade.
+        tl.fromTo(
+          headline,
+          { opacity: 0, y: 28 },
+          { opacity: 1, y: 0, duration: 0.75, ease: "sine.inOut" },
+          ghost ? "<+=0.2" : "+=0.2",
+        );
+      }
+
+      tl.to(rest, { opacity: 1, y: 0, duration: 0.8, stagger: 0.12 }, "-=0.3");
+    }, root);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <div ref={ref} className="contents">
+      {children}
+    </div>
+  );
+}

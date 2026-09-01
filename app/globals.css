@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand palette — from Figma design tokens (NSR Mallorca) */
+  --color-ink: #1a2437; /* Midnight Indigo — primary dark / headings on light */
+  --color-ink-dim: #4b5468;
+  --color-paper: #f5f4f3; /* base light section background */
+  --color-alabaster: #e5e4e2; /* light text on dark sections */
+  --color-hairline: #cfd2d3; /* dividers / borders */
+
+  --font-serif: var(--font-display), "Iowan Old Style", "Palatino Linotype", serif;
+  --font-sans: var(--font-body), "Helvetica Neue", Arial, sans-serif;
+
+  --text-display: 5.625rem; /* 90px hero headline */
+  --text-display--line-height: 0.9;
+  --text-display--letter-spacing: -0.01em;
+
+  --text-statement: 3.5rem; /* 56px reveal statement */
+  --text-statement--line-height: 1.25;
+
+  --text-h2: 3.25rem; /* 52px section headline */
+  --text-h2--line-height: 1.1;
+
+  --text-h3: 1.5rem; /* 24px card headline */
+  --text-h3--line-height: 1.2;
+
+  --text-line: 2.5rem; /* 40px reveal list line */
+  --text-line--line-height: 1.15;
+
+  --text-eyebrow: 0.8125rem; /* 13px label */
+  --text-eyebrow--letter-spacing: 0.02em;
+
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--color-ink);
+  color: var(--color-alabaster);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
