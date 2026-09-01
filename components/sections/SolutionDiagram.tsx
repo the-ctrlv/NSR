@@ -1,7 +1,6 @@
 import { Reveal } from "@/components/animations/Reveal";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { Sparkle } from "@/components/icons/CategoryIcons";
 import { solution } from "@/lib/content";
 
 export function SolutionDiagram() {
@@ -27,13 +26,13 @@ export function SolutionDiagram() {
 
         <Reveal
           stagger={0.15}
-          className="mt-24 flex flex-col items-center justify-center gap-6 sm:flex-row sm:gap-8 lg:gap-12"
+          className="mt-24 flex flex-row flex-wrap items-center justify-center gap-x-6 gap-y-4 sm:gap-x-8 lg:gap-x-12"
         >
           {solution.flow.map((step, i) => (
             <div key={step} className="flex items-center gap-6 sm:gap-8 lg:gap-12">
               <span
-                className={`font-serif text-3xl sm:text-4xl lg:text-5xl ${
-                  step === "NSR Mallorca" ? "text-ink" : "text-ink/50"
+                className={`font-serif text-4xl leading-none text-ink sm:text-5xl lg:text-[64px] ${
+                  step === "NSR Mallorca" ? "uppercase" : ""
                 }`}
               >
                 {step}
@@ -45,15 +44,12 @@ export function SolutionDiagram() {
           ))}
         </Reveal>
 
-        <div className="mt-16 flex flex-wrap justify-center gap-x-3 gap-y-2 border-t border-hairline pt-10 lg:justify-end">
-          {solution.professionals.map((p, i) => (
-            <span key={p} className="flex items-center gap-3 font-sans text-sm text-ink/80">
-              {p}
-              {i < solution.professionals.length - 1 && (
-                <Sparkle className="h-2 w-2 text-ink/40" />
-              )}
-            </span>
-          ))}
+        <div className="mt-16 border-t border-hairline pt-10 lg:flex lg:justify-end">
+          <ul className="list-disc pl-5 font-sans text-base leading-[1.6] text-ink/80 lg:w-[383px]">
+            {solution.professionals.map((p) => (
+              <li key={p}>{p}</li>
+            ))}
+          </ul>
         </div>
       </Container>
     </section>

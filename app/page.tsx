@@ -5,7 +5,7 @@ import { SolutionDiagram } from "@/components/sections/SolutionDiagram";
 import { AboutFounder } from "@/components/sections/AboutFounder";
 import { ApproachSteps } from "@/components/sections/ApproachSteps";
 import { ServiceCategories } from "@/components/sections/ServiceCategories";
-import { QuoteBand } from "@/components/sections/QuoteBand";
+import { PracticeCases } from "@/components/sections/PracticeCases";
 import { WorkingTogether } from "@/components/sections/WorkingTogether";
 import { FAQSection } from "@/components/sections/FAQSection";
 import { ClosingCta } from "@/components/sections/ClosingCta";
@@ -44,7 +44,7 @@ export default function Home() {
           <AboutFounder />
           <ApproachSteps />
           <ServiceCategories />
-          <QuoteBand />
+          <PracticeCases />
           <WorkingTogether />
           <FAQSection />
           <ClosingCta />

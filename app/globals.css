@@ -7,9 +7,11 @@
   --color-paper: #f5f4f3; /* base light section background */
   --color-alabaster: #e5e4e2; /* light text on dark sections */
   --color-hairline: #cfd2d3; /* dividers / borders */
+  --color-smoky: #8693a0; /* soft smoky blue — faint numerals, decorative accents */
 
   --font-serif: var(--font-display), "Iowan Old Style", "Palatino Linotype", serif;
   --font-sans: var(--font-body), "Helvetica Neue", Arial, sans-serif;
+  --font-numeral: var(--font-numeral), sans-serif;
 
   --text-display: 5.625rem; /* 90px hero headline */
   --text-display--line-height: 0.9;

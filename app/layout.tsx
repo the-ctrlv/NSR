@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import { Bebas_Neue, Manrope } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { siteConfig } from "@/lib/content";
@@ -16,7 +16,16 @@ const displayFont = localFont({
 const bodyFont = Manrope({
   variable: "--font-body",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+// Stand-in for "ET Begin Movalo Demo" (purchased font not yet supplied) — used
+// only for the tight-tracked 01-05 numerals in the NSR Approach section.
+const numeralFont = Bebas_Neue({
+  variable: "--font-numeral",
+  subsets: ["latin"],
+  weight: "400",
   display: "swap",
 });
 
@@ -66,7 +75,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${displayFont.variable} ${bodyFont.variable}`}>
+    <html lang="en" className={`${displayFont.variable} ${bodyFont.variable} ${numeralFont.variable}`}>
       <body className="bg-paper font-sans text-ink antialiased">{children}</body>
     </html>
   );

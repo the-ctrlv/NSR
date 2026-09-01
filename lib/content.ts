@@ -57,7 +57,7 @@ export const realityReveal = {
 };
 
 export const solution = {
-  eyebrow: "About",
+  eyebrow: "The Missing Link",
   heading: ["Having the right", "professionals is only part", "of the solution."],
   paragraphs: [
     "What is often missing is one person who sees the whole picture, connects the people involved and keeps the process moving.",
@@ -134,58 +134,80 @@ export const approach = {
 };
 
 export const serviceCategories = {
-  eyebrow: "Matters",
-  heading:
+  eyebrow: "Areas of Involvement",
+  intro:
     "One approach, applied to matters across your private life, property and business on Mallorca.",
   categories: [
     {
       icon: "private",
-      title: "Private Client Affairs",
+      title: "Privte Client Affairs",
       body: "Personal and family matters that require attention on Mallorca — from individual issues to more complex situations involving several parties.",
-      tags: [
-        "Administrative Matters",
-        "Family Transitions",
-        "Education",
-        "Healthcare",
-        "Banking",
-        "Insurance",
-        "Unexpected Local Issues",
+      tagRows: [
+        ["Administrative Matters", "Family Transition"],
+        ["Education", "Healthcare", "Banking", "Insurance"],
+        ["Unexpected Local Issues"],
       ],
     },
     {
       icon: "property",
       title: "Property",
-      body: "Matters related to acquiring, owning or improving property on Mallorca.",
-      tags: [
-        "Property Acquisition",
-        "Property Improvements",
-        "Contractor Matters",
-        "Ownership",
-        "Administration",
-        "Ongoing Property Issues",
+      body: "Matters related to acquiring, owning\nor improving property on Mallorca.",
+      tagRows: [
+        ["Property Acquisition", "Renovations"],
+        ["Property Improvements", "Property Administration"],
       ],
     },
     {
       icon: "business",
       title: "Business & Local Operations",
-      body: "Local matters connected to your business or company on Mallorca.",
-      tags: [
-        "Administrative Matters",
-        "Local Providers",
-        "Professional Follow-Up",
-        "Outstanding Issues",
+      body: "Local matters connected to your business\nor company on Mallorca.",
+      tagRows: [
+        ["Administrative Matters", "Local Providers"],
+        ["Business Projects", "Operational Issues"],
       ],
     },
   ],
 } as const;
 
-export const quoteBand = {
-  eyebrow: "Why NSR",
-  quote:
-    "The value isn't in knowing every answer. It's in knowing who to call, what to ask, and when to step in.",
-  body: "Every situation on Mallorca moves faster with one person accountable for the whole picture — not just their own part of it.",
-  cta: { label: "Share your situation", href: "#contact" },
-};
+export const practiceCases = {
+  eyebrow: "NSR in Practice",
+  cases: [
+    {
+      title: "Navigating local systems",
+      intro:
+        "My local understanding is grounded in more than 12 years of living on Mallorca and navigating Spanish systems first-hand — through to obtaining Spanish citizenship.",
+      roleLabel: "Experience",
+      lead: "This has involved multiple institutions and processes across:",
+      list: ["Identification", "Social Security", "Tax administration", "Municipal registration", "Healthcare, banking", "and other areas of everyday life."],
+      body: "It has given me a practical understanding of how local processes connect, where professional input may be needed and why the sequence of actions matters.",
+      counter: "01 / 03",
+    },
+    {
+      title: "Managing a family transition",
+      intro:
+        "An international family needed to establish a new base on Mallorca while remaining abroad during much of the process. What initially appeared to be a series of separate matters quickly became one interconnected project involving property, education, administration and multiple local parties.",
+      roleLabel: "My role",
+      paragraphs: [
+        "I took responsibility for structuring and coordinating the process on Mallorca, keeping decisions around location and property aligned with the family's schooling and practical priorities.",
+        "Where physical presence was required, I represented the clients locally — including attending selected property viewings and providing independent feedback to support their decisions.",
+        "Residency-related matters progressed through the relevant professionals, while I maintained oversight across the wider process and followed through locally.",
+      ],
+      counter: "02 / 03",
+    },
+    {
+      title: "Returning to business in Spain",
+      intro:
+        "A German business owner established a company in Spain in 2019, with my involvement in its local administrative coordination from the early stages. Five years after suspending its activity, he decided to return to the Spanish market.",
+      roleLabel: "My role",
+      paragraphs: [
+        "I took responsibility for structuring and coordinating the process of resuming activity, aligning the administrative steps required with the client's timeline.",
+        "Where physical presence was required, I represented the client locally — liaising with the relevant local providers and following up on outstanding administrative matters.",
+        "Professional matters progressed through the relevant advisors, while I maintained oversight across the wider process and followed through locally.",
+      ],
+      counter: "03 / 03",
+    },
+  ],
+} as const;
 
 export const workingTogether = {
   eyebrow: "Ways of Working Together",
@@ -206,43 +228,33 @@ export const workingTogether = {
 } as const;
 
 export const faq = {
-  eyebrow: "FAQ",
-  heading: "Everything you may want to know",
+  eyebrow: "Frequently Asked Questions",
+  heading: "What you may want to know",
   items: [
     {
-      question: "What exactly do you do?",
+      question: "How does the first conversation work?",
       answer:
-        "I take the lead on complex local matters on Mallorca — understanding what needs to be resolved, structuring the process, sourcing the right professionals, and coordinating and overseeing the work until it's done.",
+        "The first conversation is confidential and exploratory. We discuss your situation, what is already in place and what you would like to achieve. If NSR is a good fit, we will then define the scope of involvement and the most appropriate working format.",
     },
     {
-      question: "Do you replace lawyers, gestors or other professionals?",
+      question: "Can you work with my existing professionals — or find new ones if needed?",
       answer:
-        "No. I coordinate the process around their expertise rather than replacing it, so every specialist is focused on their part while someone stays accountable for the whole outcome.",
+        "Yes. I can work with professionals you already trust and, where additional expertise is needed, help identify and source appropriate professionals. Each professional remains responsible for their own area of expertise.",
     },
     {
-      question: "What kind of matters do you help with?",
+      question: "Do you provide legal, tax or other professional advice?",
       answer:
-        "Private client affairs, property matters and business or local operations — anything from a single administrative issue to a multi-party process involving several professionals.",
+        "No. Legal, tax, technical and other professional advice is provided by the relevant professionals. Where such expertise is required, I work alongside them while coordinating the wider process from the client's side.",
     },
     {
-      question: "How does an engagement start?",
+      question: "Do you work only with clients who live on Mallorca?",
       answer:
-        "You share your situation, we agree the objective and scope together, and I put together an action plan before bringing in the right people.",
+        "No. I work with international clients whose private, property or business matters require local involvement on Mallorca — whether they live here, spend part of their time on the island or are based abroad.",
     },
     {
-      question: "Can you represent me when I'm not on the island?",
+      question: "How are fees defined?",
       answer:
-        "Yes. Attending meetings, accessing property, liaising with professionals and following up locally on your behalf is a core part of the role.",
-    },
-    {
-      question: "Do you work on a single matter or ongoing basis?",
-      answer:
-        "Both. Engagements can be project-based with a defined scope, or ongoing for clients who want a consistent local point of contact over time.",
-    },
-    {
-      question: "Which areas of Mallorca do you work in?",
-      answer:
-        "I work across the island, with particular depth in the matters and networks relevant to private clients, property owners and business owners locally based here.",
+        "Fees depend on the scope and complexity of the matter and whether the engagement is project-based or ongoing. Once the scope of involvement is clear, the fee is agreed before the work begins.",
     },
   ],
 };
