@@ -154,7 +154,7 @@ export function RealityReveal() {
             never shows this screen; on desktop it's revealed via the scroll-driven circle wipe. */}
         <div
           ref={afterRef}
-          className="hidden min-h-screen flex-col justify-between gap-16 bg-ink px-6 py-20 sm:px-10 lg:flex lg:px-[50px]"
+          className="hidden min-h-screen flex-col gap-40 bg-ink px-6 py-20 sm:px-10 lg:flex lg:px-[50px]"
         >
           <Heading tone="alabaster" />
           <p className="mx-auto max-w-[825px] text-center font-serif text-[32px] uppercase leading-[1.25] text-alabaster sm:text-[42px] lg:text-statement">

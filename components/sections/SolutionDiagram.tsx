@@ -11,7 +11,7 @@ export function SolutionDiagram() {
       aria-labelledby="solution-heading"
     >
       <Container>
-        <Eyebrow className="mb-6">{solution.eyebrow}</Eyebrow>
+        <Eyebrow className="mb-20">{solution.eyebrow}</Eyebrow>
 
         <div className="grid gap-10 lg:grid-cols-[1fr_383px] lg:gap-16">
           <h2
@@ -27,7 +27,7 @@ export function SolutionDiagram() {
               </span>
             ))}
           </h2>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 pt-4">
             <p className="font-serif text-lg leading-[1.3] text-ink lg:text-[22px]">
               {solution.paragraphs[0]}
             </p>
@@ -38,13 +38,20 @@ export function SolutionDiagram() {
         </div>
 
         <Reveal
-          stagger={0.15}
-          className="mt-24 flex flex-col items-center justify-center gap-6 sm:flex-row sm:flex-wrap sm:gap-x-8 lg:gap-x-12"
+          y={0}
+          duration={0.8}
+          stagger={0.8}
+          drawSelector="[data-draw-arrow]"
+          className="mt-32 flex flex-col items-start justify-between gap-6 sm:flex-row sm:flex-wrap sm:gap-x-8 lg:gap-x-12"
         >
           {solution.flow.map((step, i) => (
             <div
               key={step}
-              className="flex flex-col items-center gap-6 sm:flex-row sm:gap-8 lg:gap-12"
+              className={`flex flex-col items-center gap-3 sm:flex-row ${
+                i === solution.flow.length - 1
+                  ? "lg:flex-col lg:items-start"
+                  : ""
+              }`}
             >
               <span
                 className={`font-serif text-4xl leading-none text-ink sm:text-5xl lg:text-[64px] ${
@@ -54,22 +61,23 @@ export function SolutionDiagram() {
                 {step}
               </span>
               {i < solution.flow.length - 1 && (
-                <span
+                <img
+                  src="/icons/arrow.svg"
                   aria-hidden="true"
-                  className="h-10 w-px bg-hairline sm:h-px sm:w-16 lg:w-[88px]"
+                  data-draw-arrow
+                  className="h-auto w-[88px]"
                 />
+              )}
+              {i === solution.flow.length - 1 && (
+                <ul className="w-full list-none pl-0 text-center font-sans text-base leading-[2] text-ink/80 lg:w-[383px] lg:list-disc lg:pl-5 lg:text-left lg:leading-[1.6]">
+                  {solution.professionals.map((professional) => (
+                    <li key={professional}>{professional}</li>
+                  ))}
+                </ul>
               )}
             </div>
           ))}
         </Reveal>
-
-        <div className="mt-16 border-t border-hairline pt-10 lg:flex lg:justify-end">
-          <ul className="w-full list-none pl-0 text-center font-sans text-base leading-[2] text-ink/80 lg:w-[383px] lg:list-disc lg:pl-5 lg:text-left lg:leading-[1.6]">
-            {solution.professionals.map((p) => (
-              <li key={p}>{p}</li>
-            ))}
-          </ul>
-        </div>
       </Container>
     </section>
   );
