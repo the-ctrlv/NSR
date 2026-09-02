@@ -5,6 +5,7 @@
   --color-ink: #1a2437; /* Midnight Indigo — primary dark / headings on light */
   --color-ink-dim: #4b5468;
   --color-paper: #f5f4f3; /* base light section background */
+  --color-paper-dim: #f0efed; /* dimmed light section background */
   --color-alabaster: #e5e4e2; /* light text on dark sections */
   --color-hairline: #cfd2d3; /* dividers / borders */
   --color-smoky: #8693a0; /* soft smoky blue — faint numerals, decorative accents */

@@ -49,7 +49,7 @@ export function Hero() {
         {/* Header */}
         <header
           data-hero="chrome"
-          className="relative z-10 flex items-center justify-between gap-6 border-b border-alabaster/20 px-6 py-6 sm:px-10 lg:px-[50px]"
+          className="relative z-10 flex items-center justify-between gap-6 border-b border-alabaster/20 px-6 pt-7 pb-5 sm:px-10 lg:px-[50px]"
         >
           <a
             href="#top"
@@ -61,7 +61,7 @@ export function Hero() {
               src="/icons/logo.svg"
               alt=""
               aria-hidden="true"
-              className="h-8 w-auto sm:h-9"
+              className="h-11 w-auto sm:h-9"
             />
           </a>
           <nav aria-label="Primary" className="hidden lg:block">
@@ -102,7 +102,10 @@ export function Hero() {
         </div>
 
         {/* Audience labels only (mobile/tablet) — top-right, no matching partner-info row at this size */}
-        <div data-hero="chrome" className="relative z-10 flex justify-end px-6 pt-6 sm:px-10 lg:hidden">
+        <div
+          data-hero="chrome"
+          className="relative z-10 flex justify-end px-6 pt-6 sm:px-10 lg:hidden"
+        >
           <div className="flex flex-col items-end gap-2 text-right font-serif text-base uppercase text-alabaster">
             {audienceLabels.map((label) => (
               <p key={label}>{label}</p>
@@ -113,9 +116,16 @@ export function Hero() {
         {/* Main content */}
         <div className="relative z-10 flex flex-1 flex-col justify-end px-6 pb-24 sm:px-10 lg:px-[50px]">
           {/* Partner info (mobile/tablet) — centered above the headline, matching the mobile layout */}
-          <div data-hero="chrome" className="mb-6 text-center font-serif text-alabaster lg:hidden">
-            <p className="font-sans text-[15px] leading-[1.7]">Independent Local Operating Partner</p>
-            <p className="text-lg uppercase leading-[1.7] tracking-[0.04em]">Nataliia Sychenko Romanova</p>
+          <div
+            data-hero="chrome"
+            className="mb-6 text-center font-serif text-alabaster lg:hidden"
+          >
+            <p className="font-sans text-[15px] leading-[1.7]">
+              Independent Local Operating Partner
+            </p>
+            <p className="text-lg uppercase leading-[1.7] tracking-[0.04em]">
+              Nataliia Sychenko Romanova
+            </p>
           </div>
 
           <div className="mx-auto flex max-w-[893px] flex-col items-center gap-2 text-center">

@@ -6,7 +6,7 @@ import { practiceCases } from "@/lib/content";
 
 export function PracticeCases() {
   return (
-    <section className="bg-paper py-24 lg:py-32" aria-label="NSR in practice">
+    <section className="bg-paper py-20" aria-label="NSR in practice">
       <Container>
         <Eyebrow className="mb-10 lg:mb-16">{practiceCases.eyebrow}</Eyebrow>
 
@@ -18,10 +18,14 @@ export function PracticeCases() {
             >
               <GrainOverlay className="opacity-[0.08] mix-blend-overlay" />
               <div className="relative grid gap-8 lg:grid-cols-[370px_1fr] lg:gap-16">
-                <h3 className="font-serif text-[32px] leading-[1.1] text-ink lg:text-[48px]">{item.title}</h3>
+                <h3 className="font-serif text-[32px] leading-[1.1] text-ink lg:text-[48px]">
+                  {item.title}
+                </h3>
 
                 <div className="flex flex-col gap-10 lg:gap-14">
-                  <p className="font-serif text-base leading-[1.2] text-ink lg:text-2xl">{item.intro}</p>
+                  <p className="font-serif text-base leading-[1.2] text-ink lg:text-2xl">
+                    {item.intro}
+                  </p>
 
                   <div className="flex flex-col gap-5 sm:flex-row sm:gap-5">
                     <p className="font-serif text-lg leading-none text-ink sm:w-[100px] sm:shrink-0">
@@ -45,7 +49,9 @@ export function PracticeCases() {
                           ))}
                         </div>
                       )}
-                      {"body" in item && item.body && <p className="text-ink/80">{item.body}</p>}
+                      {"body" in item && item.body && (
+                        <p className="text-ink/80">{item.body}</p>
+                      )}
                     </div>
                   </div>
                 </div>

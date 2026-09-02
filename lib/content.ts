@@ -16,7 +16,11 @@ export const navLinks = [
   { label: "Contacts", href: "#contact" },
 ];
 
-export const audienceLabels = ["Private Clients", "Property Owners", "Business Owners"];
+export const audienceLabels = [
+  "Private Clients",
+  "Property Owners",
+  "Business Owners",
+];
 
 export const problemCards = [
   {
@@ -30,7 +34,7 @@ export const problemCards = [
     body: "You are buying a property, managing a renovation or dealing with a local business matter. Everyone is managing their part, while you are left trying to hold the wider process together.",
   },
   {
-    icon: "wave",
+    icon: "waves",
     title: ["A stalled process"],
     body: "Documents have been submitted. Conversations have taken place. The expected steps have been followed — but it is still unclear what is holding the process up and what needs to happen next.",
   },
@@ -44,7 +48,8 @@ export const problemCards = [
 export const realityReveal = {
   eyebrow: "The Mallorca Reality",
   intro: {
-    heading: "You can have the best professionals, but NO ONE connects their efforts.",
+    heading:
+      "You can have the best professionals, but NO ONE connects their efforts.",
     body: "Mallorca has excellent professionals. The challenge begins when several are involved and no one is responsible for keeping the whole process connected.",
   },
   lines: [
@@ -58,7 +63,11 @@ export const realityReveal = {
 
 export const solution = {
   eyebrow: "The Missing Link",
-  heading: ["Having the right", "professionals is only part", "of the solution."],
+  heading: [
+    "Having the right",
+    "professionals is only part",
+    "of the solution.",
+  ],
   paragraphs: [
     "What is often missing is one person who sees the whole picture, connects the people involved and keeps the process moving.",
     "I don't replace your professionals. I coordinate the process around their respective expertise, focused on the outcome you need.",
@@ -178,7 +187,14 @@ export const practiceCases = {
         "My local understanding is grounded in more than 12 years of living on Mallorca and navigating Spanish systems first-hand — through to obtaining Spanish citizenship.",
       roleLabel: "Experience",
       lead: "This has involved multiple institutions and processes across:",
-      list: ["Identification", "Social Security", "Tax administration", "Municipal registration", "Healthcare, banking", "and other areas of everyday life."],
+      list: [
+        "Identification",
+        "Social Security",
+        "Tax administration",
+        "Municipal registration",
+        "Healthcare, banking",
+        "and other areas of everyday life.",
+      ],
       body: "It has given me a practical understanding of how local processes connect, where professional input may be needed and why the sequence of actions matters.",
       counter: "01 / 03",
     },
@@ -237,7 +253,8 @@ export const faq = {
         "The first conversation is confidential and exploratory. We discuss your situation, what is already in place and what you would like to achieve. If NSR is a good fit, we will then define the scope of involvement and the most appropriate working format.",
     },
     {
-      question: "Can you work with my existing professionals — or find new ones if needed?",
+      question:
+        "Can you work with my existing professionals — or find new ones if needed?",
       answer:
         "Yes. I can work with professionals you already trust and, where additional expertise is needed, help identify and source appropriate professionals. Each professional remains responsible for their own area of expertise.",
     },
@@ -261,11 +278,19 @@ export const faq = {
 
 export const closingCta = {
   labels: ["Confidential", "Independent", "Personal"],
-  heading: ["You bring the situation.", "I build the process around", "the outcome you need"],
+  heading: [
+    "You bring the situation.",
+    "I build the process around",
+    "the outcome you need",
+  ],
   body: "You stay informed. You make the decisions that matter. You don't have to manage everything in between.",
   cta: { label: "Let's talk in WhatsApp", href: "https://wa.me/380737777777" },
   contacts: [
-    { label: "WhatsApp", value: "+380 73-777-77-77", href: "https://wa.me/380737777777" },
+    {
+      label: "WhatsApp",
+      value: "+380 73-777-77-77",
+      href: "https://wa.me/380737777777",
+    },
     { label: "Email", value: "NSR@gmail.com", href: "mailto:NSR@gmail.com" },
     { label: "LinkedIn", value: "Nataliia Sychenko Romanova", href: "#" },
   ],
