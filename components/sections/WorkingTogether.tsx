@@ -29,7 +29,10 @@ export function WorkingTogether() {
             <span aria-hidden="true">→</span>
             {workingTogether.eyebrow}
           </p>
-          <h2 id="working-heading" className="max-w-[401px] font-serif text-2xl leading-[1.3] lg:text-right">
+          <h2
+            id="working-heading"
+            className="max-w-[401px] font-sans text-base leading-[1.4] text-alabaster/80 lg:text-right lg:text-[16px]"
+          >
             {workingTogether.heading}
           </h2>
         </div>
@@ -40,16 +43,16 @@ export function WorkingTogether() {
           className="grid grid-cols-1 gap-px border-t border-alabaster/10 bg-alabaster/10 sm:grid-cols-2"
         >
           {workingTogether.models.map((model) => (
-            <li key={model.index} className="relative flex flex-col justify-end gap-6 overflow-hidden bg-transparent px-8 py-16 lg:py-24">
+            <li key={model.index} className="relative flex flex-col justify-end gap-6 overflow-hidden bg-transparent px-4 py-10 sm:px-8 sm:py-16 lg:py-24">
               {/* eslint-disable-next-line @next/next/no-img-element -- decorative vector numeral */}
               <img
                 src={numerals[model.index]}
                 alt=""
                 aria-hidden="true"
-                className="pointer-events-none absolute right-8 top-8 h-auto w-40 select-none opacity-90 sm:w-52"
+                className="pointer-events-none absolute right-4 top-4 h-auto w-32 select-none opacity-90 sm:right-8 sm:top-8 sm:w-52"
               />
               <div className="relative max-w-[440px]">
-                <h3 className="font-serif text-3xl leading-[1.2] sm:text-4xl lg:text-[48px]">{model.title}</h3>
+                <h3 className="font-serif text-[32px] leading-[1.2] sm:text-4xl lg:text-[48px]">{model.title}</h3>
                 <p className="mt-5 font-sans text-[15px] font-medium leading-[1.4] text-alabaster">{model.body}</p>
               </div>
             </li>

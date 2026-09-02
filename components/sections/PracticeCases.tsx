@@ -14,14 +14,14 @@ export function PracticeCases() {
           {practiceCases.cases.map((item) => (
             <li
               key={item.title}
-              className="relative isolate overflow-hidden border border-hairline bg-paper p-8 lg:min-h-[540px] lg:p-20"
+              className="relative isolate overflow-hidden border border-hairline bg-paper px-4 pb-4 pt-10 lg:min-h-[540px] lg:p-20"
             >
               <GrainOverlay className="opacity-[0.08] mix-blend-overlay" />
               <div className="relative grid gap-8 lg:grid-cols-[370px_1fr] lg:gap-16">
-                <h3 className="font-serif text-3xl leading-[1.1] text-ink lg:text-[48px]">{item.title}</h3>
+                <h3 className="font-serif text-[32px] leading-[1.1] text-ink lg:text-[48px]">{item.title}</h3>
 
                 <div className="flex flex-col gap-10 lg:gap-14">
-                  <p className="font-serif text-xl leading-[1.2] text-ink lg:text-2xl">{item.intro}</p>
+                  <p className="font-serif text-base leading-[1.2] text-ink lg:text-2xl">{item.intro}</p>
 
                   <div className="flex flex-col gap-5 sm:flex-row sm:gap-5">
                     <p className="font-serif text-lg leading-none text-ink sm:w-[100px] sm:shrink-0">

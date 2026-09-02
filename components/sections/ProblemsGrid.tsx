@@ -16,7 +16,7 @@ export function ProblemsGrid() {
       <Container className="grid gap-12 lg:grid-cols-[448px_1fr] lg:gap-10">
         <div>
           <Eyebrow className="mb-6">What can I help you solve?</Eyebrow>
-          <h2 id="problems-heading" className="font-serif text-4xl leading-[1.1] text-ink sm:text-h2">
+          <h2 id="problems-heading" className="font-serif text-[42px] leading-[1.1] text-ink sm:text-h2">
             Complex local matters can look like this
           </h2>
         </div>
@@ -37,7 +37,7 @@ export function ProblemsGrid() {
                   ))}
                 </h3>
                 {/* eslint-disable-next-line @next/next/no-img-element -- small decorative vector icon */}
-                <img src={iconSrc[card.icon]} alt="" aria-hidden="true" className="h-16 w-16 shrink-0 sm:h-20 sm:w-20" />
+                <img src={iconSrc[card.icon]} alt="" aria-hidden="true" className="h-20 w-20 shrink-0" />
               </div>
               <p className="font-sans text-[15px] leading-[1.4] text-ink/80">{card.body}</p>
             </li>

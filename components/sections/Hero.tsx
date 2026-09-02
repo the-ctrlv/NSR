@@ -81,10 +81,10 @@ export function Hero() {
           <MobileNav />
         </header>
 
-        {/* Top row: partner info (left) + audience labels (right), both directly under the header */}
+        {/* Top row (desktop): partner info (left) + audience labels (right), both directly under the header */}
         <div
           data-hero="chrome"
-          className="relative z-10 flex items-start justify-between gap-6 px-6 pt-8 sm:px-10 lg:px-[50px]"
+          className="relative z-10 hidden items-start justify-between gap-6 px-6 pt-8 sm:px-10 lg:flex lg:px-[50px]"
         >
           <div className="max-w-[363px] font-serif text-alabaster">
             <p className="font-sans text-[15px] leading-[1.7]">
@@ -94,7 +94,16 @@ export function Hero() {
               Nataliia Sychenko Romanova
             </p>
           </div>
-          <div className="hidden flex-col items-end gap-2 text-right font-serif text-lg uppercase sm:flex">
+          <div className="flex flex-col items-end gap-2 text-right font-serif text-lg uppercase">
+            {audienceLabels.map((label) => (
+              <p key={label}>{label}</p>
+            ))}
+          </div>
+        </div>
+
+        {/* Audience labels only (mobile/tablet) — top-right, no matching partner-info row at this size */}
+        <div data-hero="chrome" className="relative z-10 flex justify-end px-6 pt-6 sm:px-10 lg:hidden">
+          <div className="flex flex-col items-end gap-2 text-right font-serif text-base uppercase text-alabaster">
             {audienceLabels.map((label) => (
               <p key={label}>{label}</p>
             ))}
@@ -103,26 +112,32 @@ export function Hero() {
 
         {/* Main content */}
         <div className="relative z-10 flex flex-1 flex-col justify-end px-6 pb-24 sm:px-10 lg:px-[50px]">
+          {/* Partner info (mobile/tablet) — centered above the headline, matching the mobile layout */}
+          <div data-hero="chrome" className="mb-6 text-center font-serif text-alabaster lg:hidden">
+            <p className="font-sans text-[15px] leading-[1.7]">Independent Local Operating Partner</p>
+            <p className="text-lg uppercase leading-[1.7] tracking-[0.04em]">Nataliia Sychenko Romanova</p>
+          </div>
+
           <div className="mx-auto flex max-w-[893px] flex-col items-center gap-2 text-center">
             <div className="relative">
               {/* Transient entrance line — blurs into view then dissolves as the real headline sharpens in its place. */}
               <p
                 data-hero="ghost"
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 flex select-none items-center justify-center whitespace-nowrap font-serif text-4xl leading-[0.95] text-alabaster sm:text-5xl md:text-6xl lg:text-7xl"
+                className="pointer-events-none absolute inset-0 flex select-none items-center justify-center whitespace-nowrap font-serif text-[50px] leading-[0.95] text-alabaster sm:text-5xl md:text-6xl lg:text-7xl"
               >
                 Complex matters in Mallorca
               </p>
               <h1
                 data-hero="headline"
-                className="font-serif text-5xl leading-[0.95] sm:text-6xl md:text-7xl lg:text-display"
+                className="font-serif text-[50px] leading-[0.95] sm:text-6xl md:text-7xl lg:text-display"
               >
                 {siteConfig.tagline}
               </h1>
             </div>
             <p
               data-hero="subtext"
-              className="max-w-[521px] font-sans text-lg leading-[1.4] text-alabaster/90"
+              className="max-w-[521px] font-sans text-base leading-[1.4] text-alabaster/90 sm:text-lg"
             >
               {siteConfig.heroSubtext}
             </p>

@@ -9,7 +9,7 @@ const { eyebrow, intro, lines, statement } = realityReveal;
 function Heading({ tone }: { tone: "ink" | "alabaster" }) {
   return (
     <div
-      className={`flex items-start justify-between gap-10 ${
+      className={`flex flex-col items-start gap-6 lg:flex-row lg:justify-between lg:gap-10 ${
         tone === "ink" ? "text-ink" : "text-alabaster"
       }`}
     >
@@ -18,7 +18,7 @@ function Heading({ tone }: { tone: "ink" | "alabaster" }) {
         {eyebrow}
       </p>
       <div className="max-w-[382px] space-y-3">
-        <p className="font-serif text-[22px] leading-[1.3]">
+        <p className="font-serif text-xl leading-[1.3] lg:text-[22px]">
           {intro.heading.split("NO ONE").map((part, i, arr) => (
             <span key={i}>
               {part}
@@ -26,7 +26,7 @@ function Heading({ tone }: { tone: "ink" | "alabaster" }) {
             </span>
           ))}
         </p>
-        <p className="font-sans text-[16px] leading-[1.4] opacity-80">{intro.body}</p>
+        <p className="font-sans text-[15px] leading-[1.4] opacity-80 lg:text-[16px]">{intro.body}</p>
       </div>
     </div>
   );
@@ -91,7 +91,7 @@ export function RealityReveal() {
             {lines.map((line) => (
               <li
                 key={line}
-                className="border-b border-hairline py-6 text-center font-serif text-[26px] leading-none sm:text-[32px] lg:text-line"
+                className="border-b border-hairline py-6 text-center font-serif text-[28px] leading-[1.2] sm:text-[32px] lg:text-line"
               >
                 {line}
               </li>
@@ -99,10 +99,11 @@ export function RealityReveal() {
           </ul>
         </div>
 
-        {/* After: dark state — the resolved statement, revealed via scroll on desktop */}
+        {/* After: dark state — the resolved statement. Desktop-only per the mobile design, which
+            never shows this screen; on desktop it's revealed via the scroll-driven circle wipe. */}
         <div
           ref={afterRef}
-          className="flex min-h-screen flex-col justify-center gap-16 bg-ink px-6 py-24 sm:px-10 lg:px-[70px]"
+          className="hidden min-h-screen flex-col justify-center gap-16 bg-ink px-6 py-24 sm:px-10 lg:flex lg:px-[70px]"
         >
           <Heading tone="alabaster" />
           <p className="mx-auto max-w-[825px] text-center font-serif text-[32px] uppercase leading-[1.25] text-alabaster sm:text-[42px] lg:text-statement">
