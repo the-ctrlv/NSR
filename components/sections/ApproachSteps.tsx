@@ -1,53 +1,62 @@
 import { Reveal } from "@/components/animations/Reveal";
 import { Container } from "@/components/ui/Container";
-import { Eyebrow } from "@/components/ui/Eyebrow";
 import { approach, approachSteps } from "@/lib/content";
 
 export function ApproachSteps() {
   return (
     <section
-      id="approach"
-      className="bg-paper py-20"
-      aria-labelledby="approach-heading"
+      className="bg-paper-dim py-20 text-ink lg:py-20"
+      aria-labelledby="categories-heading"
     >
-      <Container className="grid gap-12 lg:grid-cols-[448px_1fr] lg:gap-10">
-        <div>
-          <Eyebrow className="mb-6">{approach.eyebrow}</Eyebrow>
-          <h2
-            id="approach-heading"
-            className="font-serif text-4xl leading-[1.1] text-ink sm:text-5xl lg:text-[56px]"
-          >
-            {approach.heading}
-          </h2>
-        </div>
-
-        <Reveal
-          as="ol"
-          stagger={0.15}
-          className="flex flex-col divide-y divide-hairline border-t border-hairline"
-        >
-          {approachSteps.map((step) => (
-            <li
-              key={step.number}
-              className="grid grid-cols-[64px_1fr] items-start gap-6 py-8 sm:grid-cols-[120px_1fr] sm:gap-10 sm:py-10 lg:grid-cols-[190px_1fr]"
+      <Container>
+        <div className="grid gap-16 lg:grid-cols-[505px_1fr] lg:gap-20">
+          <div>
+            <p className="flex items-center gap-3 font-sans text-eyebrow font-medium uppercase tracking-wide">
+              <span aria-hidden="true">→</span>
+              {approach.eyebrow}
+            </p>
+            <h2
+              id="categories-heading"
+              className="mt-24 max-w-[505px] font-serif text-4xl leading-[1.1] sm:text-5xl lg:text-[56px]"
             >
-              <span
-                className="font-numeral text-6xl leading-none tracking-tighter text-smoky opacity-15 sm:text-8xl lg:text-[160px]"
-                aria-hidden="true"
+              Different situations.
+              <br />
+              One operational approach.
+            </h2>
+          </div>
+
+          <Reveal as="div" stagger={0.12} className="flex flex-col">
+            {approachSteps.map((step, index) => (
+              <article
+                key={step.number}
+                className="relative overflow-hidden border-b border-hairline"
               >
-                {step.number}
-              </span>
-              <div>
-                <h3 className="font-serif text-xl leading-[1.2] text-ink sm:text-2xl">
-                  {step.title}
-                </h3>
-                <p className="mt-3 max-w-[546px] font-sans text-[15px] leading-[1.5] text-ink/80">
-                  {step.body}
-                </p>
-              </div>
-            </li>
-          ))}
-        </Reveal>
+                {/* eslint-disable-next-line @next/next/no-img-element -- exported numeral artwork */}
+                {/* eslint-disable-next-line @next/next/no-img-element -- exported numeral artwork */}
+                <img
+                  src={`/icons/numeral-${step.number}.svg`}
+                  alt=""
+                  aria-hidden="true"
+                  className={`block translate-x-2 absolute -left-2 top-11 h-auto ${index === 0 ? "w-[122px] translate-y-2" : "w-40 translate-y-3"}`}
+                />
+                {/* <img
+                  src={numerals[step.number]}
+                  alt=""
+                  aria-hidden="true"
+                  className=" opacity-15"
+                /> */}
+                <div className="relative ml-50 flex max-w-[546px] flex-col gap-1 pt-[70px]">
+                  <h3 className="font-serif text-xl leading-none lg:text-2xl">
+                    {step.title}
+                  </h3>
+                  <p className="font-sans text-[15px] leading-[1.5] text-ink/80 mb-2">
+                    {step.body}
+                  </p>
+                </div>
+              </article>
+            ))}
+          </Reveal>
+        </div>
       </Container>
     </section>
   );
