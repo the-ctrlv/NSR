@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bebas_Neue, Manrope } from "next/font/google";
 import localFont from "next/font/local";
+import { SmoothScroll } from "@/components/animations/SmoothScroll";
 import "./globals.css";
 import { siteConfig } from "@/lib/content";
 
@@ -73,10 +74,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" className={`${displayFont.variable} ${bodyFont.variable} ${numeralFont.variable}`}>
-      <body className="bg-paper font-sans text-ink antialiased">{children}</body>
+    <html
+      lang="en"
+      className={`${displayFont.variable} ${bodyFont.variable} ${numeralFont.variable}`}
+    >
+      <body className="bg-paper font-sans text-ink antialiased">
+        <SmoothScroll>{children}</SmoothScroll>
+      </body>
     </html>
   );
 }
