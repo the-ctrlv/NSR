@@ -68,6 +68,7 @@ export function RealityReveal() {
   const eyebrowRef = useRef<HTMLParagraphElement>(null);
   const introRef = useRef<HTMLDivElement>(null);
   const linesRef = useRef<HTMLUListElement>(null);
+  const statementRef = useRef<HTMLParagraphElement>(null);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -95,6 +96,7 @@ export function RealityReveal() {
             )
           : [];
         gsap.set(lineTexts, { opacity: 0, y: 28 });
+        gsap.set(statementRef.current, { opacity: 0, y: 48 });
         gsap.set(ballRef.current, {
           scale: 1,
           y: 0,
@@ -118,10 +120,11 @@ export function RealityReveal() {
 
         const radius = { value: 76 };
         let contentShown = false;
+        let statementShown = false;
         const trigger = ScrollTrigger.create({
           trigger: section,
           start: "top top",
-          end: "+=180%",
+          end: "+=220%",
           scrub: 0.4,
           pin,
           anticipatePin: 1,
@@ -136,7 +139,7 @@ export function RealityReveal() {
             const revealProgress = gsap.utils.clamp(
               0,
               1,
-              (self.progress - 0.34) / 0.66,
+              (self.progress - 0.45) / 0.55,
             );
             const shouldShowContent = self.progress >= 0.25;
             if (shouldShowContent !== contentShown) {
@@ -146,6 +149,18 @@ export function RealityReveal() {
                 y: shouldShowContent ? 0 : 28,
                 duration: 0.35,
                 ease: "power2.out",
+                overwrite: true,
+              });
+            }
+            const shouldShowStatement = revealProgress >= 0.08;
+            if (shouldShowStatement !== statementShown) {
+              statementShown = shouldShowStatement;
+              gsap.to(statementRef.current, {
+                opacity: shouldShowStatement ? 1 : 0,
+                y: shouldShowStatement ? 0 : 48,
+                duration: 0.55,
+                delay: shouldShowStatement ? 0.5 : 0,
+                ease: "power3.out",
                 overwrite: true,
               });
             }
@@ -177,6 +192,7 @@ export function RealityReveal() {
             clearProps: "opacity,scale,y,transformOrigin",
           });
           gsap.set(lineTexts, { clearProps: "opacity,y" });
+          gsap.set(statementRef.current, { clearProps: "opacity,y" });
         };
       });
     }, section);
@@ -223,7 +239,10 @@ export function RealityReveal() {
           className="hidden min-h-screen flex-col gap-40 bg-ink px-6 py-20 sm:px-10 lg:flex lg:px-[50px]"
         >
           <Heading tone="alabaster" />
-          <p className="mx-auto max-w-[825px] text-center font-serif text-[32px] uppercase leading-[1.25] text-alabaster sm:text-[42px] lg:text-statement">
+          <p
+            ref={statementRef}
+            className="mx-auto max-w-[825px] text-center font-serif text-[32px] uppercase leading-[1.25] text-alabaster sm:text-[42px] lg:text-statement"
+          >
             {statement}
           </p>
         </div>
