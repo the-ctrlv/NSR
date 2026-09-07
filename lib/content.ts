@@ -90,8 +90,8 @@ export const founderReveal = {
     "Founder-led, personal and accountable — with the local understanding to take responsibility for moving a situation forward.",
   name: "Nataliia Sychenko Romanova",
   stats: [
-    { value: "12+", label: "Years on Mallorca." },
-    { value: "20+", label: "Years in international business." },
+    { value: "12 +", label: "Years on Mallorca." },
+    { value: "20 +", label: "Years in international business." },
     {
       value: "4",
       label: "Languages",
