@@ -22,7 +22,12 @@ export function HeroIntro({ children }: { children: ReactNode }) {
     const chrome = root.querySelectorAll<HTMLElement>('[data-hero="chrome"]');
     const ghost = root.querySelector<HTMLElement>('[data-hero="ghost"]');
     const headline = root.querySelector<HTMLElement>('[data-hero="headline"]');
-    const rest = root.querySelectorAll<HTMLElement>('[data-hero="subtext"], [data-hero="cta"]');
+    const rest = root.querySelectorAll<HTMLElement>(
+      '[data-hero="subtext"], [data-hero="cta"]',
+    );
+    const mainContent = headline
+      ? [headline, ...Array.from(rest)]
+      : Array.from(rest);
 
     if (prefersReducedMotion()) {
       if (ghost) ghost.style.display = "none";
@@ -57,31 +62,33 @@ export function HeroIntro({ children }: { children: ReactNode }) {
       if (headline) gsap.set(headline, { opacity: 0, y: 24 });
       gsap.set(rest, { opacity: 0, y: 20 });
 
-      const tl = gsap.timeline({ delay: 1, defaults: { ease: "power3.out" } });
+      const tl = gsap.timeline({
+        delay: 0.8,
+        defaults: { ease: "power3.out" },
+      });
 
-      tl.to(chrome, { opacity: 1, y: 0, duration: 0.8, stagger: 0.08 });
+      tl.to(chrome, { opacity: 1, y: 0, duration: 0.6, stagger: 0.06 });
 
       if (ghost) {
         // First line rolls in and reads clearly on its own for a beat.
-        tl.to(ghost, { opacity: 1, y: 0, duration: 0.6 }, "<0.1").to(
+        tl.to(ghost, { opacity: 1, y: 0, duration: 0.45 }, "<0.1").to(
           ghost,
-          { opacity: 0, y: -28, duration: 0.75, ease: "sine.inOut" },
-          "+=0.55",
+          { opacity: 0, y: -28, duration: 0.55, ease: "sine.inOut" },
+          "+=0.3",
         );
       }
 
-      if (headline) {
-        // Second line rolls in just after the first starts rolling out, so
-        // both are briefly on screen together during the crossfade.
-        tl.fromTo(
-          headline,
-          { opacity: 0, y: 28 },
-          { opacity: 1, y: 0, duration: 0.75, ease: "sine.inOut" },
-          ghost ? "<+=0.2" : "+=0.2",
-        );
-      }
-
-      tl.to(rest, { opacity: 1, y: 0, duration: 0.8, stagger: 0.12 }, "-=0.3");
+      tl.to(
+        mainContent,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.55,
+          stagger: 0,
+          ease: "sine.inOut",
+        },
+        ghost ? "<+=0.1" : "+=0.1",
+      );
     }, root);
 
     return () => ctx.revert();

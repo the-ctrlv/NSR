@@ -1,4 +1,7 @@
+"use client";
+
 import { Reveal } from "@/components/animations/Reveal";
+import { TextFillReveal } from "@/components/animations/TextFillReveal";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { problemCards } from "@/lib/content";
@@ -20,12 +23,11 @@ export function ProblemsGrid() {
       <Container className="flex justify-between">
         <div>
           <Eyebrow className="mb-15">What can I help you solve?</Eyebrow>
-          <h2
+          <TextFillReveal
             id="problems-heading"
+            lines={["Complex local", "matters can look", "like this"]}
             className="font-serif text-[42px] leading-[1.1] text-ink sm:text-h2 max-w-md"
-          >
-            Complex local matters can look like this
-          </h2>
+          />
         </div>
 
         <Reveal
