@@ -298,12 +298,14 @@ export function AboutFounder() {
 
             <div
               data-chapter="stats"
-              className="flex justify-between absolute bottom-20 left-1/2 translate-x-[-50%] border-x border-[#8693A0]/20"
+              className="flex justify-between absolute bottom-20 left-1/2 translate-x-[-50%]"
             >
               {stats.map((stat, index) => (
                 <div
                   key={stat.label}
-                  className={`w-[374.5px] flex flex-col items-center gap-2 px-8 py-10 text-center lg:p-0 ${index === 1 ? "border-x border-[#8693A0]/20" : ""}`}
+                  className={`w-[374.5px] flex flex-col items-center gap-2 px-8 py-10 text-center lg:p-0 ${index === 1 ? "border-x border-[#8693A0]/20" : ""}
+                    ${index === 0 ? "border-l border-[#8693A0]/20" : ""}
+                    ${index === 2 ? "border-r border-[#8693A0]/20" : ""}`}
                 >
                   <p className="font-serif text-[70px] uppercase leading-none lg:text-8xl">
                     {stat.value}
