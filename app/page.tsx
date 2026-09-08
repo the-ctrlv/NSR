@@ -10,6 +10,7 @@ import { WorkingTogether } from "@/components/sections/WorkingTogether";
 import { FAQSection } from "@/components/sections/FAQSection";
 import { ClosingCta } from "@/components/sections/ClosingCta";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { FloatingCta } from "@/components/layout/FloatingCta";
 import { siteConfig } from "@/lib/content";
 
 const structuredData = {
@@ -51,6 +52,7 @@ export default function Home() {
         </main>
         <SiteFooter />
       </div>
+      <FloatingCta />
     </>
   );
 }

@@ -8,7 +8,7 @@ import {
   registerGsap,
   prefersReducedMotion,
 } from "@/lib/gsap";
-import { Container } from "@/components/ui/Container";
+import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { founderReveal } from "@/lib/content";
 
 const { eyebrow, intro, name, stats, background, quote } = founderReveal;
@@ -199,16 +199,24 @@ export function AboutFounder() {
         };
 
         const STEP_COUNT = STEPS.length;
-        const segment = 1 / (STEP_COUNT - 1);
+        // A bit of extra pinned scroll held past the last step (background +
+        // quote) before the section releases, so it doesn't unpin the
+        // instant that content lands.
+        const EXTRA_HOLD_PERCENT = 40;
+        const totalPercent = (STEP_COUNT - 1) * 100 + EXTRA_HOLD_PERCENT;
+        const segment = 100 / totalPercent;
 
         const trigger = ScrollTrigger.create({
           trigger: section,
           start: "top top",
-          end: `+=${(STEP_COUNT - 1) * 100}%`,
+          end: `+=${totalPercent}%`,
           pin,
           anticipatePin: 1,
           snap: {
-            snapTo: Array.from({ length: STEP_COUNT }, (_, i) => i * segment),
+            snapTo: [
+              ...Array.from({ length: STEP_COUNT }, (_, i) => i * segment),
+              1,
+            ],
             duration: 0.45,
             ease: "power2.inOut",
           },
@@ -252,20 +260,26 @@ export function AboutFounder() {
     >
       <div
         ref={pinRef}
-        className="relative isolate overflow-hidden py-24 lg:h-screen lg:py-0"
+        className="relative isolate overflow-hidden pt-20 pb-16 lg:h-screen lg:py-0"
       >
-        {/* <GrainOverlay className="opacity-[0.12] mix-blend-overlay" /> */}
+        <GrainOverlay className="opacity-[0.12] mix-blend-overlay" />
 
-        <Container className="relative z-10 lg:h-full">
-          <div
-            ref={stageRef}
-            className="flex flex-col gap-16 lg:block lg:h-full"
-          >
+        {/* Not <Container>: its shared px-6 can't be reliably overridden by
+            a second utility class of equal specificity (Tailwind's output
+            order decides ties, not JSX order) — this section's own Figma
+            mobile frame (412:9649) uses a 16px margin, not Container's 24px,
+            so it gets its own copy of Container's shape with px-4 instead. */}
+        <div className="relative z-10 mx-auto w-full max-w-[1470px] px-4 sm:px-10 lg:px-[50px] lg:h-full">
+          {/* No shared `gap` — mobile spacing between chapters is uneven
+              (40 / -37 / 56 / 56 / 39px per Figma), so each chapter carries
+              its own mt-* below; lg:mt-0 clears it once desktop takes over
+              with absolute positioning. */}
+          <div ref={stageRef} className="flex flex-col lg:block lg:h-full">
             <div
               data-chapter="intro"
-              className="flex flex-col justify-between gap-6 max-w-[1470px] px-6 sm:px-10 lg:px-[50px] py-20 lg:absolute lg:inset-x-0 lg:top-0 lg:flex-row lg:items-start"
+              className="flex flex-col justify-between gap-6 lg:absolute lg:inset-x-0 lg:top-0 lg:max-w-[1470px] lg:px-[50px] lg:py-20 lg:flex-row lg:items-start"
             >
-              <p className="flex items-center gap-3 font-sans text-eyebrow font-medium uppercase tracking-wide">
+              <p className="flex items-center gap-3 font-sans text-eyebrow font-medium uppercase leading-[1.4] tracking-wide">
                 <span aria-hidden="true">→</span>
                 {eyebrow}
               </p>
@@ -275,9 +289,12 @@ export function AboutFounder() {
               </p>
             </div>
 
+            {/* 313×392 fixed box + mx-auto, matching the Figma mobile frame
+                exactly (it isn't width/aspect-ratio driven there, unlike
+                desktop's height-driven sizing). */}
             <div
               data-chapter="portrait"
-              className="relative mx-auto aspect-[557/726] w-full max-w-[300px] shrink-0 overflow-hidden lg:absolute lg:left-1/2 lg:top-[9%] lg:h-[70%] lg:w-auto lg:max-w-[370px] lg:-translate-x-1/2"
+              className="relative mx-auto mt-10 h-[392px] w-[313px] shrink-0 overflow-hidden bg-paper lg:mx-0 lg:mt-0 lg:absolute lg:left-1/2 lg:top-[9%] lg:h-[70%] lg:w-auto lg:aspect-[557/726] lg:max-w-[370px] lg:-translate-x-1/2"
             >
               <Image
                 src="/images/portrait-founder.jpg"
@@ -286,49 +303,68 @@ export function AboutFounder() {
                 sizes="(min-width: 1024px) 420px, 60vw"
                 className="object-cover object-[center_15%] block"
               />
-              <div className="absolute inset-0 bg-gradient-to-b from-ink/0 from-[50%] to-ink/80" />
+              <div className="absolute inset-0 bg-gradient-to-b from-ink/0 from-[53.313%] to-ink lg:from-[50%] lg:to-ink/80" />
             </div>
 
+            {/* -37px pulls the name up into the portrait's own bottom fade,
+                exactly like the Figma mobile frame — the fade is solid ink
+                by that point, so it reads as a clean gap, not an overlap. */}
             <p
               data-chapter="name"
-              className="text-center font-serif text-[48px] leading-[0.95] sm:text-6xl lg:absolute lg:inset-x-0 lg:top-[54%] lg:text-display max-w-2xl mx-auto"
+              className="mt-[-37px] mx-auto max-w-2xl text-center font-serif text-[48px] leading-[0.9] sm:text-6xl lg:mt-0 lg:absolute lg:inset-x-0 lg:top-[54%] lg:text-display"
             >
               {name}
             </p>
 
             <div
               data-chapter="stats"
-              className="flex justify-between absolute bottom-20 left-1/2 translate-x-[-50%]"
+              className="mt-14 mx-auto flex w-[313px] flex-col items-center divide-y divide-smoky/20 lg:mt-0 lg:mx-0 lg:w-auto lg:flex-row lg:justify-between lg:divide-y-0 lg:absolute lg:bottom-20 lg:left-1/2 lg:-translate-x-1/2"
             >
-              {stats.map((stat, index) => (
-                <div
-                  key={stat.label}
-                  className={`w-[374.5px] flex flex-col items-center gap-2 px-8 py-10 text-center lg:p-0 ${index === 1 ? "border-x border-[#8693A0]/20" : ""}
-                    ${index === 0 ? "border-l border-[#8693A0]/20" : ""}
-                    ${index === 2 ? "border-r border-[#8693A0]/20" : ""}`}
-                >
-                  <p className="font-serif text-[70px] uppercase leading-none lg:text-8xl">
-                    {stat.value}
-                  </p>
-                  <p className="font-serif text-xl lg:text-lg">{stat.label}</p>
-                  {"detail" in stat && stat.detail && (
-                    <p className="font-sans text-sm text-alabaster/70">
-                      {stat.detail}
+              {stats.map((stat, index) => {
+                const hasPlus = stat.value.endsWith("+");
+                const digits = hasPlus
+                  ? stat.value.slice(0, -1).trim()
+                  : stat.value;
+                return (
+                  <div
+                    key={stat.label}
+                    className={`flex w-full flex-col items-center px-[60px] py-6 text-center lg:w-[374.5px] lg:gap-2 lg:px-8 lg:py-10
+                    ${index === 1 ? "lg:border-x lg:border-smoky/20" : ""}
+                    ${index === 0 ? "lg:border-l lg:border-smoky/20" : ""}
+                    ${index === 2 ? "lg:border-r lg:border-smoky/20" : ""}`}
+                  >
+                    <p className="font-serif uppercase leading-none">
+                      <span className="text-[70px] leading-none lg:text-8xl">
+                        {digits}
+                      </span>
+                      {hasPlus && (
+                        <span className="text-[40px] leading-none lg:text-8xl">
+                          {" +"}
+                        </span>
+                      )}
                     </p>
-                  )}
-                </div>
-              ))}
+                    <p className="font-serif text-xl lg:text-lg">
+                      {stat.label}
+                    </p>
+                    {"detail" in stat && stat.detail && (
+                      <p className="font-sans text-sm text-alabaster/80">
+                        {stat.detail}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             <div
               data-chapter="background"
-              className="max-w-[1470px] px-6 sm:px-10 lg:px-[50px] py-20 flex flex-col justify-between gap-6 lg:absolute lg:inset-x-0 lg:top-0 lg:flex-row lg:items-start"
+              className="mt-14 flex flex-col justify-between gap-[17px] lg:mt-0 lg:gap-6 lg:absolute lg:inset-x-0 lg:top-0 lg:max-w-[1470px] lg:px-[50px] lg:py-20 lg:flex-row lg:items-start"
             >
-              <p className="flex items-center gap-3 font-sans text-eyebrow font-medium uppercase tracking-wide">
+              <p className="flex items-center gap-3 font-sans text-eyebrow font-medium uppercase leading-[1.4] tracking-wide">
                 <span aria-hidden="true">→</span>
                 {background.eyebrow}
               </p>
-              <div className="flex max-w-[383px] flex-col gap-4 font-sans text-base font-medium leading-[1.5] text-alabaster/80">
+              <div className="flex max-w-[383px] flex-col gap-3 font-sans text-base font-medium leading-[1.4] text-alabaster/80 lg:gap-4 lg:leading-[1.5]">
                 {background.paragraphs.map((p) => (
                   <p key={p}>{p}</p>
                 ))}
@@ -337,12 +373,12 @@ export function AboutFounder() {
 
             <p
               data-chapter="quote"
-              className="max-w-[1470px] px-6 sm:px-10 lg:px-[50px] mx-auto indent-[calc(50vw-185px)] font-serif text-2xl leading-[1.25] sm:text-4xl lg:absolute lg:inset-x-0 lg:bottom-[3%] lg:text-[56px]"
+              className="mt-[39px] indent-[3ch] font-serif text-2xl leading-[1.2] sm:text-4xl lg:mt-0 lg:indent-[calc(50vw-185px)] lg:max-w-[1470px] lg:px-[50px] lg:mx-auto lg:leading-[1.25] lg:absolute lg:inset-x-0 lg:bottom-[3%] lg:text-[56px]"
             >
               “{quote}”
             </p>
           </div>
-        </Container>
+        </div>
       </div>
     </section>
   );

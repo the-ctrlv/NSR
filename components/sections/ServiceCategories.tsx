@@ -59,50 +59,58 @@ export function ServiceCategories() {
         <Reveal
           as="ul"
           stagger={0.15}
-          className="grid grid-cols-1 gap-px border border-ink-dim/60 bg-ink-dim/60 sm:grid-cols-3"
+          className="grid grid-cols-1 border border-ink-dim/60 sm:grid-cols-3"
         >
-          {serviceCategories.categories.map((category) => (
-            <li
-              key={category.title}
-              className="flex flex-col items-center justify-between gap-8 bg-ink px-6 py-10 text-center"
-            >
-              <div className="flex flex-col items-center gap-5">
-                {category.icon === "private" && (
-                  <img
-                    src="/icons/service-private.svg"
-                    alt=""
-                    aria-hidden="true"
-                    className="size-[100px]"
-                  />
-                )}
-                {category.icon === "property" && <PropertyIcon />}
-                {category.icon === "business" && (
-                  <img
-                    src="/icons/service-business.svg"
-                    alt=""
-                    aria-hidden="true"
-                    className="size-[100px]"
-                  />
-                )}
-                <div>
-                  <h3 className="font-serif text-2xl leading-[1.2]">
-                    {category.title}
-                  </h3>
-                  <p className="mt-4 whitespace-pre-line font-sans text-[15px] leading-[1.4] text-alabaster/80">
-                    {category.body}
-                  </p>
+          {serviceCategories.categories.map((category, index) => {
+            const isLast = index === serviceCategories.categories.length - 1;
+            return (
+              <li
+                key={category.title}
+                className={`flex flex-col items-center justify-between gap-8 border-ink-dim/60 bg-ink px-6 py-10 text-center ${
+                  isLast ? "" : "border-b sm:border-b-0 sm:border-r"
+                }`}
+              >
+                <div className="flex flex-col items-center gap-5">
+                  {category.icon === "private" && (
+                    <img
+                      src="/icons/service-private.svg"
+                      alt=""
+                      aria-hidden="true"
+                      className="size-[100px]"
+                    />
+                  )}
+                  {category.icon === "property" && <PropertyIcon />}
+                  {category.icon === "business" && (
+                    <img
+                      src="/icons/service-business.svg"
+                      alt=""
+                      aria-hidden="true"
+                      className="size-[100px]"
+                    />
+                  )}
+                  <div>
+                    <h3 className="font-serif text-2xl leading-[1.2]">
+                      {category.title}
+                    </h3>
+                    <p className="mt-4 whitespace-pre-line font-sans text-[15px] leading-[1.4] text-alabaster/80">
+                      {category.body}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div className="flex flex-col items-center gap-4">
-                <span className="h-[50px] w-px bg-ink-dim" aria-hidden="true" />
-                <div className="flex min-h-[75px] flex-col items-center gap-1">
-                  {category.tagRows.map((row, index) => (
-                    <TagRow key={index} tags={row} />
-                  ))}
+                <div className="flex flex-col items-center gap-4">
+                  <span
+                    className="h-[50px] w-px bg-ink-dim"
+                    aria-hidden="true"
+                  />
+                  <div className="flex min-h-[75px] flex-col items-center gap-1">
+                    {category.tagRows.map((row, index) => (
+                      <TagRow key={index} tags={row} />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </li>
-          ))}
+              </li>
+            );
+          })}
         </Reveal>
       </Container>
     </section>

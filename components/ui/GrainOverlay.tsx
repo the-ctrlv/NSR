@@ -1,4 +1,7 @@
-import { useId } from "react";
+"use client";
+
+import { useEffect, useId, useState } from "react";
+import { prefersReducedMotion } from "@/lib/gsap";
 
 type GrainOverlayProps = {
   className?: string;
@@ -9,7 +12,9 @@ type GrainOverlayProps = {
 /**
  * Procedural film-grain texture via SVG feTurbulence — no image download,
  * infinitely crisp at any size. Pair with a low opacity + a blend-mode
- * className (e.g. mix-blend-soft-light) on the consumer side.
+ * className (e.g. mix-blend-soft-light) on the consumer side. The noise
+ * pattern re-seeds itself on an interval so the grain flickers like real
+ * film stock instead of sitting static.
  */
 export function GrainOverlay({
   className = "",
@@ -17,6 +22,15 @@ export function GrainOverlay({
   numOctaves = 3,
 }: GrainOverlayProps) {
   const filterId = useId();
+  const [seed, setSeed] = useState(0);
+
+  useEffect(() => {
+    if (prefersReducedMotion()) return;
+    const id = window.setInterval(() => {
+      setSeed((s) => (s + 1) % 100);
+    }, 90);
+    return () => window.clearInterval(id);
+  }, []);
 
   return (
     <svg aria-hidden="true" className={`pointer-events-none absolute inset-0 h-full w-full ${className}`}>
@@ -25,6 +39,7 @@ export function GrainOverlay({
           type="fractalNoise"
           baseFrequency={baseFrequency}
           numOctaves={numOctaves}
+          seed={seed}
           stitchTiles="stitch"
           result="noise"
         />

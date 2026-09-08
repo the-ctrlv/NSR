@@ -33,34 +33,43 @@ export function ProblemsGrid() {
         <Reveal
           as="ul"
           stagger={0.22}
-          className="grid grid-cols-1 gap-px border-y max-w-[745px] border-hairline bg-hairline sm:grid-cols-2 mt-12"
+          className="grid grid-cols-1 border-y max-w-[745px] border-hairline sm:grid-cols-2 mt-12"
         >
-          {problemCards.map((card) => (
-            <li
-              key={card.title.join(" ")}
-              className="flex flex-col gap-12 bg-paper px-0 py-8 sm:px-6"
-            >
-              <div className="flex items-center justify-between gap-5">
-                <h3 className="min-w-0 font-serif text-2xl leading-[1.2] text-ink">
-                  {card.title.map((line) => (
-                    <span key={line} className="block">
-                      {line}
-                    </span>
-                  ))}
-                </h3>
-                {/* eslint-disable-next-line @next/next/no-img-element -- small decorative vector icon */}
-                <img
-                  src={iconSrc[card.icon]}
-                  alt=""
-                  aria-hidden="true"
-                  className="h-20 w-20 shrink-0"
-                />
-              </div>
-              <p className="font-sans text-[15px] leading-[1.4] text-ink/80">
-                {card.body}
-              </p>
-            </li>
-          ))}
+          {problemCards.map((card, index) => {
+            const isLastMobile = index === problemCards.length - 1;
+            const isTopRowDesktop = index < 2;
+            const isLeftColDesktop = index % 2 === 0;
+            return (
+              <li
+                key={card.title.join(" ")}
+                className={`flex flex-col gap-12 border-hairline bg-paper px-0 py-8 sm:px-6 ${
+                  isLastMobile ? "" : "border-b"
+                } sm:border-b-0 ${isTopRowDesktop ? "sm:border-b" : ""} ${
+                  isLeftColDesktop ? "sm:border-r" : ""
+                }`}
+              >
+                <div className="flex items-center justify-between gap-5">
+                  <h3 className="min-w-0 font-serif text-2xl leading-[1.2] text-ink">
+                    {card.title.map((line) => (
+                      <span key={line} className="block">
+                        {line}
+                      </span>
+                    ))}
+                  </h3>
+                  {/* eslint-disable-next-line @next/next/no-img-element -- small decorative vector icon */}
+                  <img
+                    src={iconSrc[card.icon]}
+                    alt=""
+                    aria-hidden="true"
+                    className="h-20 w-20 shrink-0"
+                  />
+                </div>
+                <p className="font-sans text-[15px] leading-[1.4] text-ink/80">
+                  {card.body}
+                </p>
+              </li>
+            );
+          })}
         </Reveal>
       </Container>
     </section>

@@ -1,13 +1,15 @@
 import Image from "next/image";
 import { HeroIntro } from "@/components/animations/HeroIntro";
 import { MobileNav } from "@/components/layout/MobileNav";
-import { Button } from "@/components/ui/Button";
 import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { audienceLabels, navLinks, siteConfig } from "@/lib/content";
 
 export function Hero() {
   return (
-    <section className="relative isolate flex min-h-screen w-full flex-col overflow-hidden bg-ink text-alabaster">
+    <section
+      data-hero-root
+      className="relative isolate flex min-h-screen w-full flex-col overflow-hidden bg-ink text-alabaster"
+    >
       <HeroIntro>
         {/* Background: portrait, radial vignette, guide lines, film grain */}
         <div className="absolute inset-0 -z-10">
@@ -151,14 +153,6 @@ export function Hero() {
             >
               {siteConfig.heroSubtext}
             </p>
-          </div>
-          <div
-            data-hero="cta"
-            className="mx-auto mt-10 sm:mt-8 sm:ml-auto sm:mr-0 lg:absolute lg:bottom-24 lg:right-[50px] lg:mt-0"
-          >
-            <Button href="#contact" variant="light">
-              Share your situation
-            </Button>
           </div>
         </div>
 

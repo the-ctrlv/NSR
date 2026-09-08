@@ -22,7 +22,10 @@ export function PracticeCases() {
     registerGsap();
     const ctx = gsap.context(() => {
       const compact = window.matchMedia("(max-width: 639px)").matches;
-      const rotations = compact ? [-1.5, 1.5, -1] : [-3, 2, -2];
+      // Per original card: tilt applied once it's no longer the active
+      // (front) card — card 1 tilts one way, card 2 the other, card 3 never
+      // recedes so its own entry here is unused.
+      const rotations = [3, -3, 0];
       const offsetX = compact ? 10 : 18;
       const offsetY = compact ? -8 : -14;
       const stackHeight = compact ? 680 : 540;
@@ -44,18 +47,27 @@ export function PracticeCases() {
           x: index * offsetX,
           y: index === 0 ? 0 : stackHeight + index * 24,
           scale: 1 - index * 0.012,
+          // The front card (index 0) always lands flat; only cards waiting
+          // behind it show their tilt.
           rotation: index === 0 ? 0 : rotations[index % rotations.length],
         });
       };
 
       cards.forEach((card, index) => setStackState(card, index));
 
+      // Extra pause held after the last card lands, before the section
+      // releases — expressed in the same "1 transition = 1 unit" scale as
+      // the card-swap steps below, so it stretches the scroll range without
+      // slowing the swaps themselves.
+      const HOLD = 0.5;
+      const timelineUnits = cards.length - 1 + HOLD;
+
       const timeline = gsap.timeline({
         defaults: { duration: 1, ease: "power2.inOut" },
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          end: `+=${(cards.length - 1) * 110}%`,
+          end: `+=${timelineUnits * 110}%`,
           pin: true,
           pinSpacing: true,
           scrub: true,
@@ -103,6 +115,8 @@ export function PracticeCases() {
           );
         });
       }
+
+      timeline.to({}, { duration: HOLD });
     }, section);
 
     return () => ctx.revert();

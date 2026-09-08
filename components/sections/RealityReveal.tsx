@@ -7,6 +7,7 @@ import {
   registerGsap,
   prefersReducedMotion,
 } from "@/lib/gsap";
+import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { realityReveal } from "@/lib/content";
 
 const { eyebrow, intro, lines, statement } = realityReveal;
@@ -236,8 +237,9 @@ export function RealityReveal() {
             never shows this screen; on desktop it's revealed via the scroll-driven circle wipe. */}
         <div
           ref={afterRef}
-          className="hidden min-h-screen flex-col gap-40 bg-ink px-6 py-20 sm:px-10 lg:flex lg:px-[50px]"
+          className="relative isolate hidden min-h-screen flex-col gap-40 bg-ink px-6 py-20 sm:px-10 lg:flex lg:px-[50px]"
         >
+          <GrainOverlay className="-z-10 opacity-[0.12] mix-blend-overlay" />
           <Heading tone="alabaster" />
           <p
             ref={statementRef}

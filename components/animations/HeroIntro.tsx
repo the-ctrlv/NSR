@@ -2,13 +2,21 @@
 
 import { useLayoutEffect, useRef } from "react";
 import type { ReactNode } from "react";
-import { gsap, registerGsap, prefersReducedMotion } from "@/lib/gsap";
+import { gsap, ScrollTrigger, registerGsap, prefersReducedMotion } from "@/lib/gsap";
+import { HERO_PIN_END, HERO_REVEAL_AT, HERO_REVEAL_EVENT } from "@/lib/heroReveal";
 
 /**
  * Staged hero entrance, matching the Figma storyboard (Frame 1000001971→1973):
  * background settles first, then chrome (header/labels) fades in, then the
- * transient "Complex matters in Mallorca" line reads clearly for a beat before
- * the real headline rolls in to replace it, then subtext/CTA follow.
+ * transient "Complex matters in Mallorca" line reads clearly and holds. The
+ * hero pins itself in place and the swap to the real headline/subtext is
+ * gated by a scroll threshold (not a timer) — the section doesn't visibly
+ * move, scrolling a little just fires that reveal, and scrolling back up
+ * reverses it. The CTA button lives outside the hero entirely (see
+ * FloatingCta) so it can stay fixed across the whole site instead of being
+ * pinned to this section — it listens for HERO_REVEAL_EVENT (dispatched
+ * below) rather than computing its own threshold, so it always appears in
+ * the same beat as this headline, never independently.
  */
 export function HeroIntro({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -16,15 +24,17 @@ export function HeroIntro({ children }: { children: ReactNode }) {
   useLayoutEffect(() => {
     const root = ref.current;
     if (!root) return;
+    // HeroIntro renders as the sole child of Hero's <section> — that section
+    // is what needs to pin, but its ref lives one level up in Hero.tsx.
+    const section = root.parentElement;
+    if (!section) return;
 
     const bgLines = root.querySelector<HTMLElement>('[data-hero="bg-lines"]');
     const portrait = root.querySelector<HTMLElement>('[data-hero="portrait"]');
     const chrome = root.querySelectorAll<HTMLElement>('[data-hero="chrome"]');
     const ghost = root.querySelector<HTMLElement>('[data-hero="ghost"]');
     const headline = root.querySelector<HTMLElement>('[data-hero="headline"]');
-    const rest = root.querySelectorAll<HTMLElement>(
-      '[data-hero="subtext"], [data-hero="cta"]',
-    );
+    const rest = root.querySelectorAll<HTMLElement>('[data-hero="subtext"]');
     const mainContent = headline
       ? [headline, ...Array.from(rest)]
       : Array.from(rest);
@@ -62,33 +72,61 @@ export function HeroIntro({ children }: { children: ReactNode }) {
       if (headline) gsap.set(headline, { opacity: 0, y: 24 });
       gsap.set(rest, { opacity: 0, y: 20 });
 
-      const tl = gsap.timeline({
+      // Entrance: chrome fades in, the transient line rolls in and holds —
+      // no auto-dissolve, it just sits there until the user scrolls.
+      const introTl = gsap.timeline({
         delay: 0.8,
         defaults: { ease: "power3.out" },
       });
 
-      tl.to(chrome, { opacity: 1, y: 0, duration: 0.6, stagger: 0.06 });
+      introTl.to(chrome, { opacity: 1, y: 0, duration: 0.6, stagger: 0.06 });
 
       if (ghost) {
-        // First line rolls in and reads clearly on its own for a beat.
-        tl.to(ghost, { opacity: 1, y: 0, duration: 0.45 }, "<0.1").to(
-          ghost,
-          { opacity: 0, y: -28, duration: 0.55, ease: "sine.inOut" },
-          "+=0.3",
-        );
+        introTl.to(ghost, { opacity: 1, y: 0, duration: 0.45 }, "<0.1");
       }
 
-      tl.to(
+      // One snap-in beat, not scrubbed: the transient line slides out while
+      // the real headline/subtext slide in together, at a fixed duration,
+      // the instant the threshold is crossed — and reverses the same way
+      // when scrolled back above it.
+      const mainTl = gsap.timeline({
+        paused: true,
+        defaults: { ease: "sine.inOut" },
+      });
+      if (ghost) {
+        mainTl.to(ghost, { opacity: 0, y: -24, duration: 0.4 }, 0);
+      }
+      mainTl.to(
         mainContent,
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.55,
-          stagger: 0,
-          ease: "sine.inOut",
-        },
-        ghost ? "<+=0.1" : "+=0.1",
+        { opacity: 1, y: 0, duration: 0.4, stagger: 0 },
+        0,
       );
+
+      let revealed = false;
+      const trigger = ScrollTrigger.create({
+        trigger: section,
+        start: "top top",
+        end: HERO_PIN_END,
+        pin: true,
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          const shouldReveal = self.progress >= HERO_REVEAL_AT;
+          if (shouldReveal !== revealed) {
+            revealed = shouldReveal;
+            if (revealed) mainTl.play();
+            else mainTl.reverse();
+            window.dispatchEvent(
+              new CustomEvent(HERO_REVEAL_EVENT, {
+                detail: { revealed: shouldReveal },
+              }),
+            );
+          }
+        },
+      });
+
+      return () => {
+        trigger.kill();
+      };
     }, root);
 
     return () => ctx.revert();
