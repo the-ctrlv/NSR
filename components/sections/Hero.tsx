@@ -136,7 +136,7 @@ export function Hero() {
               <p
                 data-hero="ghost"
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 flex select-none items-center justify-center whitespace-nowrap font-serif text-[50px] leading-[0.95] text-alabaster sm:text-5xl md:text-6xl lg:text-7xl"
+                className="pointer-events-none text-[50px] sm:text-6xl md:text-[90px] absolute inset-0 flex select-none items-center justify-center whitespace-nowrap font-serif text-[50px] leading-[0.95] text-alabaster"
               >
                 Complex matters in Mallorca
               </p>

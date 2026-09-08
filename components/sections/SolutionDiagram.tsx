@@ -30,7 +30,10 @@ export function SolutionDiagram() {
           </div>
         </div>
 
-        <SequentialFlowReveal className="mt-32 flex flex-col items-start justify-between gap-6 sm:flex-row sm:flex-wrap sm:gap-x-8 lg:gap-x-12">
+        <SequentialFlowReveal
+          start="top 95%"
+          className="mt-32 flex flex-col items-start justify-between gap-6 sm:flex-row sm:flex-wrap sm:gap-x-8 lg:gap-x-12"
+        >
           {solution.flow.map((step, i) => (
             <div
               key={step}
