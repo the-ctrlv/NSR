@@ -26,9 +26,10 @@ export function PracticeCases() {
       // (front) card — card 1 tilts one way, card 2 the other, card 3 never
       // recedes so its own entry here is unused.
       const rotations = [3, -3, 0];
-      const offsetX = compact ? 10 : 18;
-      const offsetY = compact ? -8 : -14;
       const stackHeight = compact ? 680 : 540;
+      // Full container height below — the incoming card starts as if
+      // arriving from the section below.
+      const enterFromY = stackHeight;
 
       gsap.set(stack, {
         position: "relative",
@@ -44,11 +45,16 @@ export function PracticeCases() {
       const setStackState = (card: HTMLElement, index: number) => {
         gsap.set(card, {
           zIndex: cards.length - index,
-          x: index * offsetX,
-          y: index === 0 ? 0 : stackHeight + index * 24,
-          scale: 1 - index * 0.012,
+          // Cards not yet "arrived" are hidden outright (not just faded —
+          // visibility, so it's an instant on/off switch, no fade) and
+          // parked below their spot, so nothing peeks out early and the
+          // already-arrived cards' rotated corners are never clipped by an
+          // overflow-hidden container.
+          visibility: index === 0 ? "visible" : "hidden",
+          y: index === 0 ? 0 : enterFromY,
           // The front card (index 0) always lands flat; only cards waiting
-          // behind it show their tilt.
+          // behind it show their tilt. Once a card has arrived it never
+          // moves again — only rotation and stacking order change.
           rotation: index === 0 ? 0 : rotations[index % rotations.length],
         });
       };
@@ -84,15 +90,14 @@ export function PracticeCases() {
             cards[frontIndex],
             {
               zIndex: cards.length + frontIndex,
+              visibility: "visible",
             },
             position,
           )
           .to(
             cards[frontIndex],
             {
-              x: 0,
               y: 0,
-              scale: 1,
               rotation: 0,
             },
             position,
@@ -106,9 +111,6 @@ export function PracticeCases() {
             card,
             {
               zIndex: cards.length - stackDepth,
-              x: stackDepth * offsetX,
-              y: stackDepth * offsetY,
-              scale: 1 - stackDepth * 0.012,
               rotation: rotations[depth % rotations.length],
             },
             position,
