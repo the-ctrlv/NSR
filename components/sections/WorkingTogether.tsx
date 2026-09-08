@@ -1,6 +1,10 @@
+"use client";
+
+import { useLayoutEffect, useRef } from "react";
 import { Reveal } from "@/components/animations/Reveal";
 import { Container } from "@/components/ui/Container";
 import { workingTogether } from "@/lib/content";
+import { gsap, registerGsap, prefersReducedMotion } from "@/lib/gsap";
 
 const numerals: Record<string, string> = {
   "01": "/icons/numeral-01-big.svg",
@@ -8,11 +12,61 @@ const numerals: Record<string, string> = {
 };
 
 export function WorkingTogether() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    const bg = bgRef.current;
+    if (!section || !bg || prefersReducedMotion()) return;
+
+    registerGsap();
+    const ctx = gsap.context(() => {
+      // One-time settle: the background is slightly over-zoomed as the
+      // section scrolls into view, then eases down to its resting scale.
+      gsap.fromTo(
+        bg,
+        { scale: 1.45 },
+        {
+          scale: 1.35,
+          duration: 1.4,
+          ease: "power2.out",
+          scrollTrigger: { trigger: section, start: "top 85%", once: true },
+        },
+      );
+
+      // Continuous parallax drift for as long as the section is in view —
+      // the resting 1.35 scale keeps this wider range from ever showing an
+      // edge.
+      gsap.fromTo(
+        bg,
+        { yPercent: -15 },
+        {
+          yPercent: 15,
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        },
+      );
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section
-      className="bg-paper py-20 h-screen text-alabaster bg-[url('/images/blurred-wt.jpg')] bg-cover bg-center bg-no-repeat"
+      ref={sectionRef}
+      className="relative isolate h-screen overflow-hidden bg-paper py-20 text-alabaster"
       aria-labelledby="working-heading"
     >
+      <div
+        ref={bgRef}
+        className="absolute inset-0 -z-10 bg-[url('/images/blurred-wt.jpg')] bg-cover bg-center bg-no-repeat"
+      />
       <Container className="relative flex flex-col justify-between h-full">
         <div className="mb-16 flex flex-col justify-between gap-6 lg:flex-row lg:items-start">
           <p className="flex items-center gap-3 font-sans text-eyebrow font-medium uppercase tracking-wide">
