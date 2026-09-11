@@ -11,6 +11,7 @@ import { FAQSection } from "@/components/sections/FAQSection";
 import { ClosingCta } from "@/components/sections/ClosingCta";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { FloatingCta } from "@/components/layout/FloatingCta";
+import { StickyHeader } from "@/components/layout/StickyHeader";
 import { siteConfig } from "@/lib/content";
 
 const structuredData = {
@@ -53,6 +54,7 @@ export default function Home() {
         <SiteFooter />
       </div>
       <FloatingCta />
+      <StickyHeader />
     </>
   );
 }
