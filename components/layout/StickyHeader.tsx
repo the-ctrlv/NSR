@@ -30,35 +30,41 @@ export function StickyHeader() {
     const hero = document.querySelector<HTMLElement>("[data-hero-root]");
 
     const ctx = gsap.context(() => {
-      let visible = false;
+      // Mobile has no sticky header at all — MobileNav's own full-screen
+      // panel already covers navigation there.
+      const mm = gsap.matchMedia();
 
-      const setVisible = (next: boolean) => {
-        if (next === visible) return;
-        visible = next;
-        gsap.to(el, {
-          yPercent: next ? 0 : -100,
-          duration: 0.4,
-          ease: "power2.out",
-          overwrite: true,
+      mm.add("(min-width: 1024px)", () => {
+        let visible = false;
+
+        const setVisible = (next: boolean) => {
+          if (next === visible) return;
+          visible = next;
+          gsap.to(el, {
+            yPercent: next ? 0 : -100,
+            duration: 0.4,
+            ease: "power2.out",
+            overwrite: true,
+          });
+        };
+
+        const trigger = ScrollTrigger.create({
+          start: 0,
+          end: "max",
+          onUpdate: (self) => {
+            const heroHeight = hero?.offsetHeight ?? 0;
+            if (self.scroll() < heroHeight) {
+              setVisible(false);
+              return;
+            }
+            setVisible(self.direction === -1);
+          },
         });
-      };
 
-      const trigger = ScrollTrigger.create({
-        start: 0,
-        end: "max",
-        onUpdate: (self) => {
-          const heroHeight = hero?.offsetHeight ?? 0;
-          if (self.scroll() < heroHeight) {
-            setVisible(false);
-            return;
-          }
-          setVisible(self.direction === -1);
-        },
+        return () => {
+          trigger.kill();
+        };
       });
-
-      return () => {
-        trigger.kill();
-      };
     });
 
     return () => ctx.revert();
@@ -67,7 +73,7 @@ export function StickyHeader() {
   return (
     <header
       ref={ref}
-      className="fixed inset-x-0 top-0 z-40 flex items-center justify-between gap-6 border-b border-alabaster/20 bg-ink/95 px-6 pt-7 pb-5 text-alabaster backdrop-blur-sm sm:px-10 lg:px-[50px]"
+      className="fixed inset-x-0 top-0 z-40 hidden items-center justify-between gap-6 border-b border-alabaster/20 bg-ink/95 px-6 pt-7 pb-5 text-alabaster backdrop-blur-sm lg:flex lg:px-[50px]"
     >
       <a
         href="#top"

@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { HeroIntro } from "@/components/animations/HeroIntro";
-import { MobileNav } from "@/components/layout/MobileNav";
 import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { audienceLabels, navLinks, siteConfig } from "@/lib/content";
 
@@ -34,7 +33,7 @@ export function Hero() {
           <GrainOverlay className="opacity-[0.25] mix-blend-overlay" />
           <div
             data-hero="portrait"
-            className="absolute inset-x-0 top-[10%] mx-auto h-[95%] w-[45%] min-w-[280px] overflow-hidden"
+            className="absolute inset-x-0 top-[10%] mx-auto h-[95%] w-screen sm:w-[45%] min-w-[280px] overflow-hidden"
           >
             <Image
               src="/images/hero-portrait.png"
@@ -45,13 +44,13 @@ export function Hero() {
               className="object-contain"
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-b from-ink/0 from-[68%] to-ink/90 to-[90%]" />
+          <div className="absolute inset-x-0 bottom-0 h-[65vh] bg-gradient-to-b from-ink/0 from-0% to-ink to-[78%] sm:from-[55%] sm:to-ink/97 sm:to-[85%]" />
         </div>
 
         {/* Header */}
         <header
           data-hero="chrome"
-          className="relative z-10 flex items-center justify-between gap-6 border-b border-alabaster/20 px-6 pt-7 pb-5 sm:px-10 lg:px-[50px]"
+          className="relative z-10 flex items-center justify-between gap-6 border-b border-alabaster/20 px-4 pt-6 pb-3 sm:px-10 lg:px-[50px]"
         >
           <a
             href="#top"
@@ -63,7 +62,7 @@ export function Hero() {
               src="/icons/logo.svg"
               alt=""
               aria-hidden="true"
-              className="h-11 w-auto sm:h-9"
+              className="h-[25px] w-auto sm:h-9"
             />
           </a>
           <nav aria-label="Primary" className="hidden lg:block">
@@ -80,7 +79,6 @@ export function Hero() {
               ))}
             </ul>
           </nav>
-          <MobileNav />
         </header>
 
         {/* Top row (desktop): partner info (left) + audience labels (right), both directly under the header */}
@@ -92,7 +90,7 @@ export function Hero() {
             <p className="font-sans text-[15px] leading-[1.7]">
               Independent Local Operating Partner
             </p>
-            <p className="text-lg uppercase leading-[1.7] tracking-[0.04em]">
+            <p className="text-lg uppercase leading-[1.7] tracking-[0.02em]">
               Nataliia Sychenko Romanova
             </p>
           </div>
@@ -106,9 +104,9 @@ export function Hero() {
         {/* Audience labels only (mobile/tablet) — top-right, no matching partner-info row at this size */}
         <div
           data-hero="chrome"
-          className="relative z-10 flex justify-end px-6 pt-6 sm:px-10 lg:hidden"
+          className="relative z-10 flex justify-end px-4 pt-[30px] sm:px-10 lg:hidden"
         >
-          <div className="flex flex-col items-end gap-2 text-right font-serif text-base uppercase text-alabaster">
+          <div className="flex flex-col items-end gap-2 text-right font-serif text-base uppercase leading-[1.4] text-alabaster">
             {audienceLabels.map((label) => (
               <p key={label}>{label}</p>
             ))}
@@ -116,35 +114,35 @@ export function Hero() {
         </div>
 
         {/* Main content */}
-        <div className="relative z-10 flex flex-1 flex-col justify-end px-6 pb-24 sm:px-10 lg:px-[50px]">
+        <div className="relative z-10 flex flex-1 flex-col justify-end px-4 pb-24 sm:px-10 lg:px-[50px]">
           {/* Partner info (mobile/tablet) — centered above the headline, matching the mobile layout */}
           <div
             data-hero="chrome"
-            className="mb-6 text-center font-serif text-alabaster lg:hidden"
+            className="mx-auto mb-5 max-w-[277px] text-center font-serif text-alabaster lg:hidden"
           >
             <p className="font-sans text-[15px] leading-[1.7]">
               Independent Local Operating Partner
             </p>
-            <p className="text-lg uppercase leading-[1.7] tracking-[0.04em]">
+            <p className="text-lg uppercase leading-[1.7] tracking-[0.02em]">
               Nataliia Sychenko Romanova
             </p>
           </div>
 
           <div className="mx-auto flex max-w-[893px] flex-col items-center gap-2 text-center">
             <div className="relative">
-              {/* Transient entrance line — blurs into view then dissolves as the real headline sharpens in its place. */}
+              {/* Transient entrance line — blurs into view then dissolves as the real headline sharpens in its place. Mirrors the headline text/sizing exactly so the two align during the morph. */}
               <p
                 data-hero="ghost"
                 aria-hidden="true"
-                className="pointer-events-none text-[50px] sm:text-6xl md:text-[90px] absolute inset-0 flex select-none items-center justify-center whitespace-nowrap font-serif text-[50px] leading-[0.95] text-alabaster"
+                className="pointer-events-none absolute inset-0 flex select-none items-center justify-center text-center font-serif text-[clamp(2.25rem,calc(14vw_-_8px),3.125rem)] leading-none text-alabaster sm:text-6xl md:text-7xl lg:text-display"
               >
-                Complex matters in Mallorca
+                {siteConfig.tagline}
               </p>
               <h1
                 data-hero="headline"
-                className="font-serif text-[50px] leading-[0.95] sm:text-6xl md:text-7xl lg:text-display"
+                className="font-serif text-[clamp(2.25rem,calc(14vw_-_8px),3.125rem)] leading-none sm:text-6xl md:text-7xl lg:text-display"
               >
-                {siteConfig.tagline}
+                {siteConfig.tagline2}
               </h1>
             </div>
             <p
@@ -159,14 +157,14 @@ export function Hero() {
         <a
           data-hero="chrome"
           href="#matters"
-          className="group absolute bottom-8 left-6 z-10 hidden items-center gap-3 sm:flex lg:left-[50px]"
+          className="group absolute left-4 top-[100px] z-10 flex flex-col items-center gap-3 sm:left-6 sm:top-auto sm:bottom-8 sm:flex-row lg:left-[50px]"
           aria-label="Scroll to content"
         >
-          <span className="font-sans text-sm text-alabaster [writing-mode:vertical-lr]">
+          <span className="font-sans text-sm leading-[1.6] text-alabaster [writing-mode:vertical-lr]">
             Scroll down
           </span>
           <span
-            className="h-16 w-px animate-pulse bg-alabaster/50"
+            className="h-[60px] w-px animate-pulse bg-alabaster/50 sm:h-16"
             aria-hidden="true"
           />
         </a>

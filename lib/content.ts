@@ -1,6 +1,7 @@
 export const siteConfig = {
   name: "NSR Mallorca",
-  tagline: "Taking the lead on local matters",
+  tagline: "Complex matters on Mallorca",
+  tagline2: "Taking the lead on local matters",
   heroSubtext:
     "From finding a solution and the right people to coordinating execution and representing your interests on Mallorca.",
   description:

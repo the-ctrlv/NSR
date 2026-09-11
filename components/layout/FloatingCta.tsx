@@ -45,7 +45,7 @@ export function FloatingCta() {
   return (
     <div
       ref={ref}
-      className="fixed bottom-6 right-6 z-50 sm:bottom-8 sm:right-8 lg:bottom-10 lg:right-[50px]"
+      className="fixed bottom-6 right-6 z-50 hidden sm:block sm:bottom-8 sm:right-8 lg:bottom-10 lg:right-[50px]"
     >
       <Button href="#contact" variant="light">
         Share your situation
