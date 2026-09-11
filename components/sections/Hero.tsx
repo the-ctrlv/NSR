@@ -157,16 +157,18 @@ export function Hero() {
         <a
           data-hero="chrome"
           href="#matters"
-          className="group absolute left-4 top-[100px] z-10 flex flex-col items-center gap-3 sm:left-6 sm:top-auto sm:bottom-8 sm:flex-row lg:left-[50px]"
+          className="group absolute left-4 top-[100px] z-10 flex flex-col items-center gap-3 sm:left-6 sm:top-auto sm:bottom-8 lg:left-[50px]"
           aria-label="Scroll to content"
         >
           <span className="font-sans text-sm leading-[1.6] text-alabaster [writing-mode:vertical-lr]">
             Scroll down
           </span>
           <span
-            className="h-[60px] w-px animate-pulse bg-alabaster/50 sm:h-16"
+            className="relative block h-[60px] w-px overflow-hidden bg-alabaster/20 sm:h-16"
             aria-hidden="true"
-          />
+          >
+            <span className="absolute inset-x-0 top-0 h-1/3 animate-[scroll-line_2s_ease-in-out_infinite] bg-alabaster" />
+          </span>
         </a>
       </HeroIntro>
     </section>
