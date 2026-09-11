@@ -271,7 +271,7 @@ export function AboutFounder() {
             so it gets its own copy of Container's shape with px-4 instead. */}
         <div className="relative z-10 mx-auto w-full max-w-[1470px] px-4 sm:px-10 lg:px-[50px] lg:h-full">
           {/* No shared `gap` — mobile spacing between chapters is uneven
-              (40 / -37 / 56 / 56 / 39px per Figma), so each chapter carries
+              (40 / -37 / 40 / 80 / 39px per Figma), so each chapter carries
               its own mt-* below; lg:mt-0 clears it once desktop takes over
               with absolute positioning. */}
           <div ref={stageRef} className="flex flex-col lg:block lg:h-full">
@@ -318,7 +318,7 @@ export function AboutFounder() {
 
             <div
               data-chapter="stats"
-              className="mt-14 mx-auto flex w-[313px] flex-col items-center divide-y divide-smoky/20 lg:mt-0 lg:mx-0 lg:w-auto lg:flex-row lg:justify-between lg:divide-y-0 lg:absolute lg:bottom-20 lg:left-1/2 lg:-translate-x-1/2"
+              className="mt-10 mx-auto flex w-[313px] flex-col items-center divide-y divide-smoky/20 lg:mt-0 lg:mx-0 lg:w-auto lg:flex-row lg:justify-between lg:divide-y-0 lg:absolute lg:bottom-20 lg:left-1/2 lg:-translate-x-1/2"
             >
               {stats.map((stat, index) => {
                 const hasPlus = stat.value.endsWith("+");
@@ -328,10 +328,11 @@ export function AboutFounder() {
                 return (
                   <div
                     key={stat.label}
-                    className={`flex w-full flex-col items-center px-[60px] py-6 text-center lg:w-[374.5px] lg:gap-2 lg:px-8 lg:py-10
+                    className={`flex w-full flex-col items-center px-[10px] py-6 text-center lg:w-[374.5px] lg:gap-2 lg:px-8 lg:py-10
                     ${index === 1 ? "lg:border-x lg:border-smoky/20" : ""}
-                    ${index === 0 ? "lg:border-l lg:border-smoky/20" : ""}
-                    ${index === 2 ? "lg:border-r lg:border-smoky/20" : ""}`}
+                    ${index === 0 ? "border-t lg:border-t-0 lg:border-l lg:border-smoky/20" : ""}
+                    ${index === 2 ? "border-smoky/20 border-b lg:border-b-0 lg:border-r lg:border-smoky/20" : ""}
+                    `}
                   >
                     <p className="font-serif uppercase leading-none">
                       <span className="text-[70px] leading-none lg:text-8xl">
@@ -358,7 +359,7 @@ export function AboutFounder() {
 
             <div
               data-chapter="background"
-              className="mt-14 flex flex-col justify-between gap-[17px] lg:mt-0 lg:gap-6 lg:absolute lg:inset-x-0 lg:top-0 lg:max-w-[1470px] lg:px-[50px] lg:py-20 lg:flex-row lg:items-start"
+              className="mt-20 flex flex-col justify-between gap-[17px] lg:mt-0 lg:gap-6 lg:absolute lg:inset-x-0 lg:top-0 lg:max-w-[1470px] lg:px-[50px] lg:py-20 lg:flex-row lg:items-start"
             >
               <p className="flex items-center gap-3 font-sans text-eyebrow font-medium uppercase leading-[1.4] tracking-wide">
                 <span aria-hidden="true">→</span>

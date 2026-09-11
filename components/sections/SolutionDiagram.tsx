@@ -8,21 +8,30 @@ export function SolutionDiagram() {
   return (
     <section
       id="about"
-      className="bg-paper py-20"
+      className="bg-paper pt-20 pb-16 lg:pb-20"
       aria-labelledby="solution-heading"
     >
-      <Container>
-        <Eyebrow className="mb-20">{solution.eyebrow}</Eyebrow>
+      <Container className="max-sm:!px-4">
+        <Eyebrow className="mb-8 lg:mb-20">{solution.eyebrow}</Eyebrow>
 
-        <div className="grid gap-10 lg:grid-cols-[1fr_383px] lg:gap-16">
+        <div className="grid gap-5 lg:grid-cols-[1fr_383px] lg:gap-16">
           <TextFillReveal
             id="solution-heading"
             lines={solution.heading}
             className="font-serif text-4xl leading-[1.1] text-ink sm:text-h2"
           />
-          <div className="flex flex-col gap-3 pt-4">
+          <div className="flex flex-col gap-2 pt-0 lg:gap-3 lg:pt-4">
             <p className="font-serif text-lg leading-[1.3] text-ink lg:text-[22px]">
-              {solution.paragraphs[0]}
+              {solution.paragraphs[0]
+                .split("one person")
+                .map((part, i, arr) => (
+                  <span key={i}>
+                    {part}
+                    {i < arr.length - 1 && (
+                      <span className="uppercase">one person</span>
+                    )}
+                  </span>
+                ))}
             </p>
             <p className="font-sans text-base leading-[1.4] text-ink/80">
               {solution.paragraphs[1]}
@@ -32,12 +41,14 @@ export function SolutionDiagram() {
 
         <SequentialFlowReveal
           start="top 95%"
-          className="mt-32 flex flex-col items-start justify-between gap-6 sm:flex-row sm:flex-wrap sm:gap-x-8 lg:gap-x-12"
+          className="mt-10 flex flex-col items-center justify-between gap-6 sm:flex-row sm:flex-wrap sm:items-start sm:gap-x-8 lg:mt-32 lg:gap-x-12"
         >
           {solution.flow.map((step, i) => (
             <div
               key={step}
-              className={`flex flex-col items-center gap-3 sm:flex-row ${
+              className={`flex flex-col items-center ${
+                i === solution.flow.length - 1 ? "gap-2" : "gap-6"
+              } sm:flex-row sm:!gap-3 ${
                 i === solution.flow.length - 1
                   ? "lg:flex-col lg:items-start"
                   : ""
@@ -52,13 +63,15 @@ export function SolutionDiagram() {
                 {step}
               </span>
               {i < solution.flow.length - 1 && (
-                <img
-                  src="/icons/arrow.svg"
-                  alt=""
-                  aria-hidden="true"
-                  data-flow-arrow
-                  className="h-auto w-[88px]"
-                />
+                <div className="flex h-16 w-16 items-center justify-center sm:h-auto sm:w-[88px]">
+                  <img
+                    src="/icons/arrow.svg"
+                    alt=""
+                    aria-hidden="true"
+                    data-flow-arrow
+                    className="h-auto w-16 rotate-90 sm:w-[88px] sm:rotate-0"
+                  />
+                </div>
               )}
               {i === solution.flow.length - 1 && (
                 <ul

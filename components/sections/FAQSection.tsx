@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Reveal } from "@/components/animations/Reveal";
+import { TextFillReveal } from "@/components/animations/TextFillReveal";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { faq } from "@/lib/content";
@@ -26,12 +27,11 @@ export function FAQSection() {
       <Container>
         <Eyebrow className="mb-6">{faq.eyebrow}</Eyebrow>
         <div className="grid gap-12 lg:grid-cols-[459px_1fr] lg:gap-55 mt-15">
-          <h2
+          <TextFillReveal
             id="faq-heading"
+            lines={[faq.heading]}
             className="font-serif text-4xl leading-[1.1] text-ink sm:text-5xl lg:text-[56px]"
-          >
-            {faq.heading}
-          </h2>
+          />
           <Reveal
             as="div"
             stagger={0.08}

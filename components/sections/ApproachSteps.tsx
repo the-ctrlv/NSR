@@ -79,21 +79,25 @@ export function ApproachSteps() {
                 data-approach-step
                 className="relative overflow-hidden border-b border-hairline"
               >
+                {/* Mobile: shrunk down to a quiet watermark sitting behind
+                    the (now full-width) text instead of a large figure
+                    pushing it over. Desktop keeps the original large
+                    left-hand numeral, text indented to clear it. */}
                 <div
                   data-approach-numeral
-                  className="absolute -left-2 top-11"
+                  className="absolute right-0 bottom-0 lg:top-1/2 lg:-left-2 lg:top-11 lg:right-auto lg:translate-y-0"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element -- exported numeral artwork */}
                   <img
                     src={`/icons/numeral-${step.number}.svg`}
                     alt=""
                     aria-hidden="true"
-                    className={`block h-auto translate-x-2 ${index === 0 ? "w-[122px] translate-y-2" : "w-40 translate-y-3"}`}
+                    className={`block h-auto lg:translate-x-2 ${index === 0 ? "w-20 lg:w-[122px] lg:translate-y-2" : "w-24 lg:w-40 lg:translate-y-3"}`}
                   />
                 </div>
                 <div
                   data-approach-text
-                  className="relative ml-50 flex max-w-[546px] flex-col gap-1 pt-[70px]"
+                  className="relative z-10 flex w-full flex-col gap-1 py-8 lg:ml-50 lg:max-w-[546px] lg:py-0 lg:pt-[70px]"
                 >
                   <h3 className="font-serif text-xl leading-none lg:text-2xl">
                     {step.title}

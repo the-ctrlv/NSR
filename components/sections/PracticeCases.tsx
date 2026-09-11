@@ -127,37 +127,37 @@ export function PracticeCases() {
   return (
     <section
       ref={sectionRef}
-      className="bg-paper py-20 lg:min-h-screen"
+      className="bg-paper py-10 lg:py-20 lg:min-h-screen"
       aria-label="NSR in practice"
     >
       <Container>
-        <Eyebrow className="mb-10 lg:mb-16">{practiceCases.eyebrow}</Eyebrow>
+        <Eyebrow className="mb-6 lg:mb-16">{practiceCases.eyebrow}</Eyebrow>
 
         <ul
           ref={stackRef}
-          className="relative flex min-h-[680px] flex-col gap-6 lg:min-h-[540px]"
+          className="relative flex min-h-[680px] flex-col gap-6 lg:min-h-[540px] w-[calc(100%+16px)] translate-x-[-8px] lg:translate-x-0 lg:w-auto"
         >
           {practiceCases.cases.map((item) => (
             <li
               key={item.title}
-              className="relative isolate h-full overflow-hidden border border-hairline bg-paper px-4 pb-4 pt-10 lg:py-20 lg:px-15"
+              className="relative isolate flex h-full flex-col justify-between overflow-hidden border border-hairline bg-paper px-4 pb-4 pt-6 lg:block lg:py-20 lg:px-15"
             >
               <GrainOverlay className="opacity-[0.08] mix-blend-overlay" />
-              <div className="relative flex gap-8 justify-between lg:gap-14">
-                <h3 className="font-serif text-[32px] leading-[1.1] text-ink lg:text-[48px] max-w-sm">
+              <div className="relative flex flex-col gap-2 lg:flex-row lg:justify-between lg:gap-14">
+                <h3 className="font-serif text-[32px] leading-[1.1] text-ink lg:max-w-sm lg:text-[48px]">
                   {item.title}
                 </h3>
 
-                <div className="flex flex-col gap-10 lg:gap-14 max-w-[708px]">
-                  <p className="font-serif indent-[100px] text-base leading-[1.2] text-ink lg:text-2xl">
+                <div className="flex flex-col gap-4 lg:gap-14 max-w-[708px]">
+                  <p className="font-serif indent-[100px] text-lg leading-[1.2] text-ink lg:text-2xl">
                     {item.intro}
                   </p>
 
-                  <div className="flex flex-col gap-5 sm:flex-row sm:gap-5">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:gap-5">
                     <p className="font-serif text-lg leading-none text-ink sm:w-[100px] sm:shrink-0">
                       {item.roleLabel}
                     </p>
-                    <div className="flex flex-col gap-3 border-hairline pl-0 font-sans text-[15px] leading-[1.5] text-ink sm:border-l sm:pl-5">
+                    <div className="flex flex-col gap-3 border-l border-hairline pl-3 font-sans text-[14px] leading-[1.5] text-ink sm:pl-5">
                       {"lead" in item && item.lead && (
                         <p className="font-semibold">{item.lead}</p>
                       )}
@@ -169,7 +169,7 @@ export function PracticeCases() {
                         </ul>
                       )}
                       {"paragraphs" in item && item.paragraphs && (
-                        <div className="flex flex-col gap-3 text-ink/80">
+                        <div className="flex flex-col gap-2 text-ink/80">
                           {item.paragraphs.map((p) => (
                             <p key={p}>{p}</p>
                           ))}
@@ -183,7 +183,7 @@ export function PracticeCases() {
                 </div>
               </div>
 
-              <p className="relative mt-10 font-serif text-lg uppercase text-ink lg:absolute lg:bottom-20 lg:left-20 lg:mt-0">
+              <p className="relative font-serif text-lg uppercase leading-[1.4] text-ink lg:absolute lg:bottom-20 lg:left-20">
                 {item.counter}
               </p>
             </li>
