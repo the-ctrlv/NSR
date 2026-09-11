@@ -32,7 +32,7 @@ export function ProblemsGrid() {
 
         <Reveal
           as="ul"
-          stagger={0.22}
+          stagger={0.42}
           className="grid grid-cols-1 border-y max-w-[745px] border-hairline sm:grid-cols-2 mt-12"
         >
           {problemCards.map((card, index) => {
@@ -44,7 +44,7 @@ export function ProblemsGrid() {
                 key={card.title.join(" ")}
                 className={`flex flex-col gap-12 border-hairline bg-paper px-0 py-8 sm:px-6 ${
                   isLastMobile ? "" : "border-b"
-                } sm:border-b-0 ${isTopRowDesktop ? "sm:border-b" : ""} ${
+                } sm:border-b-0 ${isTopRowDesktop ? "sm:!border-b" : ""} ${
                   isLeftColDesktop ? "sm:border-r" : ""
                 }`}
               >

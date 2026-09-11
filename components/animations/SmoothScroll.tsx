@@ -17,6 +17,13 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       lerp: 0.06,
       wheelMultiplier: 0.85,
       syncTouch: true,
+      // Nav links (#matters, #about, etc.) go through Lenis's own animated
+      // scrollTo instead of the browser's instant hash jump. This has to be
+      // Lenis's scroll, not a separate gsap.to(window, {scrollTo}) tween —
+      // Lenis already owns the scroll position every frame via the ticker
+      // above, so a second RAF loop writing to window.scrollY at the same
+      // time would fight it and stutter.
+      anchors: { duration: 1.2 },
     });
 
     const updateScroll = (time: number) => {
