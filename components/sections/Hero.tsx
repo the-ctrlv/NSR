@@ -33,7 +33,7 @@ export function Hero() {
           <GrainOverlay className="opacity-[0.25] mix-blend-overlay" />
           <div
             data-hero="portrait"
-            className="absolute inset-x-0 top-[10%] mx-auto h-[95%] w-screen sm:w-[45%] min-w-[280px] overflow-hidden"
+            className="absolute inset-x-0 top-[10%] isolate mx-auto h-[95%] w-screen sm:w-[45%] min-w-[280px] overflow-hidden"
           >
             <Image
               src="/images/hero-portrait.png"

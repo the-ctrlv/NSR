@@ -13,16 +13,6 @@ import { founderReveal } from "@/lib/content";
 
 const { eyebrow, intro, name, stats, background, quote } = founderReveal;
 
-// Per-Figma-storyboard placement for the 3 stat columns once they're taken
-// out of the grid and pinned directly against the portrait: 12+ sits to its
-// left, 4/Languages to its right, and 20+ overlays the photo's own lower
-// (gradient-darkened) band rather than sitting in a shared row.
-const STAT_POSITION_CLASSES = [
-  "lg:absolute lg:left-0 lg:top-1/2 lg:w-[240px] lg:-translate-y-1/2",
-  "lg:absolute lg:inset-x-0 lg:top-[68%]",
-  "lg:absolute lg:right-0 lg:top-1/2 lg:w-[240px] lg:-translate-y-1/2",
-];
-
 type ChapterKey = "intro" | "name" | "stats" | "background" | "quote";
 type StepKey =
   | "introEyebrow"
@@ -311,14 +301,14 @@ export function AboutFounder() {
                 by that point, so it reads as a clean gap, not an overlap. */}
             <p
               data-chapter="name"
-              className="mt-[-37px] mx-auto max-w-2xl text-center font-serif text-[48px] leading-[0.9] sm:text-6xl lg:mt-0 lg:absolute lg:inset-x-0 lg:top-[54%] lg:text-display"
+              className="mt-15 lg:mt-[-57px] mx-auto max-w-2xl text-center font-serif text-[48px] leading-[0.9] sm:text-6xl lg:mt-0 lg:absolute lg:inset-x-0 lg:top-[54%] lg:text-display"
             >
               {name}
             </p>
 
             <div
               data-chapter="stats"
-              className="mt-10 mx-auto flex w-[313px] flex-col items-center divide-y divide-smoky/20 lg:mt-0 lg:mx-0 lg:w-auto lg:flex-row lg:justify-between lg:divide-y-0 lg:absolute lg:bottom-20 lg:left-1/2 lg:-translate-x-1/2"
+              className="mt-20 mx-auto flex w-[313px] flex-col items-center divide-y divide-smoky/20 lg:mt-0 lg:mx-0 lg:w-auto lg:flex-row lg:justify-between lg:divide-y-0 lg:absolute lg:bottom-20 lg:left-1/2 lg:-translate-x-1/2"
             >
               {stats.map((stat, index) => {
                 const hasPlus = stat.value.endsWith("+");
@@ -329,9 +319,9 @@ export function AboutFounder() {
                   <div
                     key={stat.label}
                     className={`flex w-full flex-col items-center px-[10px] py-6 text-center lg:w-[374.5px] lg:gap-2 lg:px-8 lg:py-10
-                    ${index === 1 ? "lg:border-x lg:border-smoky/20" : ""}
-                    ${index === 0 ? "border-t lg:border-t-0 lg:border-l lg:border-smoky/20" : ""}
-                    ${index === 2 ? "border-smoky/20 border-b lg:border-b-0 lg:border-r lg:border-smoky/20" : ""}
+                    ${index === 1 ? "lg:!translate-y-10 lg:border-x lg:border-smoky/20" : ""}
+                    ${index === 0 ? "lg:!translate-y-5 border-t lg:border-t-0 lg:border-l lg:border-smoky/20" : ""}
+                    ${index === 2 ? "lg:!translate-y-5 border-smoky/20 border-b lg:border-b-0 lg:border-r lg:border-smoky/20" : ""}
                     `}
                   >
                     <p className="font-serif uppercase leading-none">

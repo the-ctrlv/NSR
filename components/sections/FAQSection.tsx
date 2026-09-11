@@ -29,7 +29,7 @@ export function FAQSection() {
         <div className="grid gap-12 lg:grid-cols-[459px_1fr] lg:gap-55 mt-15">
           <TextFillReveal
             id="faq-heading"
-            lines={[faq.heading]}
+            lines={faq.heading}
             className="font-serif text-4xl leading-[1.1] text-ink sm:text-5xl lg:text-[56px]"
           />
           <Reveal

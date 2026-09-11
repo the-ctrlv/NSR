@@ -246,7 +246,7 @@ export const workingTogether = {
 
 export const faq = {
   eyebrow: "Frequently Asked Questions",
-  heading: "What you may want to know",
+  heading: ["What you may", "want to know"],
   items: [
     {
       question: "How does the first conversation work?",

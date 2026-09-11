@@ -4,6 +4,7 @@ import { useLayoutEffect, useRef } from "react";
 import { Container } from "@/components/ui/Container";
 import { approach, approachSteps } from "@/lib/content";
 import { gsap, registerGsap, prefersReducedMotion } from "@/lib/gsap";
+import { TextFillReveal } from "../animations/TextFillReveal";
 
 export function ApproachSteps() {
   const listRef = useRef<HTMLDivElement>(null);
@@ -16,7 +17,7 @@ export function ApproachSteps() {
     const ctx = gsap.context(() => {
       const steps = gsap.utils.toArray<HTMLElement>("[data-approach-step]");
 
-      steps.forEach((step) => {
+      steps.forEach((step, index) => {
         // The numeral wrapper and text both start pushed down past the
         // article's own overflow-hidden + bottom border, so they read as
         // rising up out from behind the border line rather than fading in.
@@ -30,18 +31,19 @@ export function ApproachSteps() {
         gsap.set(targets, { y: 56 });
 
         const timeline = gsap.timeline({
+          // A per-card delay so steps that cross the trigger threshold in
+          // the same scroll gesture still land one at a time, in order,
+          // instead of firing together.
+          delay: index * 0.15,
           scrollTrigger: { trigger: step, start: "top 85%", once: true },
         });
         if (numeral) {
-          timeline.to(numeral, { y: 0, duration: 0.7, ease: "power3.out" });
+          timeline.to(numeral, { y: 0, duration: 0.5, ease: "power3.out" });
         }
         if (text) {
-          // Text rises half a second after the numeral, not together with it.
-          timeline.to(
-            text,
-            { y: 0, duration: 0.7, ease: "power3.out" },
-            "+=0.5",
-          );
+          // Text only starts rising once the numeral has fully landed —
+          // a clean two-beat sequence, not a simultaneous reveal.
+          timeline.to(text, { y: 0, duration: 0.6, ease: "power3.out" }, ">");
         }
       });
     }, list);
@@ -62,14 +64,11 @@ export function ApproachSteps() {
               <span aria-hidden="true">→</span>
               {approach.eyebrow}
             </p>
-            <h2
+            <TextFillReveal
               id="categories-heading"
+              lines={["Different situations.", "One operational.", "approach"]}
               className="mt-24 max-w-[505px] font-serif text-4xl leading-[1.1] sm:text-5xl lg:text-[56px]"
-            >
-              Different situations.
-              <br />
-              One operational approach.
-            </h2>
+            />
           </div>
 
           <div ref={listRef} className="flex flex-col">
@@ -99,7 +98,7 @@ export function ApproachSteps() {
                   data-approach-text
                   className="relative z-10 flex w-full flex-col gap-1 py-8 lg:ml-50 lg:max-w-[546px] lg:py-0 lg:pt-[70px]"
                 >
-                  <h3 className="font-serif text-xl leading-none lg:text-2xl">
+                  <h3 className="font-serif text-2xl leading-none lg:text-2xl">
                     {step.title}
                   </h3>
                   <p className="font-sans text-[15px] leading-[1.5] text-ink/80 mb-2">

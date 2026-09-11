@@ -73,7 +73,7 @@ export function StickyHeader() {
   return (
     <header
       ref={ref}
-      className="fixed inset-x-0 top-0 z-40 hidden items-center justify-between gap-6 border-b border-alabaster/20 bg-ink/95 px-6 pt-7 pb-5 text-alabaster backdrop-blur-sm lg:flex lg:px-[50px]"
+      className="fixed inset-x-0 top-0 z-40 hidden items-center justify-between gap-6 border-b border-alabaster/20 bg-ink/95 px-6 pt-5 pb-4 text-alabaster backdrop-blur-sm lg:flex lg:px-[50px]"
     >
       <a
         href="#top"
