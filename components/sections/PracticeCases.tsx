@@ -21,104 +21,127 @@ export function PracticeCases() {
 
     registerGsap();
     const ctx = gsap.context(() => {
-      const compact = window.matchMedia("(max-width: 639px)").matches;
-      // Per original card: tilt applied once it's no longer the active
-      // (front) card — card 1 tilts one way, card 2 the other, card 3 never
-      // recedes so its own entry here is unused.
-      const rotations = [3, -3, 0];
-      const stackHeight = compact ? 680 : 540;
-      // Full container height below — the incoming card starts as if
-      // arriving from the section below.
-      const enterFromY = stackHeight;
+      // Rebuilt per breakpoint via matchMedia (not a one-time
+      // window.matchMedia().matches snapshot) so a real width change —
+      // rotating the phone, resizing the window — tears down and rebuilds
+      // the whole pinned sequence with the right stack height for that
+      // size, instead of leaving a stale ScrollTrigger whose measurements
+      // (frozen at mount) drift out of sync with what invalidateOnRefresh
+      // recalculates. That drift is what read as the section jumping /
+      // flashing white mid-scroll on mobile.
+      const mm = gsap.matchMedia();
 
-      gsap.set(stack, {
-        position: "relative",
-        minHeight: stackHeight,
-      });
-      gsap.set(cards, {
-        position: "absolute",
-        inset: 0,
-        transformOrigin: "50% 50%",
-        willChange: "transform",
-      });
+      const build = (stackHeight: number) => {
+        // Per original card: tilt applied once it's no longer the active
+        // (front) card — card 1 tilts one way, card 2 the other, card 3
+        // never recedes so its own entry here is unused.
+        const rotations = [3, -3, 0];
+        // Full container height below — the incoming card starts as if
+        // arriving from the section below.
+        const enterFromY = stackHeight;
 
-      const setStackState = (card: HTMLElement, index: number) => {
-        gsap.set(card, {
-          zIndex: cards.length - index,
-          // Cards not yet "arrived" are hidden outright (not just faded —
-          // visibility, so it's an instant on/off switch, no fade) and
-          // parked below their spot, so nothing peeks out early and the
-          // already-arrived cards' rotated corners are never clipped by an
-          // overflow-hidden container.
-          visibility: index === 0 ? "visible" : "hidden",
-          y: index === 0 ? 0 : enterFromY,
-          // The front card (index 0) always lands flat; only cards waiting
-          // behind it show their tilt. Once a card has arrived it never
-          // moves again — only rotation and stacking order change.
-          rotation: index === 0 ? 0 : rotations[index % rotations.length],
+        gsap.set(stack, {
+          position: "relative",
+          minHeight: stackHeight,
         });
+        gsap.set(cards, {
+          position: "absolute",
+          inset: 0,
+          transformOrigin: "50% 50%",
+          willChange: "transform",
+        });
+
+        const setStackState = (card: HTMLElement, index: number) => {
+          gsap.set(card, {
+            zIndex: cards.length - index,
+            // Cards not yet "arrived" are hidden outright (not just faded —
+            // visibility, so it's an instant on/off switch, no fade) and
+            // parked below their spot, so nothing peeks out early and the
+            // already-arrived cards' rotated corners are never clipped by
+            // an overflow-hidden container.
+            visibility: index === 0 ? "visible" : "hidden",
+            y: index === 0 ? 0 : enterFromY,
+            // The front card (index 0) always lands flat; only cards
+            // waiting behind it show their tilt. Once a card has arrived it
+            // never moves again — only rotation and stacking order change.
+            rotation: index === 0 ? 0 : rotations[index % rotations.length],
+          });
+        };
+
+        cards.forEach((card, index) => setStackState(card, index));
+
+        // Extra pause held after the last card lands, before the section
+        // releases — expressed in the same "1 transition = 1 unit" scale
+        // as the card-swap steps below, so it stretches the scroll range
+        // without slowing the swaps themselves.
+        const HOLD = 0.5;
+        const timelineUnits = cards.length - 1 + HOLD;
+
+        const timeline = gsap.timeline({
+          defaults: { duration: 1, ease: "power2.inOut" },
+          scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: `+=${timelineUnits * 110}%`,
+            pin: true,
+            pinSpacing: true,
+            scrub: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        for (let frontIndex = 1; frontIndex < cards.length; frontIndex += 1) {
+          const position = frontIndex - 1;
+
+          timeline
+            .set(
+              cards[frontIndex],
+              {
+                zIndex: cards.length + frontIndex,
+                visibility: "visible",
+              },
+              position,
+            )
+            .to(
+              cards[frontIndex],
+              {
+                y: 0,
+                rotation: 0,
+              },
+              position,
+            );
+
+          cards.slice(0, frontIndex).forEach((card, depth) => {
+            // Earlier cards sit deeper in the stack; the immediately
+            // previous front card must remain above all older cards.
+            const stackDepth = frontIndex - depth;
+            timeline.to(
+              card,
+              {
+                zIndex: cards.length - stackDepth,
+                rotation: rotations[depth % rotations.length],
+              },
+              position,
+            );
+          });
+        }
+
+        timeline.to({}, { duration: HOLD });
+
+        return () => {
+          timeline.scrollTrigger?.kill();
+          timeline.kill();
+          gsap.set(stack, { clearProps: "position,minHeight" });
+          gsap.set(cards, {
+            clearProps:
+              "position,inset,transformOrigin,willChange,visibility,y,rotation,zIndex",
+          });
+        };
       };
 
-      cards.forEach((card, index) => setStackState(card, index));
-
-      // Extra pause held after the last card lands, before the section
-      // releases — expressed in the same "1 transition = 1 unit" scale as
-      // the card-swap steps below, so it stretches the scroll range without
-      // slowing the swaps themselves.
-      const HOLD = 0.5;
-      const timelineUnits = cards.length - 1 + HOLD;
-
-      const timeline = gsap.timeline({
-        defaults: { duration: 1, ease: "power2.inOut" },
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: `+=${timelineUnits * 110}%`,
-          pin: true,
-          pinSpacing: true,
-          scrub: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      for (let frontIndex = 1; frontIndex < cards.length; frontIndex += 1) {
-        const position = frontIndex - 1;
-
-        timeline
-          .set(
-            cards[frontIndex],
-            {
-              zIndex: cards.length + frontIndex,
-              visibility: "visible",
-            },
-            position,
-          )
-          .to(
-            cards[frontIndex],
-            {
-              y: 0,
-              rotation: 0,
-            },
-            position,
-          );
-
-        cards.slice(0, frontIndex).forEach((card, depth) => {
-          // Earlier cards sit deeper in the stack; the immediately previous
-          // front card must remain above all older cards.
-          const stackDepth = frontIndex - depth;
-          timeline.to(
-            card,
-            {
-              zIndex: cards.length - stackDepth,
-              rotation: rotations[depth % rotations.length],
-            },
-            position,
-          );
-        });
-      }
-
-      timeline.to({}, { duration: HOLD });
+      mm.add("(max-width: 639px)", () => build(680));
+      mm.add("(min-width: 640px)", () => build(540));
     }, section);
 
     return () => ctx.revert();
@@ -128,7 +151,7 @@ export function PracticeCases() {
     <section
       ref={sectionRef}
       data-hide-floating-cta
-      className="bg-paper py-10 lg:py-20 lg:min-h-screen"
+      className="relative flex h-screen flex-col justify-center overflow-hidden bg-paper py-10 lg:py-20"
       aria-label="NSR in practice"
     >
       <Container>

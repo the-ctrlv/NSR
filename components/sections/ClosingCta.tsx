@@ -40,13 +40,18 @@ export function ClosingCta() {
             "radial-gradient(ellipse 60vw 90vh at 21% 38%, #9aacba 0%, #7a8a99 25%, #5a6879 50%, #3a4658 75%, #2a3547 87.5%, #1a2437 100%)",
         }}
       /> */}
+      {/* Desktop: tighter, more centered ellipse. */}
       <div
-        className="absolute inset-0"
-        // style={{
-        //   opacity: 0.62,
-        //   // background:
-        //   //   "radial-gradient(ellipse 60vw 40vh at 20% 10%, #9aacba 0%, #5a6879 50%, #3a4658 75%, #2a3547 87.5%, #1a2437 100%)",
-        // }}
+        className="absolute inset-0 hidden lg:block"
+        style={{
+          opacity: 0.62,
+          background:
+            "radial-gradient(ellipse 60vw 40vh at 20% 10%, #9aacba 0%, #5a6879 50%, #3a4658 75%, #2a3547 87.5%, #1a2437 100%)",
+        }}
+      />
+      {/* Mobile/tablet: wider, taller ellipse for full-bleed coverage on a narrow viewport. */}
+      <div
+        className="absolute inset-0 lg:hidden"
         style={{
           opacity: 0.62,
           background:
