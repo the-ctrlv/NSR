@@ -38,12 +38,14 @@
 
 html {
   color-scheme: light;
+  overflow-x: hidden;
 }
 
 body {
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
+  overflow-x: hidden;
 }
 
 ::selection {

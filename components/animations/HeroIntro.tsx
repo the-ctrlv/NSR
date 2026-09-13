@@ -102,13 +102,41 @@ export function HeroIntro({ children }: { children: ReactNode }) {
         0,
       );
 
+      // GSAP's own pin mechanism locks in `height`/`max-height` as inline
+      // styles (so a position:fixed pin doesn't collapse) from whatever it
+      // measures at that instant — and on a fresh load, that can happen
+      // later than creation, on the first scroll tick that actually
+      // engages the pin. If mobile Safari's address bar is in a different
+      // state at that moment, its measurement can undersize the box.
+      // NOTE: an earlier version of this fix re-applied on every
+      // ScrollTrigger onRefresh — that fires continuously while the
+      // toolbar is mid-animation during a scroll, so it turned into a
+      // refresh-loop and the whole page visibly juddered. onToggle only
+      // fires once per pin engage/disengage, not per scroll tick, so a
+      // single correction there is far safer.
+      const isMobile = window.matchMedia("(max-width: 1023px)").matches;
+      const applyFixedHeight = () => {
+        if (!isMobile) return;
+        const fixedHeight = Math.max(window.innerHeight, window.screen.height);
+        section.style.height = `${fixedHeight}px`;
+        section.style.maxHeight = `${fixedHeight}px`;
+      };
+
       let revealed = false;
+      let heightFixedOnEngage = false;
       const trigger = ScrollTrigger.create({
         trigger: section,
         start: "top top",
         end: HERO_PIN_END,
         pin: true,
         anticipatePin: 1,
+        onToggle: (self) => {
+          if (self.isActive && !heightFixedOnEngage) {
+            heightFixedOnEngage = true;
+            applyFixedHeight();
+            self.refresh();
+          }
+        },
         onUpdate: (self) => {
           const shouldReveal = self.progress >= HERO_REVEAL_AT;
           if (shouldReveal !== revealed) {
@@ -123,6 +151,9 @@ export function HeroIntro({ children }: { children: ReactNode }) {
           }
         },
       });
+
+      applyFixedHeight();
+      if (isMobile) trigger.refresh();
 
       return () => {
         trigger.kill();

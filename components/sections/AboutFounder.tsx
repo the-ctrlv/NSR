@@ -8,7 +8,7 @@ import {
   registerGsap,
   prefersReducedMotion,
 } from "@/lib/gsap";
-import { GrainOverlay } from "@/components/ui/GrainOverlay";
+// import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { founderReveal } from "@/lib/content";
 
 const { eyebrow, intro, name, stats, background, quote } = founderReveal;
@@ -252,7 +252,7 @@ export function AboutFounder() {
         ref={pinRef}
         className="relative isolate overflow-hidden pt-20 pb-16 lg:h-screen lg:py-0"
       >
-        <GrainOverlay className="opacity-[0.12] mix-blend-overlay" />
+        {/* <GrainOverlay className="opacity-[0.12] mix-blend-overlay" /> */}
 
         {/* Not <Container>: its shared px-6 can't be reliably overridden by
             a second utility class of equal specificity (Tailwind's output

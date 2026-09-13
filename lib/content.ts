@@ -300,6 +300,7 @@ export const closingCta = {
 export const footer = {
   copyright: `© ${new Date().getFullYear()} NSR Mallorca. All rights reserved.`,
   links: [
+    { label: "Legal Notice", href: "#" },
     { label: "Privacy Policy", href: "#" },
     { label: "Cookie Policy", href: "#" },
   ],

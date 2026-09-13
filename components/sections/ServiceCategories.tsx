@@ -1,7 +1,7 @@
 import { Reveal } from "@/components/animations/Reveal";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { GrainOverlay } from "@/components/ui/GrainOverlay";
+// import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { serviceCategories } from "@/lib/content";
 
 const stars = ["/icons/star-a.svg", "/icons/star-b.svg", "/icons/star-c.svg"];
@@ -41,10 +41,11 @@ function PropertyIcon() {
 export function ServiceCategories() {
   return (
     <section
+      data-hide-floating-cta-from
       className="relative isolate overflow-hidden bg-ink py-20 text-alabaster lg:py-32"
       aria-labelledby="categories-heading"
     >
-      <GrainOverlay className="opacity-[0.12] mix-blend-overlay" />
+      {/* <GrainOverlay className="opacity-[0.12] mix-blend-overlay" /> */}
       <Container className="relative">
         <div className="mb-16 flex flex-col justify-between gap-6 lg:flex-row lg:items-start">
           <Eyebrow>{serviceCategories.eyebrow}</Eyebrow>

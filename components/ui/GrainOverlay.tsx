@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { prefersReducedMotion } from "@/lib/gsap";
 
 type GrainOverlayProps = {
@@ -23,17 +23,51 @@ export function GrainOverlay({
 }: GrainOverlayProps) {
   const filterId = useId();
   const [seed, setSeed] = useState(0);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  // TEMP: mobile jank test — grain fully suppressed below lg to see whether
+  // it's a contributor. Remove this once the test is done either way.
+  const [suppressedForTest, setSuppressedForTest] = useState(false);
 
   useEffect(() => {
-    if (prefersReducedMotion()) return;
+    if (window.matchMedia("(max-width: 1023px)").matches) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time client-only viewport check for a temporary diagnostic toggle
+      setSuppressedForTest(true);
+    }
+  }, []);
+
+  // There are several of these on the page (one per card in some sections),
+  // and re-seeding is a real SVG-filter recompute, not a cheap style
+  // change — reseeding every one of them on a timer regardless of scroll
+  // position was a constant background cost and a real source of jank on
+  // mobile. Only run the loop while this particular instance is on screen.
+  useEffect(() => {
+    const el = svgRef.current;
+    if (!el || prefersReducedMotion()) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { rootMargin: "200px 0px" },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isVisible || prefersReducedMotion()) return;
     const id = window.setInterval(() => {
       setSeed((s) => (s + 1) % 100);
     }, 90);
     return () => window.clearInterval(id);
-  }, []);
+  }, [isVisible]);
+
+  if (suppressedForTest) return null;
 
   return (
-    <svg aria-hidden="true" className={`pointer-events-none absolute inset-0 h-full w-full ${className}`}>
+    <svg
+      ref={svgRef}
+      aria-hidden="true"
+      className={`pointer-events-none absolute inset-0 h-full w-full ${className}`}
+    >
       <filter id={filterId}>
         <feTurbulence
           type="fractalNoise"

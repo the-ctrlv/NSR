@@ -3,7 +3,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { GrainOverlay } from "@/components/ui/GrainOverlay";
+// import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { practiceCases } from "@/lib/content";
 import { gsap, registerGsap, prefersReducedMotion } from "@/lib/gsap";
 
@@ -127,6 +127,7 @@ export function PracticeCases() {
   return (
     <section
       ref={sectionRef}
+      data-hide-floating-cta
       className="bg-paper py-10 lg:py-20 lg:min-h-screen"
       aria-label="NSR in practice"
     >
@@ -142,7 +143,7 @@ export function PracticeCases() {
               key={item.title}
               className="relative isolate flex h-full flex-col justify-between overflow-hidden border border-hairline bg-paper px-4 pb-4 pt-6 lg:block lg:py-20 lg:px-15"
             >
-              <GrainOverlay className="opacity-[0.08] mix-blend-overlay" />
+              {/* <GrainOverlay className="opacity-[0.08] mix-blend-overlay" /> */}
               <div className="relative flex flex-col gap-2 lg:flex-row lg:justify-between lg:gap-14">
                 <h3 className="font-serif text-[32px] leading-[1.1] text-ink lg:max-w-sm lg:text-[48px]">
                   {item.title}

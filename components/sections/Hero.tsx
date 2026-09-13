@@ -1,13 +1,13 @@
 import Image from "next/image";
 import { HeroIntro } from "@/components/animations/HeroIntro";
-import { GrainOverlay } from "@/components/ui/GrainOverlay";
+// import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { audienceLabels, navLinks, siteConfig } from "@/lib/content";
 
 export function Hero() {
   return (
     <section
       data-hero-root
-      className="relative isolate flex min-h-screen w-full flex-col overflow-hidden bg-ink text-alabaster"
+      className="relative isolate flex h-[100lvh] w-full flex-col overflow-hidden bg-ink text-alabaster"
     >
       <HeroIntro>
         {/* Background: portrait, radial vignette, guide lines, film grain */}
@@ -30,10 +30,10 @@ export function Hero() {
             />
           </div>
           {/* Grain sits under the portrait so it only shows on the blue background — the portrait PNG is a transparent cutout and occludes it wherever she is opaque. */}
-          <GrainOverlay className="opacity-[0.25] mix-blend-overlay" />
+          {/* <GrainOverlay className="opacity-[0.25] mix-blend-overlay" /> */}
           <div
             data-hero="portrait"
-            className="absolute inset-x-0 top-[10%] isolate mx-auto h-[95%] w-screen sm:w-[45%] min-w-[280px] overflow-hidden"
+            className="absolute inset-x-0 top-[10%] isolate mx-auto h-[95%] w-full sm:w-[45%] min-w-[280px] overflow-hidden"
           >
             <Image
               src="/images/hero-portrait.png"

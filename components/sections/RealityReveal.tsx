@@ -7,7 +7,7 @@ import {
   registerGsap,
   prefersReducedMotion,
 } from "@/lib/gsap";
-import { GrainOverlay } from "@/components/ui/GrainOverlay";
+// import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { realityReveal } from "@/lib/content";
 
 const { eyebrow, intro, lines, statement } = realityReveal;
@@ -324,7 +324,7 @@ export function RealityReveal() {
     >
       <div ref={pinRef} className="relative isolate overflow-hidden">
         {/* Before: light state — the fragmented reality */}
-        <div className="flex min-h-screen flex-col justify-between gap-16 bg-paper-dim px-4 pt-[120px] pb-20 sm:px-10 lg:px-[50px] lg:pt-20">
+        <div className="flex min-h-[100lvh] flex-col justify-between gap-16 bg-paper-dim px-4 pt-[120px] pb-20 sm:px-10 lg:px-[50px] lg:pt-20">
           <Heading
             tone="ink"
             ballRef={ballRef}
@@ -355,7 +355,7 @@ export function RealityReveal() {
           ref={afterRef}
           className="invisible absolute inset-0 isolate flex flex-col justify-between bg-ink px-4 pt-[120px] pb-[70px] sm:px-10 lg:justify-normal lg:gap-40 lg:px-[50px] lg:py-20"
         >
-          <GrainOverlay className="-z-10 opacity-[0.12] mix-blend-overlay" />
+          {/* <GrainOverlay className="-z-10 opacity-[0.12] mix-blend-overlay" /> */}
           <Heading tone="alabaster" />
           <p
             ref={statementRef}

@@ -38,12 +38,12 @@ export function ApproachSteps() {
           scrollTrigger: { trigger: step, start: "top 85%", once: true },
         });
         if (numeral) {
-          timeline.to(numeral, { y: 0, duration: 0.5, ease: "power3.out" });
+          // Both start at the timeline's own t=0 — numeral and text rise
+          // together as one beat instead of the numeral landing first.
+          timeline.to(numeral, { y: 0, duration: 0.5, ease: "power3.out" }, 0);
         }
         if (text) {
-          // Text only starts rising once the numeral has fully landed —
-          // a clean two-beat sequence, not a simultaneous reveal.
-          timeline.to(text, { y: 0, duration: 0.6, ease: "power3.out" }, ">");
+          timeline.to(text, { y: 0, duration: 0.6, ease: "power3.out" }, 0);
         }
       });
     }, list);
@@ -58,7 +58,7 @@ export function ApproachSteps() {
       aria-labelledby="categories-heading"
     >
       <Container>
-        <div className="grid gap-16 lg:grid-cols-[505px_1fr] lg:gap-20">
+        <div className="grid gap-8 lg:grid-cols-[505px_1fr] lg:gap-20">
           <div>
             <p className="flex items-center gap-3 font-sans text-eyebrow font-medium uppercase tracking-wide">
               <span aria-hidden="true">→</span>
@@ -78,25 +78,32 @@ export function ApproachSteps() {
                 data-approach-step
                 className="relative overflow-hidden border-b border-hairline"
               >
-                {/* Mobile: shrunk down to a quiet watermark sitting behind
-                    the (now full-width) text instead of a large figure
-                    pushing it over. Desktop keeps the original large
-                    left-hand numeral, text indented to clear it. */}
+                {/* Mobile: large numeral watermark top-left (matching the
+                    Figma mobile frame), text indented to clear it. Desktop
+                    keeps the original large left-hand numeral in the same
+                    spirit, text indented further to clear it. */}
                 <div
                   data-approach-numeral
-                  className="absolute right-0 bottom-0 lg:top-1/2 lg:-left-2 lg:top-11 lg:right-auto lg:translate-y-0"
+                  className="absolute left-0 top-6 lg:top-1/2 lg:-left-2 lg:top-11 lg:right-auto lg:translate-y-0"
                 >
+                  {/* eslint-disable-next-line @next/next/no-img-element -- exported numeral artwork */}
+                  <img
+                    src={`/icons/numeral-${step.number}-mob.svg`}
+                    alt=""
+                    aria-hidden="true"
+                    className={`block h-auto lg:hidden ${index === 0 ? "w-20" : "w-24"}`}
+                  />
                   {/* eslint-disable-next-line @next/next/no-img-element -- exported numeral artwork */}
                   <img
                     src={`/icons/numeral-${step.number}.svg`}
                     alt=""
                     aria-hidden="true"
-                    className={`block h-auto lg:translate-x-2 ${index === 0 ? "w-20 lg:w-[122px] lg:translate-y-2" : "w-24 lg:w-40 lg:translate-y-3"}`}
+                    className={`hidden h-auto lg:block lg:translate-x-2 ${index === 0 ? "lg:w-[122px] lg:translate-y-2" : "lg:w-40 lg:translate-y-3"}`}
                   />
                 </div>
                 <div
                   data-approach-text
-                  className="relative z-10 flex w-full flex-col gap-1 py-8 lg:ml-50 lg:max-w-[546px] lg:py-0 lg:pt-[70px]"
+                  className="relative z-10 flex w-full flex-col gap-1 pt-16 pb-8 pl-8 lg:ml-50 lg:max-w-[546px] lg:py-0 lg:pt-[70px] lg:pb-0 lg:pl-0"
                 >
                   <h3 className="font-serif text-2xl leading-none lg:text-2xl">
                     {step.title}

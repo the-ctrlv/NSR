@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Bebas_Neue, Manrope } from "next/font/google";
 import localFont from "next/font/local";
 import { SmoothScroll } from "@/components/animations/SmoothScroll";
@@ -72,6 +72,15 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+};
+
+// viewport-fit: "cover" lets full-bleed sections (Hero etc.) draw under the
+// iPhone notch/home-indicator safe areas instead of stopping short of them —
+// relevant to those sections actually reaching the true screen edges.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

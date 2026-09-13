@@ -8,7 +8,7 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 import { faq } from "@/lib/content";
 
 export function FAQSection() {
-  const [openItems, setOpenItems] = useState<Set<number>>(new Set());
+  const [openItems, setOpenItems] = useState<Set<number>>(new Set([0]));
 
   const toggle = (index: number) => {
     setOpenItems((prev) => {
@@ -23,7 +23,11 @@ export function FAQSection() {
   };
 
   return (
-    <section id="faq" className="bg-paper py-20" aria-labelledby="faq-heading">
+    <section
+      id="faq"
+      className="bg-paper py-20 lg:flex lg:h-screen lg:items-center lg:py-0"
+      aria-labelledby="faq-heading"
+    >
       <Container>
         <Eyebrow className="mb-6">{faq.eyebrow}</Eyebrow>
         <div className="grid gap-12 lg:grid-cols-[459px_1fr] lg:gap-55 mt-15">
