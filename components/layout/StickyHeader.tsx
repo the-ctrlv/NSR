@@ -9,6 +9,7 @@ import {
   registerGsap,
   prefersReducedMotion,
 } from "@/lib/gsap";
+import { isScrollSnapping } from "@/lib/scrollSnapGuard";
 
 /**
  * Same header markup/spacing as the hero's own (logo, nav, MobileNav) —
@@ -36,6 +37,18 @@ export function StickyHeader() {
 
       mm.add("(min-width: 1024px)", () => {
         let visible = false;
+        // Tracked ourselves instead of relying on ScrollTrigger's own
+        // self.direction, which flips on ANY sign change no matter how
+        // tiny — a momentary sub-pixel reverse blip (Lenis's smoothing
+        // easing into its target, or another pinned section's snap
+        // animation settling) was enough to flash the header even during
+        // an otherwise steady scroll straight down.
+        let lastScroll = 0;
+        // Net upward distance accumulated since the last downward move —
+        // any scroll down resets it to 0, so only a real, sustained upward
+        // scroll (not a brief wobble) brings the header back in.
+        let upAccum = 0;
+        const SHOW_AFTER_UP_PX = 150;
 
         const setVisible = (next: boolean) => {
           if (next === visible) return;
@@ -53,11 +66,36 @@ export function StickyHeader() {
           end: "max",
           onUpdate: (self) => {
             const heroHeight = hero?.offsetHeight ?? 0;
-            if (self.scroll() < heroHeight) {
+            const scroll = self.scroll();
+            const delta = scroll - lastScroll;
+            lastScroll = scroll;
+
+            if (scroll < heroHeight) {
               setVisible(false);
+              upAccum = 0;
               return;
             }
-            setVisible(self.direction === -1);
+            // Another section (AboutFounder) can snap-correct the scroll
+            // position backward on its own, well after the user's actual
+            // gesture ended — that's not the user scrolling up, so ignore
+            // it entirely while it's happening.
+            if (isScrollSnapping()) return;
+            // Ignore tiny jitter — anything smaller is noise, not a real
+            // move in either direction.
+            if (Math.abs(delta) < 4) return;
+
+            if (delta < 0) {
+              // Scrolling up: accumulate, only reveal once it adds up to a
+              // real, sustained upward scroll rather than any small nudge.
+              upAccum += -delta;
+              if (upAccum > SHOW_AFTER_UP_PX) setVisible(true);
+            } else {
+              // Any downward move hides it immediately and resets the
+              // count — the next reveal needs a fresh 150px of upward
+              // scroll, not leftover credit from before.
+              upAccum = 0;
+              setVisible(false);
+            }
           },
         });
 

@@ -10,6 +10,7 @@ import {
 } from "@/lib/gsap";
 // import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { founderReveal } from "@/lib/content";
+import { setScrollSnapping } from "@/lib/scrollSnapGuard";
 
 const { eyebrow, intro, name, stats, background, quote } = founderReveal;
 
@@ -26,11 +27,15 @@ type StepKey =
 // Discrete steps, not a scroll-scrubbed progress bar: each swipe/wheel tick
 // advances exactly one step, and that step's reveal plays on its own fixed
 // timing regardless of how far or fast the user scrolled — matching the
-// Figma storyboard's frames (rest label → name → statistics → background +
-// quote) as content that "lands" one swipe at a time rather than scrubbing
-// continuously with the scrollbar.
+// Figma storyboard's frames (photo alone → label + name → statistics →
+// background + quote) as content that "lands" one swipe at a time rather
+// than scrubbing continuously with the scrollbar. Frame 1 is the portrait
+// by itself, no text at all; the eyebrow label only lands on the next swipe,
+// together with the intro copy and name as one group (not as its own
+// standalone frame), then holds through the stats frame before retiring for
+// background/quote.
 const STEPS: StepKey[][] = [
-  ["introEyebrow"],
+  [],
   ["introEyebrow", "introCopy", "name"],
   ["introEyebrow", "introCopy", "stats"],
   ["backgroundEyebrow", "backgroundParagraphs", "quote"],
@@ -97,23 +102,41 @@ export function AboutFounder() {
           ? Array.from(els.stats.querySelectorAll<HTMLElement>(":scope > div"))
           : [];
 
-        // Each key maps to its own initial "hidden" offset — how far/blurred
-        // it starts before its step brings it in — reused both for the
-        // gsap.set() below and for the exit offset when a step retires it.
+        // Every chapter now flies in from below the viewport itself, not a
+        // subtle few-pixel nudge — the pin wrapper is overflow-hidden and
+        // exactly one viewport tall (lg:h-screen), so starting each element
+        // offset by that same measured height guarantees it begins fully
+        // clipped below the visible frame and travels the whole distance up
+        // into place, instead of just fading in from a few pixels away.
+        const enterDistance = pin.offsetHeight;
+
+        // Each key still gets its own entry in `targets` (and could still
+        // carry a different offset per chapter if a future frame needs
+        // one) — reused both for the gsap.set() below and for the exit
+        // offset when a step retires it.
         const targets: Record<
           StepKey,
           { els: HTMLElement[]; offsetY: number }
         > = {
-          introEyebrow: { els: introEyebrow ? [introEyebrow] : [], offsetY: 8 },
-          introCopy: { els: introCopy ? [introCopy] : [], offsetY: 14 },
-          name: { els: els.name ? [els.name] : [], offsetY: 26 },
-          stats: { els: statItems, offsetY: 20 },
+          introEyebrow: {
+            els: introEyebrow ? [introEyebrow] : [],
+            offsetY: enterDistance,
+          },
+          introCopy: {
+            els: introCopy ? [introCopy] : [],
+            offsetY: enterDistance,
+          },
+          name: { els: els.name ? [els.name] : [], offsetY: enterDistance },
+          stats: { els: statItems, offsetY: enterDistance },
           backgroundEyebrow: {
             els: backgroundEyebrow ? [backgroundEyebrow] : [],
-            offsetY: 8,
+            offsetY: enterDistance,
           },
-          backgroundParagraphs: { els: backgroundParagraphs, offsetY: 16 },
-          quote: { els: els.quote ? [els.quote] : [], offsetY: 24 },
+          backgroundParagraphs: {
+            els: backgroundParagraphs,
+            offsetY: enterDistance,
+          },
+          quote: { els: els.quote ? [els.quote] : [], offsetY: enterDistance },
         };
         const stepKeys = Object.keys(targets) as StepKey[];
         const revealTargets = stepKeys.flatMap((key) => targets[key].els);
@@ -131,8 +154,18 @@ export function AboutFounder() {
         // Step index the pin is currently showing — advanced/retreated by
         // ScrollTrigger below, one step per swipe rather than continuously.
         let currentStep = -1;
+        // Which chapters were visible in the step we're coming FROM — lets
+        // goToStep tell "just arrived" apart from "was already showing and
+        // is just holding" (see the reset below).
+        let previousVisible = new Set<StepKey>();
 
-        const goToStep = (index: number) => {
+        // `forward` mirrors the scroll direction that triggered this step
+        // change: true = scrolling down, false = scrolling up. Every
+        // chapter's motion flips with it, like a conveyor belt running in
+        // the same direction as the scroll — forward, content rises in from
+        // below and retired content exits off the top; backward, content
+        // falls in from above and retired content exits off the bottom.
+        const goToStep = (index: number, forward: boolean) => {
           if (index === currentStep) return;
           currentStep = index;
           const visible = new Set(STEPS[index]);
@@ -143,6 +176,19 @@ export function AboutFounder() {
             // sequence — they must land and leave together, no cascade.
             const isStats = key === "stats";
             if (visible.has(key)) {
+              // A chapter that's newly entering (wasn't shown a moment ago)
+              // must always fly in from the side matching the current
+              // scroll direction — but if it had previously retired off the
+              // opposite side (e.g. the direction reversed since), GSAP
+              // would otherwise just tween it from wherever that retreat
+              // left it. Snapping it back to the correct side first (no
+              // animation) guarantees every entrance starts from the right
+              // place. A chapter that's simply holding across consecutive
+              // steps (already visible last step too) is left alone so it
+              // doesn't jump.
+              if (!previousVisible.has(key)) {
+                gsap.set(target, { y: forward ? offsetY : -offsetY });
+              }
               gsap.to(target, {
                 opacity: 1,
                 y: 0,
@@ -152,10 +198,14 @@ export function AboutFounder() {
                 ease: "power2.out",
                 overwrite: true,
               });
-            } else {
+            } else if (previousVisible.has(key)) {
+              // Only actually retire a chapter that was visible a moment
+              // ago — one that's never been shown yet (e.g. everything
+              // during the photo-only first frame) is already sitting
+              // hidden off-screen, so there's nothing to animate out.
               gsap.to(target, {
                 opacity: 0,
-                y: -offsetY * 0.6,
+                y: forward ? -offsetY * 0.6 : offsetY * 0.6,
                 filter: "blur(10px)",
                 duration: 0.4,
                 stagger: isStats ? 0 : 0.02,
@@ -164,6 +214,7 @@ export function AboutFounder() {
               });
             }
           });
+          previousVisible = visible;
         };
 
         // The portrait settles in once, on entering the pin, then drifts in
@@ -189,10 +240,11 @@ export function AboutFounder() {
         };
 
         const STEP_COUNT = STEPS.length;
-        // A bit of extra pinned scroll held past the last step (background +
-        // quote) before the section releases, so it doesn't unpin the
-        // instant that content lands.
-        const EXTRA_HOLD_PERCENT = 40;
+        // Extra pinned scroll held past the last step (background + quote)
+        // before the section releases — a full step's worth, so there's a
+        // real pause to keep scrolling through once that content has landed,
+        // not just a brief beat before unpinning.
+        const EXTRA_HOLD_PERCENT = 100;
         const totalPercent = (STEP_COUNT - 1) * 100 + EXTRA_HOLD_PERCENT;
         const segment = 100 / totalPercent;
 
@@ -209,21 +261,40 @@ export function AboutFounder() {
             ],
             duration: 0.45,
             ease: "power2.inOut",
+            // This snap can correct the scroll position BACKWARD (if the
+            // user let go closer to the previous step than the next one) —
+            // a real, sizeable automatic scroll the user didn't initiate.
+            // StickyHeader watches scroll direction globally, so without
+            // this flag it would misread that correction as "user scrolled
+            // up" and flash in. See lib/scrollSnapGuard.ts.
+            onStart: () => setScrollSnapping(true),
+            onComplete: () => setScrollSnapping(false),
+            onInterrupt: () => setScrollSnapping(false),
           },
           onEnter: () => {
             settlePortrait();
-            goToStep(0);
+            goToStep(0, true);
           },
           onEnterBack: () => {
             settlePortrait();
-            goToStep(STEP_COUNT - 1);
+            goToStep(STEP_COUNT - 1, false);
           },
           onUpdate: (self) => {
-            const index = Math.min(
+            const targetIndex = Math.min(
               STEP_COUNT - 1,
               Math.max(0, Math.round(self.progress / segment)),
             );
-            goToStep(index);
+            // Move at most one step per update instead of jumping straight
+            // to targetIndex — a single fast swipe/flick can move scroll
+            // progress across more than one segment in one tick, which used
+            // to skip straight past a step (or fire two reveals back to
+            // back). Walking one step at a time means a big scroll still
+            // catches up, just by playing each step's reveal in turn on
+            // the next tick rather than jumping over it.
+            if (targetIndex === currentStep) return;
+            const forward = targetIndex > currentStep;
+            const nextIndex = currentStep + (forward ? 1 : -1);
+            goToStep(nextIndex, forward);
           },
         });
 
@@ -284,14 +355,14 @@ export function AboutFounder() {
                 desktop's height-driven sizing). */}
             <div
               data-chapter="portrait"
-              className="relative mx-auto mt-10 h-[392px] w-[313px] shrink-0 overflow-hidden bg-paper lg:mx-0 lg:mt-0 lg:absolute lg:left-1/2 lg:top-[9%] lg:h-[70%] lg:w-auto lg:aspect-[557/726] lg:max-w-[370px] lg:-translate-x-1/2"
+              className="relative mx-auto mt-20 h-[392px] w-[313px] overflow-hidden lg:mx-0 lg:mt-0 lg:absolute lg:left-1/2 lg:top-[13%] lg:h-[70%] lg:w-auto lg:aspect-[557/726] lg:max-w-[370px] lg:-translate-x-1/2"
             >
               <Image
                 src="/images/portrait-founder.jpg"
                 alt="Nataliia Sychenko Romanova, founder of NSR Mallorca"
                 fill
                 sizes="(min-width: 1024px) 420px, 60vw"
-                className="object-cover object-[center_15%] block"
+                className="object-cover object-center block"
               />
               <div className="absolute inset-0 bg-gradient-to-b from-ink/0 from-[53.313%] to-ink lg:from-[50%] lg:to-ink/80" />
             </div>
@@ -301,14 +372,14 @@ export function AboutFounder() {
                 by that point, so it reads as a clean gap, not an overlap. */}
             <p
               data-chapter="name"
-              className="mt-15 lg:mt-[-57px] mx-auto max-w-2xl text-center font-serif text-[48px] leading-[0.9] sm:text-6xl lg:mt-0 lg:absolute lg:inset-x-0 lg:top-[54%] lg:text-display"
+              className="mt-15 lg:mt-[18vh] mx-auto max-w-2xl text-center font-serif text-[48px] leading-[0.9] sm:text-6xl lg:mt-0 lg:absolute lg:inset-x-0 lg:top-[54%] lg:text-display"
             >
               {name}
             </p>
 
             <div
               data-chapter="stats"
-              className="mt-20 mx-auto flex w-[313px] flex-col items-center divide-y divide-smoky/20 lg:mt-0 lg:mx-0 lg:w-auto lg:flex-row lg:justify-between lg:divide-y-0 lg:absolute lg:bottom-20 lg:left-1/2 lg:-translate-x-1/2"
+              className="mt-20 mx-auto flex w-[388px] flex-col items-center divide-y divide-smoky/20 lg:mt-0 lg:mx-0 lg:w-auto lg:flex-row lg:justify-between lg:divide-y-0 lg:absolute lg:bottom-20 lg:left-1/2 lg:-translate-x-1/2"
             >
               {stats.map((stat, index) => {
                 const hasPlus = stat.value.endsWith("+");
