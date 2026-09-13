@@ -132,7 +132,7 @@ export function PracticeCases() {
       aria-label="NSR in practice"
     >
       <Container>
-        <Eyebrow className="mb-6 lg:mb-16">{practiceCases.eyebrow}</Eyebrow>
+        <Eyebrow className="mb-6 lg:mb-10">{practiceCases.eyebrow}</Eyebrow>
 
         <ul
           ref={stackRef}

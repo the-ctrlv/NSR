@@ -40,15 +40,17 @@ export function SolutionDiagram() {
         </div>
 
         <SequentialFlowReveal
-          start="top 95%"
-          className="mt-10 flex flex-col items-center justify-between gap-6 sm:flex-row sm:flex-wrap sm:items-start sm:gap-x-8 lg:mt-32 lg:gap-x-12"
+          start="top 140%"
+          duration={0.3}
+          pause={0.05}
+          className="mt-10 flex flex-col items-center gap-6 sm:flex-row sm:flex-wrap sm:items-start sm:justify-center sm:gap-x-8 lg:mt-32 lg:gap-x-12"
         >
           {solution.flow.map((step, i) => (
             <div
               key={step}
               className={`flex flex-col items-center ${
                 i === solution.flow.length - 1 ? "gap-2" : "gap-6"
-              } sm:flex-row sm:!gap-3 ${
+              } sm:flex-row sm:!gap-8 lg:!gap-12 ${
                 i === solution.flow.length - 1
                   ? "lg:flex-col lg:items-start"
                   : ""

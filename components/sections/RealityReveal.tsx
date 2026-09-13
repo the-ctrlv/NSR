@@ -145,7 +145,7 @@ export function RealityReveal() {
               1,
               (self.progress - 0.45) / 0.55,
             );
-            const shouldShowContent = self.progress >= 0.25;
+            const shouldShowContent = self.progress >= 0.18;
             if (shouldShowContent !== contentShown) {
               contentShown = shouldShowContent;
               gsap.to(lineTexts, {
