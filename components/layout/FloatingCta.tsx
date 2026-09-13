@@ -119,7 +119,12 @@ export function FloatingCta() {
   return (
     <div
       ref={ref}
-      className="fixed bottom-6 right-6 z-50 hidden sm:block sm:bottom-8 sm:right-8 lg:bottom-10 lg:right-[50px]"
+      // Starts hidden via plain CSS (opacity-0, translate-y-5, no pointer
+      // events) so it's already invisible in the server-rendered HTML —
+      // GSAP's gsap.set() below only re-confirms the same state, it isn't
+      // what first hides it. Without this, the button paints fully visible
+      // for a moment before JS ever runs on a fresh load.
+      className="pointer-events-none fixed bottom-6 right-6 z-50 hidden translate-y-5 opacity-0 sm:block sm:bottom-8 sm:right-8 lg:bottom-10 lg:right-[50px]"
     >
       <Button href="#contact" variant="light">
         Share your situation

@@ -41,6 +41,20 @@ export function HeroIntro({ children }: { children: ReactNode }) {
 
     if (prefersReducedMotion()) {
       if (ghost) ghost.style.display = "none";
+      // Chrome/headline/subtext start at opacity 0 via a plain CSS rule
+      // (see app/globals.css) so there's no flash of the final text before
+      // GSAP takes over — but with reduced motion we skip the entrance
+      // timeline entirely, so nothing else ever un-hides them. Restore
+      // full visibility explicitly instead of leaving that to the timeline.
+      gsap.set([...Array.from(chrome), ...mainContent], {
+        opacity: 1,
+        y: 0,
+      });
+      // Portrait now starts scaled up via CSS (see Hero.tsx) to match
+      // gsap.fromTo()'s starting point below — with reduced motion we skip
+      // that tween entirely, so it would otherwise stay stuck oversized
+      // forever. Settle it to its normal rest scale explicitly.
+      if (portrait) gsap.set(portrait, { scale: 1 });
       return;
     }
 
@@ -92,6 +106,21 @@ export function HeroIntro({ children }: { children: ReactNode }) {
       const mainTl = gsap.timeline({
         paused: true,
         defaults: { ease: "sine.inOut" },
+        // If the user scrolls past the reveal threshold fast, right after
+        // load, this can start while introTl's own ghost-reveal tween above
+        // is still running — two independent, uncoordinated timelines
+        // fighting over the same element's opacity, which read as the
+        // ghost line and the real headline both staying visible, overlapping
+        // each other. (Tried `overwrite: true` on this timeline's own tweens
+        // for this — turns out GSAP's overwrite check runs at tween
+        // CREATION time, not at play time, and mainTl is built synchronously
+        // right after introTl, before introTl has even started — so it just
+        // killed the ghost-reveal tween immediately, before it ever got a
+        // chance to run, and the ghost line never appeared at all.) Killing
+        // introTl only once mainTl actually starts playing is the correct
+        // timing — introTl has normally long since finished by then anyway,
+        // so this is a no-op in the common case.
+        onStart: () => introTl.kill(),
       });
       if (ghost) {
         mainTl.to(ghost, { opacity: 0, y: -24, duration: 0.4 }, 0);

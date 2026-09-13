@@ -23,7 +23,16 @@ export function StickyHeader() {
 
   useLayoutEffect(() => {
     const el = ref.current;
-    if (!el || prefersReducedMotion()) return;
+    if (!el) return;
+
+    if (prefersReducedMotion()) {
+      // The CSS default now hides it (-translate-y-full); with reduced
+      // motion we skip the scroll-driven show/hide logic entirely below,
+      // so nothing else would ever bring it back. Restore the same
+      // "visible at rest" state this had before that CSS default existed.
+      gsap.set(el, { yPercent: 0 });
+      return;
+    }
 
     gsap.set(el, { yPercent: -100 });
 
@@ -111,7 +120,11 @@ export function StickyHeader() {
   return (
     <header
       ref={ref}
-      className="fixed inset-x-0 top-0 z-40 hidden items-center justify-between gap-6 border-b border-alabaster/20 bg-ink/95 px-6 pt-5 pb-4 text-alabaster backdrop-blur-sm lg:flex lg:px-[50px]"
+      // Starts translated off-screen above via plain CSS (-translate-y-full)
+      // instead of relying on gsap.set() to hide it after mount — otherwise
+      // it paints at rest (fully visible, overlapping the hero) for a
+      // moment on a fresh load before JS ever runs.
+      className="fixed inset-x-0 top-0 z-40 hidden -translate-y-full items-center justify-between gap-6 border-b border-alabaster/20 bg-ink/95 px-6 pt-5 pb-4 text-alabaster backdrop-blur-sm lg:flex lg:px-[50px]"
     >
       <a
         href="#top"

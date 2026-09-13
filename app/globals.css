@@ -58,6 +58,25 @@ body {
   outline-offset: 3px;
 }
 
+/* Hero text starts hidden here, in plain CSS, instead of only via GSAP's
+   gsap.set() inside HeroIntro's useLayoutEffect. That JS-only hide runs
+   after React hydrates, well after the server-rendered HTML has already
+   painted with this text fully visible — on production that gap is a
+   real, visible flash of the final headline/subtext before the entrance
+   animation takes over. A plain CSS rule on these data-hero attributes
+   hides them from the very first paint, no JS required; HeroIntro then
+   only has to animate them BACK to opacity 1, never hide them itself.
+   Scoped to Hero.tsx's own data-hero markers only — no other section
+   uses this attribute. If JS never runs (disabled/broken), see the
+   prefers-reduced-motion branch in HeroIntro.tsx, which explicitly
+   restores opacity 1 rather than relying on the entrance timeline. */
+[data-hero="chrome"],
+[data-hero="ghost"],
+[data-hero="headline"],
+[data-hero="subtext"] {
+  opacity: 0;
+}
+
 @keyframes scroll-line {
   0% {
     transform: translateY(-100%);

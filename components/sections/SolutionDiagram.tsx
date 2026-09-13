@@ -40,7 +40,7 @@ export function SolutionDiagram() {
         </div>
 
         <SequentialFlowReveal
-          start="top 140%"
+          start="top 180%"
           duration={0.3}
           pause={0.05}
           className="mt-10 flex flex-col items-center gap-6 sm:flex-row sm:flex-wrap sm:items-start sm:justify-center sm:gap-x-8 lg:mt-32 lg:gap-x-12"

@@ -33,7 +33,13 @@ export function Hero() {
           {/* <GrainOverlay className="opacity-[0.25] mix-blend-overlay" /> */}
           <div
             data-hero="portrait"
-            className="absolute inset-x-0 top-[10%] isolate mx-auto h-[95%] w-full sm:w-[45%] min-w-[280px] overflow-hidden"
+            // Starts at the same scale/origin GSAP's fromTo() below animates
+            // FROM (1.42, origin 50% 15%) via plain CSS, so there's nothing
+            // to snap to when JS runs — otherwise it paints at its default
+            // scale (1, i.e. already settled) for a moment before hydration,
+            // then visibly jumps up to 1.42 the instant gsap.fromTo() applies
+            // its starting state, before easing back down.
+            className="absolute inset-x-0 top-[10%] isolate mx-auto h-[95%] w-full origin-[50%_15%] scale-[1.42] sm:w-[45%] min-w-[280px] overflow-hidden"
           >
             <Image
               src="/images/hero-portrait.png"
