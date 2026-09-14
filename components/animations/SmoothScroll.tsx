@@ -24,8 +24,8 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       // Lower lerp = slower catch-up to the target position, which reads as
       // more weight/inertia; the reduced wheelMultiplier makes each wheel
       // tick move less on its own, reinforcing that heavier feel.
-      lerp: 0.06,
-      wheelMultiplier: 0.85,
+      lerp: 0.045,
+      wheelMultiplier: 0.8,
       // Smoothing only applies to wheel input — touch/swipe scrolls natively
       // on mobile. Intercepting touch here fights with the pinned
       // ScrollTrigger sections on real phones and reads as a jumpy
