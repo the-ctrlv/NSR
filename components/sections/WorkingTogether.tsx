@@ -84,12 +84,12 @@ export function WorkingTogether() {
         <Reveal
           as="ul"
           stagger={0.15}
-          className="grid grid-cols-1 border-y border-alabaster/10 sm:grid-cols-2"
+          className="grid grid-cols-1 border-y border-alabaster/10 sm:grid-cols-1 lg:grid-cols-2"
         >
           {workingTogether.models.map((model) => (
             <li
               key={model.index}
-              className="relative flex flex-col justify-end items-start gap-2 overflow-hidden border-b border-alabaster/10 px-4 pt-4 pb-[30px] last:border-b-0 sm:gap-6 sm:border-b-0 sm:border-r sm:px-8 sm:py-7 sm:last:border-r-0"
+              className="relative flex flex-col justify-end items-start gap-2 overflow-hidden border-b border-alabaster/10 px-4 pt-4 pb-[30px] last:border-b-0 sm:gap-6 sm:px-8 sm:py-7 lg:border-b-0 lg:border-r lg:last:border-r-0"
             >
               {/* eslint-disable-next-line @next/next/no-img-element -- decorative vector numeral */}
               <div className="w-full flex justify-end mb-[-20px] sm:mb-0">

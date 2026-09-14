@@ -42,17 +42,22 @@ const STEPS: StepKey[][] = [
 ];
 
 /**
- * Desktop (lg+): pinned, step-based scroll sequence matching the Figma
- * storyboard (node 149:7978, "Property 1=0..4") — the section stays exactly
- * one viewport tall. The portrait is a large, fixed, centered anchor and
- * every other chapter (label, name, stats, background copy, quote) is
- * absolutely positioned against it; each scroll gesture steps the content
- * to the next frame, playing a fixed-duration fade/lift over the photo
- * (not scrubbed frame-by-frame with scroll distance).
- * Mobile/tablet (node 412:9138) has its own dedicated linear layout — the
- * stage below is authored in that reading order (intro, portrait, name,
- * stats, background, quote) and just flows normally; under reduced motion
- * it also falls back to this plain stacked order.
+ * Real desktop (xl+, 1280px): pinned, step-based scroll sequence matching
+ * the Figma storyboard (node 149:7978, "Property 1=0..4") — the section
+ * stays exactly one viewport tall. The portrait is a large, fixed, centered
+ * anchor and every other chapter (label, name, stats, background copy,
+ * quote) is absolutely positioned against it; each scroll gesture steps the
+ * content to the next frame, playing a fixed-duration fade/lift over the
+ * photo (not scrubbed frame-by-frame with scroll distance). Gated at xl
+ * (1280px), not the more common lg (1024px), specifically because a real
+ * iPad in landscape commonly reports a viewport width at or above 1024px —
+ * at lg this pinned sequence would hijack scroll on tablets, which should
+ * get the plain layout below instead.
+ * Mobile/tablet (node 412:9138, and everything up to xl) has its own
+ * dedicated linear layout — the stage below is authored in that reading
+ * order (intro, portrait, name, stats, background, quote) and just flows
+ * normally; under reduced motion it also falls back to this plain stacked
+ * order.
  */
 export function AboutFounder() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -69,7 +74,7 @@ export function AboutFounder() {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
 
-      mm.add("(min-width: 1024px)", () => {
+      mm.add("(min-width: 1280px)", () => {
         const portrait = stage.querySelector<HTMLElement>(
           '[data-chapter="portrait"]',
         );
@@ -104,7 +109,7 @@ export function AboutFounder() {
 
         // Every chapter now flies in from below the viewport itself, not a
         // subtle few-pixel nudge — the pin wrapper is overflow-hidden and
-        // exactly one viewport tall (lg:h-screen), so starting each element
+        // exactly one viewport tall (xl:h-screen), so starting each element
         // offset by that same measured height guarantees it begins fully
         // clipped below the visible frame and travels the whole distance up
         // into place, instead of just fading in from a few pixels away.
@@ -321,7 +326,7 @@ export function AboutFounder() {
     >
       <div
         ref={pinRef}
-        className="relative isolate overflow-hidden pt-20 pb-16 lg:h-screen lg:py-0"
+        className="relative isolate overflow-hidden pt-20 pb-16 xl:h-screen xl:py-0"
       >
         {/* <GrainOverlay className="opacity-[0.12] mix-blend-overlay" /> */}
 
@@ -330,41 +335,42 @@ export function AboutFounder() {
             order decides ties, not JSX order) — this section's own Figma
             mobile frame (412:9649) uses a 16px margin, not Container's 24px,
             so it gets its own copy of Container's shape with px-4 instead. */}
-        <div className="relative z-10 mx-auto w-full max-w-[1470px] px-4 sm:px-10 lg:px-[50px] lg:h-full">
-          {/* No shared `gap` — mobile spacing between chapters is uneven
-              (40 / -37 / 40 / 80 / 39px per Figma), so each chapter carries
-              its own mt-* below; lg:mt-0 clears it once desktop takes over
-              with absolute positioning. */}
-          <div ref={stageRef} className="flex flex-col lg:block lg:h-full">
+        <div className="relative z-10 mx-auto w-full max-w-[1470px] px-4 sm:px-10 xl:px-[50px] xl:h-full">
+          {/* No shared `gap` — mobile/tablet spacing between chapters is
+              uneven (40 / -37 / 40 / 80 / 39px per Figma), so each chapter
+              carries its own mt-* below; xl:mt-0 clears it once the real
+              desktop pin takes over with absolute positioning. */}
+          <div ref={stageRef} className="flex flex-col xl:block xl:h-full">
             <div
               data-chapter="intro"
-              className="flex flex-col justify-between gap-6 lg:absolute lg:inset-x-0 lg:top-0 lg:max-w-[1470px] lg:px-[50px] lg:py-20 lg:flex-row lg:items-start"
+              className="flex flex-col justify-between gap-6 xl:absolute xl:inset-x-0 xl:top-0 xl:max-w-[1470px] xl:px-[50px] xl:py-20 xl:flex-row xl:items-start"
             >
               <p className="flex items-center gap-3 font-sans text-eyebrow font-medium uppercase leading-[1.4] tracking-wide">
                 <span aria-hidden="true">→</span>
                 {eyebrow}
               </p>
-              {/* Not shown in the mobile design — only the eyebrow appears above the portrait there. */}
-              <p className="hidden max-w-[382px] font-sans text-base leading-[1.4] text-alabaster/80 lg:block">
+              {/* Not shown in the mobile/tablet design — only the eyebrow appears above the portrait there. */}
+              <p className="hidden max-w-[382px] font-sans text-base leading-[1.4] text-alabaster/80 xl:block">
                 {intro}
               </p>
             </div>
 
-            {/* 313×392 fixed box + mx-auto, matching the Figma mobile frame
-                exactly (it isn't width/aspect-ratio driven there, unlike
-                desktop's height-driven sizing). */}
+            {/* 313×392 fixed box + mx-auto on phones, a bit larger on
+                tablet, matching the Figma mobile frame's spirit (it isn't
+                width/aspect-ratio driven there, unlike the real desktop's
+                height-driven sizing). */}
             <div
               data-chapter="portrait"
-              className="relative mx-auto mt-20 h-[392px] w-[313px] overflow-hidden lg:mx-0 lg:mt-0 lg:absolute lg:left-1/2 lg:top-[13%] lg:h-[70%] lg:w-auto lg:aspect-[557/726] lg:max-w-[370px] lg:-translate-x-1/2"
+              className="relative mx-auto mt-20 h-[392px] w-[313px] overflow-hidden sm:h-[500px] sm:w-[400px] xl:mx-0 xl:mt-0 xl:h-[70%] xl:w-auto xl:absolute xl:left-1/2 xl:top-[13%] xl:aspect-[557/726] xl:max-w-[370px] xl:-translate-x-1/2"
             >
               <Image
                 src="/images/portrait-founder.jpg"
                 alt="Nataliia Sychenko Romanova, founder of NSR Mallorca"
                 fill
-                sizes="(min-width: 1024px) 420px, 60vw"
+                sizes="(min-width: 1280px) 420px, 60vw"
                 className="object-cover object-center block"
               />
-              <div className="absolute inset-0 bg-gradient-to-b from-ink/0 from-[53.313%] to-ink lg:from-[50%] lg:to-ink/80" />
+              <div className="absolute inset-0 bg-gradient-to-b from-ink/0 from-[53.313%] to-ink xl:from-[50%] xl:to-ink/80" />
             </div>
 
             {/* -37px pulls the name up into the portrait's own bottom fade,
@@ -372,14 +378,14 @@ export function AboutFounder() {
                 by that point, so it reads as a clean gap, not an overlap. */}
             <p
               data-chapter="name"
-              className="mt-15 lg:mt-[18vh] mx-auto max-w-2xl text-center font-serif text-[48px] leading-[0.9] sm:text-6xl lg:mt-0 lg:absolute lg:inset-x-0 lg:top-[54%] lg:text-display"
+              className="mt-15 xl:mt-[18vh] mx-auto max-w-2xl text-center font-serif text-[48px] leading-[0.9] sm:text-6xl xl:mt-0 xl:absolute xl:inset-x-0 xl:top-[54%] xl:text-display"
             >
               {name}
             </p>
 
             <div
               data-chapter="stats"
-              className="mt-20 mx-auto flex w-[388px] flex-col items-center divide-y divide-smoky/20 lg:mt-0 lg:mx-0 lg:w-auto lg:flex-row lg:justify-between lg:divide-y-0 lg:absolute lg:bottom-20 lg:left-1/2 lg:-translate-x-1/2"
+              className="mt-20 mx-auto flex w-[388px] flex-col items-center divide-y divide-smoky/20 sm:w-[480px] xl:mt-0 xl:mx-0 xl:w-auto xl:flex-row xl:justify-between xl:divide-y-0 xl:absolute xl:bottom-20 xl:left-1/2 xl:-translate-x-1/2"
             >
               {stats.map((stat, index) => {
                 const hasPlus = stat.value.endsWith("+");
@@ -389,23 +395,23 @@ export function AboutFounder() {
                 return (
                   <div
                     key={stat.label}
-                    className={`flex w-full flex-col items-center px-[10px] py-6 text-center lg:w-[374.5px] lg:gap-2 lg:px-8 lg:py-10
-                    ${index === 1 ? "lg:!translate-y-10 lg:border-x lg:border-smoky/20" : ""}
-                    ${index === 0 ? "lg:!translate-y-5 border-t lg:border-t-0 lg:border-l lg:border-smoky/20" : ""}
-                    ${index === 2 ? "lg:!translate-y-5 border-smoky/20 border-b lg:border-b-0 lg:border-r lg:border-smoky/20" : ""}
+                    className={`flex w-full flex-col items-center px-[10px] py-6 text-center xl:w-[374.5px] xl:gap-2 xl:px-8 xl:py-10
+                    ${index === 1 ? "xl:!translate-y-10 xl:border-x xl:border-smoky/20" : ""}
+                    ${index === 0 ? "xl:!translate-y-5 border-t xl:border-t-0 xl:border-l xl:border-smoky/20" : ""}
+                    ${index === 2 ? "xl:!translate-y-5 border-smoky/20 border-b xl:border-b-0 xl:border-r xl:border-smoky/20" : ""}
                     `}
                   >
                     <p className="font-serif uppercase leading-none">
-                      <span className="text-[70px] leading-none lg:text-8xl">
+                      <span className="text-[70px] leading-none xl:text-8xl">
                         {digits}
                       </span>
                       {hasPlus && (
-                        <span className="text-[40px] leading-none lg:text-8xl">
+                        <span className="text-[40px] leading-none xl:text-8xl">
                           {" +"}
                         </span>
                       )}
                     </p>
-                    <p className="font-serif text-xl lg:text-lg">
+                    <p className="font-serif text-xl xl:text-lg">
                       {stat.label}
                     </p>
                     {"detail" in stat && stat.detail && (
@@ -420,13 +426,13 @@ export function AboutFounder() {
 
             <div
               data-chapter="background"
-              className="mt-20 flex flex-col justify-between gap-[17px] lg:mt-0 lg:gap-6 lg:absolute lg:inset-x-0 lg:top-0 lg:max-w-[1470px] lg:px-[50px] lg:py-20 lg:flex-row lg:items-start"
+              className="mt-20 flex flex-col justify-between gap-[17px] xl:mt-0 xl:gap-6 xl:absolute xl:inset-x-0 xl:top-0 xl:max-w-[1470px] xl:px-[50px] xl:py-20 xl:flex-row xl:items-start"
             >
               <p className="flex items-center gap-3 font-sans text-eyebrow font-medium uppercase leading-[1.4] tracking-wide">
                 <span aria-hidden="true">→</span>
                 {background.eyebrow}
               </p>
-              <div className="flex max-w-[383px] flex-col gap-3 font-sans text-base font-medium leading-[1.4] text-alabaster/80 lg:gap-4 lg:leading-[1.5]">
+              <div className="flex max-w-[383px] flex-col gap-3 font-sans text-base font-medium leading-[1.4] text-alabaster/80 sm:max-w-[520px] sm:text-lg xl:max-w-[383px] xl:gap-4 xl:text-base xl:leading-[1.5]">
                 {background.paragraphs.map((p) => (
                   <p key={p}>{p}</p>
                 ))}
@@ -435,7 +441,7 @@ export function AboutFounder() {
 
             <p
               data-chapter="quote"
-              className="mt-[39px] indent-[3ch] font-serif text-2xl leading-[1.2] sm:text-4xl lg:mt-0 lg:indent-[calc(50vw-185px)] lg:max-w-[1470px] lg:px-[50px] lg:mx-auto lg:leading-[1.25] lg:absolute lg:inset-x-0 lg:bottom-[3%] lg:text-[56px]"
+              className="mt-[39px] indent-[3ch] font-serif text-2xl leading-[1.2] sm:text-4xl xl:mt-0 xl:indent-[calc(50vw-185px)] xl:max-w-[1470px] xl:px-[50px] xl:mx-auto xl:leading-[1.25] xl:absolute xl:inset-x-0 xl:bottom-[3%] xl:text-[56px]"
             >
               “{quote}”
             </p>

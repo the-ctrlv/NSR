@@ -20,9 +20,11 @@ export function ProblemsGrid() {
       className="bg-paper pt-20 pb-16 sm:py-20"
       aria-labelledby="problems-heading"
     >
-      <Container className="flex flex-col sm:flex-row sm:justify-between max-sm:!px-4">
+      <Container className="flex flex-col xl:flex-row lg:justify-between max-sm:!px-4">
         <div>
-          <Eyebrow className="mb-8 sm:mb-15">What can I help you solve?</Eyebrow>
+          <Eyebrow className="mb-8 sm:mb-15">
+            What can I help you solve?
+          </Eyebrow>
           <TextFillReveal
             id="problems-heading"
             lines={["Complex local", "matters can look", "like this"]}
@@ -33,7 +35,7 @@ export function ProblemsGrid() {
         <Reveal
           as="ul"
           stagger={0.42}
-          className="grid grid-cols-1 border-y max-w-[745px] border-hairline sm:grid-cols-2 mt-8 sm:mt-12"
+          className="grid grid-cols-1 border-y xl:max-w-[745px] border-hairline sm:grid-cols-2 mt-8 sm:mt-12"
         >
           {problemCards.map((card, index) => {
             const isLastMobile = index === problemCards.length - 1;

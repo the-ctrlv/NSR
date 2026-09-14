@@ -58,7 +58,7 @@ export function ApproachSteps() {
       aria-labelledby="categories-heading"
     >
       <Container>
-        <div className="grid gap-8 lg:grid-cols-[505px_1fr] lg:gap-20">
+        <div className="grid gap-8 lg:grid-cols-[380px_1fr] lg:gap-10 xl:grid-cols-[505px_1fr] xl:gap-20">
           <div>
             <p className="flex items-center gap-3 font-sans text-eyebrow font-medium uppercase tracking-wide">
               <span aria-hidden="true">→</span>
@@ -91,7 +91,7 @@ export function ApproachSteps() {
                     src={`/icons/numeral-${step.number}-mob.svg`}
                     alt=""
                     aria-hidden="true"
-                    className={`block h-auto lg:hidden ${index === 0 ? "w-20" : "w-24"}`}
+                    className={`block h-auto sm:w-32 lg:hidden ${index === 0 ? "w-20" : "w-24"}`}
                   />
                   {/* eslint-disable-next-line @next/next/no-img-element -- exported numeral artwork */}
                   <img
@@ -103,9 +103,9 @@ export function ApproachSteps() {
                 </div>
                 <div
                   data-approach-text
-                  className="relative z-10 flex w-full flex-col gap-1 pt-16 pb-8 pl-8 lg:ml-50 lg:max-w-[546px] lg:py-0 lg:pt-[70px] lg:pb-0 lg:pl-0"
+                  className="relative z-10 flex w-full flex-col gap-1 pt-16 pb-8 pl-8 sm:pt-20 sm:pl-12 lg:ml-16 lg:max-w-[420px] lg:py-0 lg:pt-[70px] lg:pb-0 lg:pl-0 xl:ml-50 xl:max-w-[546px]"
                 >
-                  <h3 className="font-serif text-2xl leading-none lg:text-2xl">
+                  <h3 className="font-serif text-2xl leading-none sm:text-3xl lg:text-2xl">
                     {step.title}
                   </h3>
                   <p className="font-sans text-[15px] leading-[1.5] text-ink/80 mb-2">

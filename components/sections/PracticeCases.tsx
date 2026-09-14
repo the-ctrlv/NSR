@@ -159,21 +159,21 @@ export function PracticeCases() {
 
         <ul
           ref={stackRef}
-          className="relative flex min-h-[680px] flex-col gap-6 lg:min-h-[540px] w-[calc(100%+16px)] translate-x-[-8px] lg:translate-x-0 lg:w-auto"
+          className="relative flex min-h-[680px] flex-col gap-6 sm:min-h-[540px] w-[calc(100%+16px)] translate-x-[-8px] lg:translate-x-0 lg:w-auto"
         >
           {practiceCases.cases.map((item) => (
             <li
               key={item.title}
-              className="relative isolate flex h-full flex-col justify-between overflow-hidden border border-hairline bg-paper px-4 pb-4 pt-6 lg:block lg:py-20 lg:px-15"
+              className="relative isolate flex h-full flex-col justify-between overflow-hidden border border-hairline bg-paper px-4 pb-4 pt-6 sm:px-8 sm:pt-10 sm:pb-8 lg:block lg:py-20 lg:px-15"
             >
               {/* <GrainOverlay className="opacity-[0.08] mix-blend-overlay" /> */}
-              <div className="relative flex flex-col gap-2 lg:flex-row lg:justify-between lg:gap-14">
-                <h3 className="font-serif text-[32px] leading-[1.1] text-ink lg:max-w-sm lg:text-[48px]">
+              <div className="relative flex flex-col gap-2 sm:gap-6 lg:flex-row lg:justify-between lg:gap-6 xl:gap-14">
+                <h3 className="font-serif text-[32px] leading-[1.1] text-ink sm:text-[40px] lg:max-w-sm lg:text-[48px]">
                   {item.title}
                 </h3>
 
                 <div className="flex flex-col gap-4 lg:gap-14 max-w-[708px]">
-                  <p className="font-serif indent-[100px] text-lg leading-[1.2] text-ink lg:text-2xl">
+                  <p className="font-serif indent-[100px] text-lg leading-[1.2] text-ink sm:text-xl lg:text-2xl">
                     {item.intro}
                   </p>
 

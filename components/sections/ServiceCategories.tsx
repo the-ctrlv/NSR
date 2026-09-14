@@ -60,15 +60,15 @@ export function ServiceCategories() {
         <Reveal
           as="ul"
           stagger={0.15}
-          className="grid grid-cols-1 border border-ink-dim/60 sm:grid-cols-3"
+          className="grid grid-cols-1 border border-ink-dim/60 sm:grid-cols-1 lg:grid-cols-3"
         >
           {serviceCategories.categories.map((category, index) => {
             const isLast = index === serviceCategories.categories.length - 1;
             return (
               <li
                 key={category.title}
-                className={`flex flex-col items-center justify-between gap-8 border-ink-dim/60 bg-ink px-6 py-10 text-center ${
-                  isLast ? "" : "border-b sm:border-b-0 sm:border-r"
+                className={`flex flex-col items-center justify-between gap-8 border-ink-dim/60 bg-ink px-6 py-10 text-center sm:px-10 sm:py-14 lg:px-6 lg:py-10 ${
+                  isLast ? "" : "border-b lg:border-b-0 lg:border-r"
                 }`}
               >
                 <div className="flex flex-col items-center gap-5">

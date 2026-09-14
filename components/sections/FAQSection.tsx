@@ -30,7 +30,7 @@ export function FAQSection() {
     >
       <Container>
         <Eyebrow className="mb-6">{faq.eyebrow}</Eyebrow>
-        <div className="grid gap-12 lg:grid-cols-[459px_1fr] lg:gap-55 mt-15">
+        <div className="grid gap-12 lg:grid-cols-[340px_1fr] lg:gap-16 xl:grid-cols-[459px_1fr] xl:gap-55 mt-15">
           <TextFillReveal
             id="faq-heading"
             lines={faq.heading}
