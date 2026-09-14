@@ -36,9 +36,11 @@ export function PracticeCases() {
         // (front) card — card 1 tilts one way, card 2 the other, card 3
         // never recedes so its own entry here is unused.
         const rotations = [3, -3, 0];
-        // Full container height below — the incoming card starts as if
-        // arriving from the section below.
-        const enterFromY = stackHeight;
+        // A full viewport height below (not just the stack's own, often
+        // shorter, height) — otherwise the incoming card starts close
+        // enough to its resting spot that flipping it to visible reads as
+        // "just appears" rather than genuinely sliding up from off-screen.
+        const enterFromY = Math.max(stackHeight, window.innerHeight);
 
         gsap.set(stack, {
           position: "relative",
@@ -151,11 +153,13 @@ export function PracticeCases() {
     <section
       ref={sectionRef}
       data-hide-floating-cta
-      className="relative flex h-screen flex-col justify-center overflow-hidden bg-paper py-10 lg:py-20"
+      className="relative flex h-screen flex-col justify-center overflow-hidden bg-paper py-10 md:py-14 lg:py-20"
       aria-label="NSR in practice"
     >
       <Container>
-        <Eyebrow className="mb-6 lg:mb-10">{practiceCases.eyebrow}</Eyebrow>
+        <Eyebrow className="mb-6 md:mb-8 lg:mb-10">
+          {practiceCases.eyebrow}
+        </Eyebrow>
 
         <ul
           ref={stackRef}
@@ -164,10 +168,10 @@ export function PracticeCases() {
           {practiceCases.cases.map((item) => (
             <li
               key={item.title}
-              className="relative isolate flex h-full flex-col justify-between overflow-hidden border border-hairline bg-paper px-4 pb-4 pt-6 sm:px-8 sm:pt-10 sm:pb-8 lg:block lg:py-20 lg:px-15"
+              className="relative isolate flex h-full flex-col justify-between overflow-hidden border border-hairline bg-paper px-4 pb-4 pt-6 sm:px-8 sm:pt-10 sm:pb-8 md:pt-14 md:pb-12 lg:block lg:py-20 lg:px-15"
             >
               {/* <GrainOverlay className="opacity-[0.08] mix-blend-overlay" /> */}
-              <div className="relative flex flex-col gap-2 sm:gap-6 lg:flex-row lg:justify-between lg:gap-6 xl:gap-14">
+              <div className="relative flex flex-col gap-2 sm:gap-6 md:gap-9 lg:flex-row lg:justify-between lg:gap-6 xl:gap-14">
                 <h3 className="font-serif text-[32px] leading-[1.1] text-ink sm:text-[40px] lg:max-w-sm lg:text-[48px]">
                   {item.title}
                 </h3>

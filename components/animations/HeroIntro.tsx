@@ -163,7 +163,16 @@ export function HeroIntro({ children }: { children: ReactNode }) {
           if (self.isActive && !heightFixedOnEngage) {
             heightFixedOnEngage = true;
             applyFixedHeight();
-            self.refresh();
+            // Deferred a frame: calling refresh() synchronously here can
+            // land mid-way through another component's own ScrollTrigger
+            // setup (every section on this page creates at least one on
+            // mount), which intermittently threw GSAP's internal
+            // "Cannot read properties of undefined (reading 'end')" —
+            // a known race from refreshing while the global trigger list
+            // is still being built elsewhere. One frame is enough for the
+            // rest of the page's mount-time ScrollTrigger.create() calls to
+            // finish first.
+            requestAnimationFrame(() => self.refresh());
           }
         },
         onUpdate: (self) => {
@@ -182,7 +191,9 @@ export function HeroIntro({ children }: { children: ReactNode }) {
       });
 
       applyFixedHeight();
-      if (isMobile) trigger.refresh();
+      // Same deferral as onToggle above — let every other section's
+      // mount-time ScrollTrigger.create() calls finish first.
+      if (isMobile) requestAnimationFrame(() => trigger.refresh());
 
       return () => {
         trigger.kill();

@@ -137,7 +137,7 @@ export function ClosingCta() {
           width={798}
           height={1200}
           sizes="100vw"
-          className="block h-auto w-full"
+          className="block h-auto w-full lg:p-[20vw] xl:p-0"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-ink from-[8%] via-ink/60 via-[42%] to-transparent to-[72%]" />
       </div>

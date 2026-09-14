@@ -68,7 +68,7 @@ export function Hero() {
               src="/icons/logo.svg"
               alt=""
               aria-hidden="true"
-              className="h-[25px] w-auto sm:h-9"
+              className="h-[25px] w-auto sm:h-7"
             />
           </a>
           <nav aria-label="Primary" className="hidden lg:block">
