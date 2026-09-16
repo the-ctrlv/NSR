@@ -82,9 +82,10 @@ export function RealityReveal() {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
 
-      // Desktop: ball sits centered, shrinks/drifts up as the lines reveal,
-      // then fades out as the circle wipe (sourced from its position) grows
-      // to cover the screen — a slow, held scroll-scrubbed sequence.
+      // Desktop: ball sits statically at its (formerly animated) smallest,
+      // highest position — no shrink/rise animation anymore — then fades
+      // out as the circle wipe (sourced from its position) grows to cover
+      // the screen, a slow, held scroll-scrubbed sequence.
       mm.add("(min-width: 1024px)", () => {
         gsap.set(after, {
           position: "absolute",
@@ -101,9 +102,12 @@ export function RealityReveal() {
           : [];
         gsap.set(lineTexts, { opacity: 0, y: 28 });
         gsap.set(statementRef.current, { opacity: 0, y: 48 });
+        // Ball no longer shrinks/rises with scroll — it sits statically at
+        // what used to be its fully-progressed end state (contentProgress
+        // === 1), i.e. already at its smallest size and highest position.
         gsap.set(ballRef.current, {
-          scale: 1,
-          y: 0,
+          scale: 0.54,
+          y: -window.innerHeight * 0.2,
           transformOrigin: "50% 50%",
         });
 
@@ -135,11 +139,6 @@ export function RealityReveal() {
           invalidateOnRefresh: true,
           onRefreshInit: setRevealOrigin,
           onUpdate: (self) => {
-            const contentProgress = gsap.utils.clamp(
-              0,
-              1,
-              (self.progress - 0.05) / 0.2,
-            );
             const revealProgress = gsap.utils.clamp(
               0,
               1,
@@ -168,9 +167,10 @@ export function RealityReveal() {
                 overwrite: true,
               });
             }
+            // Scale/position no longer animate here — the ball stays put at
+            // the static state set above; only its fade before the wipe
+            // remains scroll-driven.
             gsap.set(ballRef.current, {
-              scale: 1 - contentProgress * 0.46,
-              y: -contentProgress * window.innerHeight * 0.2,
               opacity: revealProgress > 0 ? 0 : 1,
             });
 

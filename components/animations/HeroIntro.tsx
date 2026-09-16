@@ -29,7 +29,12 @@ export function HeroIntro({ children }: { children: ReactNode }) {
     const section = root.parentElement;
     if (!section) return;
 
-    const bgLines = root.querySelector<HTMLElement>('[data-hero="bg-lines"]');
+    const bgLines1 = root.querySelector<HTMLElement>(
+      '[data-hero="bg-lines-1"]',
+    );
+    const bgLines2 = root.querySelector<HTMLElement>(
+      '[data-hero="bg-lines-2"]',
+    );
     const portrait = root.querySelector<HTMLElement>('[data-hero="portrait"]');
     const chrome = root.querySelectorAll<HTMLElement>('[data-hero="chrome"]');
     const ghost = root.querySelector<HTMLElement>('[data-hero="ghost"]');
@@ -60,11 +65,22 @@ export function HeroIntro({ children }: { children: ReactNode }) {
 
     registerGsap();
     const ctx = gsap.context(() => {
-      // Ambient background motion — slow, endless, independent of the entrance timeline.
-      if (bgLines) {
-        gsap.to(bgLines, {
+      // Ambient background motion — slow, endless, independent of the
+      // entrance timeline. Two layers spinning at different speeds instead
+      // of one flat rotation, so they drift in and out of alignment.
+      if (bgLines1) {
+        gsap.to(bgLines1, {
           rotation: 360,
           duration: 180,
+          repeat: -1,
+          ease: "none",
+          transformOrigin: "50% 50%",
+        });
+      }
+      if (bgLines2) {
+        gsap.to(bgLines2, {
+          rotation: 360,
+          duration: 260,
           repeat: -1,
           ease: "none",
           transformOrigin: "50% 50%",

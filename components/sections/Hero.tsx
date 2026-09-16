@@ -19,14 +19,26 @@ export function Hero() {
                 "radial-gradient(ellipse 620px 470px at 50% 41%, #9aacba 0%, #7a8a99 25%, #5a6879 50%, #3a4658 75%, #2a3547 87.5%, #1a2437 100%)",
             }}
           />
-          <div className="absolute left-1/2 top-1/2 h-[160%] w-[160%] max-w-none -translate-x-1/2 -translate-y-[40%]">
+          <div className="absolute left-1/2 top-[80%] h-[80%] w-[80%] max-w-none -translate-x-1/2 -translate-y-[40%]">
+            {/* Two independent line graphics layered in the same spot,
+                each spun by HeroIntro at its own speed (see data-hero
+                below) for a subtle multi-speed parallax instead of one
+                flat rotation. */}
             {/* eslint-disable-next-line @next/next/no-img-element -- decorative vector, next/image adds no value for local SVG */}
             <img
-              src="/icons/bg-lines.svg"
+              src="/icons/bg-line.svg"
               alt=""
               aria-hidden="true"
-              data-hero="bg-lines"
-              className="block h-full w-full opacity-60"
+              data-hero="bg-lines-1"
+              className="absolute inset-0 block h-full w-full opacity-60"
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element -- decorative vector, next/image adds no value for local SVG */}
+            <img
+              src="/icons/bg-line-2.svg"
+              alt=""
+              aria-hidden="true"
+              data-hero="bg-lines-2"
+              className="absolute inset-0 block h-full w-full opacity-60"
             />
           </div>
           {/* Grain sits under the portrait so it only shows on the blue background — the portrait PNG is a transparent cutout and occludes it wherever she is opaque. */}
@@ -140,7 +152,7 @@ export function Hero() {
               <p
                 data-hero="ghost"
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 flex select-none items-center justify-center text-center font-serif text-[clamp(2.25rem,calc(14vw_-_8px),3.125rem)] leading-none text-alabaster sm:text-6xl md:text-7xl lg:text-display"
+                className="pointer-events-none absolute inset-0 flex select-none items-center justify-center text-center font-serif text-[clamp(2.25rem,calc(14vw_-_8px),3.125rem)] leading-none text-alabaster sm:text-6xl md:text-7xl lg:text-display lg:whitespace-nowrap"
               >
                 {siteConfig.tagline}
               </p>

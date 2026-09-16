@@ -153,14 +153,18 @@ export function PracticeCases() {
     <section
       ref={sectionRef}
       data-hide-floating-cta
-      className="relative flex h-screen flex-col justify-center overflow-hidden bg-paper py-10 md:py-14 lg:py-20"
+      className="relative h-screen overflow-hidden bg-paper"
       aria-label="NSR in practice"
     >
-      <Container>
-        <Eyebrow className="mb-6 md:mb-8 lg:mb-10">
-          {practiceCases.eyebrow}
-        </Eyebrow>
+      {/* Pinned to the top edge, independent of the card stack's own
+          vertical centering below — was previously part of the same
+          centered flex column, which dragged it down with the stack
+          instead of anchoring it to the top of the section. */}
+      <Container className="absolute inset-x-0 top-0 pt-10 md:pt-14 lg:pt-[5vh]">
+        <Eyebrow>{practiceCases.eyebrow}</Eyebrow>
+      </Container>
 
+      <Container className="absolute inset-0 flex items-center">
         <ul
           ref={stackRef}
           className="relative flex min-h-[680px] flex-col gap-6 sm:min-h-[540px] w-[calc(100%+16px)] translate-x-[-8px] lg:translate-x-0 lg:w-auto"
