@@ -2,8 +2,18 @@
 
 import { useLayoutEffect, useRef } from "react";
 import type { ReactNode } from "react";
-import { gsap, ScrollTrigger, registerGsap, prefersReducedMotion } from "@/lib/gsap";
-import { HERO_PIN_END, HERO_REVEAL_AT, HERO_REVEAL_EVENT } from "@/lib/heroReveal";
+import {
+  gsap,
+  ScrollTrigger,
+  registerGsap,
+  prefersReducedMotion,
+} from "@/lib/gsap";
+import {
+  HERO_PIN_END,
+  HERO_REVEAL_AT,
+  HERO_REVEAL_EVENT,
+} from "@/lib/heroReveal";
+import { getLenisInstance } from "@/lib/lenisInstance";
 
 /**
  * Staged hero entrance, matching the Figma storyboard (Frame 1000001971→1973):
@@ -64,6 +74,28 @@ export function HeroIntro({ children }: { children: ReactNode }) {
     }
 
     registerGsap();
+
+    // Scroll stays locked from the moment the hero mounts until the intro
+    // timeline below (chrome fade-in + the transient headline) has fully
+    // played — otherwise a fast scroller can blow straight through the
+    // entrance before it even finishes. document.body's overflow is the
+    // native fallback (also covers touch, which Lenis doesn't intercept —
+    // see SmoothScroll's syncTouch: false); lenis.stop()/.start() pauses the
+    // wheel-driven virtual scroll itself so its internal target position
+    // doesn't drift out of sync while locked. Lenis is created in
+    // SmoothScroll's useEffect, which — unlike this layout effect — hasn't
+    // necessarily run yet at this exact point, so the stop() call is
+    // deferred a frame (same reasoning as the refresh() deferrals below).
+    document.body.style.overflow = "hidden";
+    requestAnimationFrame(() => getLenisInstance()?.stop());
+    let scrollUnlocked = false;
+    const unlockScroll = () => {
+      if (scrollUnlocked) return;
+      scrollUnlocked = true;
+      document.body.style.overflow = "";
+      getLenisInstance()?.start();
+    };
+
     const ctx = gsap.context(() => {
       // Ambient background motion — slow, endless, independent of the
       // entrance timeline. Two layers spinning at different speeds instead
@@ -107,6 +139,7 @@ export function HeroIntro({ children }: { children: ReactNode }) {
       const introTl = gsap.timeline({
         delay: 0.8,
         defaults: { ease: "power3.out" },
+        onComplete: unlockScroll,
       });
 
       introTl.to(chrome, { opacity: 1, y: 0, duration: 0.6, stagger: 0.06 });
@@ -211,12 +244,69 @@ export function HeroIntro({ children }: { children: ReactNode }) {
       // mount-time ScrollTrigger.create() calls finish first.
       if (isMobile) requestAnimationFrame(() => trigger.refresh());
 
+      // Parallax: only once the hero's pin-spacer is actually done and the
+      // section is scrolling normally off the top of the viewport — the
+      // portrait sinks down, same idea as WorkingTogether's background
+      // drift. A separate trigger, not reusing the pin trigger's own
+      // progress, since that one only spans the pin itself and sits at 1
+      // for its whole exit — it never reflects this later phase.
+      // `start: () => trigger.end` reads the pin trigger's actual resolved
+      // end position (a real scroll offset in px) — HERO_PIN_END itself is
+      // a "+=90%" string, valid as an `end` value relative to that
+      // trigger's own `start`, but meaningless as a `start` value here with
+      // nothing to be relative to. `end: "bottom top"` runs it for the
+      // section's entire exit, all the way until it's fully scrolled out of
+      // view.
+      //
+      // This is built as a real tween passed via `animation`, not a manual
+      // gsap.set() inside onUpdate — with no attached animation, `scrub`
+      // doesn't actually do anything, and self.progress is always the raw,
+      // instantaneous value. That's what caused the reported bug: scrolling
+      // through the pin-spacer (before this trigger's own start) somehow
+      // still left something "building up", which then dumped out all at
+      // once the moment the pin let go. With an attached animation, GSAP
+      // maps the tween's own progress directly and exclusively to this
+      // trigger's [start, end] window — it's hard-clamped to 0 for the
+      // entire pin phase, with nothing to accumulate, and scrub's lag/
+      // inertia applies correctly once real scrolling begins past start.
+      const parallaxTrigger = portrait
+        ? ScrollTrigger.create({
+            trigger: section,
+            start: () => trigger.end,
+            // "bottom top" measured this section's bottom edge while it's
+            // also the target of the pin above — with a pin-spacer in play,
+            // that resolved to a position barely past `start`, so the whole
+            // range collapsed to ~100-200px and progress hit 1 almost
+            // immediately. Defining `end` the same way as `start` — a
+            // function, offset by one more viewport height past the pin's
+            // own end — sidesteps that ambiguity and reliably covers the
+            // section's actual exit distance.
+            end: () => trigger.end + window.innerHeight,
+            scrub: 3.5,
+            animation: gsap.to(portrait, {
+              yPercent: 18,
+              // power2.inOut eased the start too, so the portrait barely
+              // moved for the first bit of scrolling — power2.out instead
+              // starts at full speed right away and only eases off at the
+              // very end.
+              ease: "power2.out",
+            }),
+          })
+        : null;
+
       return () => {
         trigger.kill();
+        parallaxTrigger?.kill();
       };
     }, root);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      // Defensive: if this ever unmounts before the intro finished (it
+      // normally doesn't — Hero is static for the page's lifetime), don't
+      // leave scroll stuck locked.
+      unlockScroll();
+    };
   }, []);
 
   return (

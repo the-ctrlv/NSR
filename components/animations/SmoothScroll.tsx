@@ -3,6 +3,7 @@
 import { useEffect, useLayoutEffect } from "react";
 import Lenis from "lenis";
 import { gsap, registerGsap, ScrollTrigger } from "@/lib/gsap";
+import { setLenisInstance } from "@/lib/lenisInstance";
 
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   // Browsers restore the previous scroll position on a plain reload, which
@@ -39,6 +40,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       // time would fight it and stutter.
       anchors: { duration: 1.2 },
     });
+    setLenisInstance(lenis);
 
     const updateScroll = (time: number) => {
       lenis.raf(time * 1000);
@@ -70,6 +72,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       lenis.off("scroll", updateScrollTrigger);
       gsap.ticker.remove(updateScroll);
       lenis.destroy();
+      setLenisInstance(null);
     };
   }, []);
 

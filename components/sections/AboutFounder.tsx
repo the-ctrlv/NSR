@@ -27,15 +27,16 @@ type StepKey =
 // Discrete steps, not a scroll-scrubbed progress bar: each swipe/wheel tick
 // advances exactly one step, and that step's reveal plays on its own fixed
 // timing regardless of how far or fast the user scrolled — matching the
-// Figma storyboard's frames (photo alone → label + name → statistics →
+// Figma storyboard's frames (photo + label → name → statistics →
 // background + quote) as content that "lands" one swipe at a time rather
 // than scrubbing continuously with the scrollbar. Frame 1 is the portrait
-// by itself, no text at all; the eyebrow label only lands on the next swipe,
-// together with the intro copy and name as one group (not as its own
-// standalone frame), then holds through the stats frame before retiring for
-// background/quote.
+// together with just the eyebrow label — nothing else yet. The intro copy
+// and name only land on the next swipe, as their own group. The eyebrow
+// itself then holds, unchanged, through the stats frame, before finally
+// swapping to the background chapter's own eyebrow ("My background") on
+// the last frame.
 const STEPS: StepKey[][] = [
-  [],
+  ["introEyebrow"],
   ["introEyebrow", "introCopy", "name"],
   ["introEyebrow", "introCopy", "stats"],
   ["backgroundEyebrow", "backgroundParagraphs", "quote"],
@@ -107,13 +108,19 @@ export function AboutFounder() {
           ? Array.from(els.stats.querySelectorAll<HTMLElement>(":scope > div"))
           : [];
 
-        // Every chapter now flies in from below the viewport itself, not a
-        // subtle few-pixel nudge — the pin wrapper is overflow-hidden and
-        // exactly one viewport tall (xl:h-screen), so starting each element
-        // offset by that same measured height guarantees it begins fully
-        // clipped below the visible frame and travels the whole distance up
-        // into place, instead of just fading in from a few pixels away.
+        // Every chapter (other than the eyebrow label, see below) flies in
+        // from below the viewport itself, not a subtle few-pixel nudge —
+        // the pin wrapper is overflow-hidden and exactly one viewport tall
+        // (xl:h-screen), so starting each element offset by that same
+        // measured height guarantees it begins fully clipped below the
+        // visible frame and travels the whole distance up into place,
+        // instead of just fading in from a few pixels away.
         const enterDistance = pin.offsetHeight;
+        // The eyebrow label is small text, not a headline-sized block —
+        // dragging it the full viewport height along with everything else
+        // reads as far too heavy a move for something this light. It gets
+        // its own small, quick nudge instead.
+        const eyebrowOffset = 24;
 
         // Each key still gets its own entry in `targets` (and could still
         // carry a different offset per chapter if a future frame needs
@@ -125,7 +132,7 @@ export function AboutFounder() {
         > = {
           introEyebrow: {
             els: introEyebrow ? [introEyebrow] : [],
-            offsetY: enterDistance,
+            offsetY: eyebrowOffset,
           },
           introCopy: {
             els: introCopy ? [introCopy] : [],
@@ -135,7 +142,7 @@ export function AboutFounder() {
           stats: { els: statItems, offsetY: enterDistance },
           backgroundEyebrow: {
             els: backgroundEyebrow ? [backgroundEyebrow] : [],
-            offsetY: enterDistance,
+            offsetY: eyebrowOffset,
           },
           backgroundParagraphs: {
             els: backgroundParagraphs,
@@ -179,7 +186,13 @@ export function AboutFounder() {
             if (!target.length) return;
             // The 3 stat columns (12+ / 20+ / 4) read as one statistic, not a
             // sequence — they must land and leave together, no cascade.
+            // Same for the background paragraphs: two lines of one
+            // continuous thought, so they land together too, not one after
+            // the other. Both also get a touch more time than the rest —
+            // slower still reads better without a stagger masking it.
             const isStats = key === "stats";
+            const isBackgroundCopy = key === "backgroundParagraphs";
+            const noStagger = isStats || isBackgroundCopy;
             if (visible.has(key)) {
               // A chapter that's newly entering (wasn't shown a moment ago)
               // must always fly in from the side matching the current
@@ -198,9 +211,9 @@ export function AboutFounder() {
                 opacity: 1,
                 y: 0,
                 filter: "blur(0px)",
-                duration: 0.55,
-                stagger: isStats ? 0 : 0.04,
-                ease: "power2.out",
+                duration: isBackgroundCopy ? 1.2 : 1,
+                stagger: noStagger ? 0 : 0.08,
+                ease: "power3.out",
                 overwrite: true,
               });
             } else if (previousVisible.has(key)) {
@@ -212,9 +225,9 @@ export function AboutFounder() {
                 opacity: 0,
                 y: forward ? -offsetY * 0.6 : offsetY * 0.6,
                 filter: "blur(10px)",
-                duration: 0.4,
-                stagger: isStats ? 0 : 0.02,
-                ease: "power2.in",
+                duration: isBackgroundCopy ? 0.9 : 0.75,
+                stagger: noStagger ? 0 : 0.05,
+                ease: "power2.inOut",
                 overwrite: true,
               });
             }
@@ -235,22 +248,20 @@ export function AboutFounder() {
             ease: "power2.out",
             overwrite: true,
           });
-          gsap.to(portrait, {
-            scale: 1.05,
-            duration: 14,
-            ease: "sine.inOut",
-            delay: 0.8,
-            overwrite: "auto",
-          });
         };
 
         const STEP_COUNT = STEPS.length;
+        // How much scroll (in % of the section's own height) each step
+        // transition takes — bigger means a longer scroll before content
+        // changes, not a faster/slower animation.
+        const PER_STEP_PERCENT = 160;
         // Extra pinned scroll held past the last step (background + quote)
         // before the section releases — a full step's worth, so there's a
         // real pause to keep scrolling through once that content has landed,
         // not just a brief beat before unpinning.
         const EXTRA_HOLD_PERCENT = 100;
-        const totalPercent = (STEP_COUNT - 1) * 100 + EXTRA_HOLD_PERCENT;
+        const totalPercent =
+          (STEP_COUNT - 1) * PER_STEP_PERCENT + EXTRA_HOLD_PERCENT;
         const segment = 100 / totalPercent;
 
         const trigger = ScrollTrigger.create({
@@ -289,17 +300,19 @@ export function AboutFounder() {
               STEP_COUNT - 1,
               Math.max(0, Math.round(self.progress / segment)),
             );
-            // Move at most one step per update instead of jumping straight
-            // to targetIndex — a single fast swipe/flick can move scroll
-            // progress across more than one segment in one tick, which used
-            // to skip straight past a step (or fire two reveals back to
-            // back). Walking one step at a time means a big scroll still
-            // catches up, just by playing each step's reveal in turn on
-            // the next tick rather than jumping over it.
             if (targetIndex === currentStep) return;
-            const forward = targetIndex > currentStep;
-            const nextIndex = currentStep + (forward ? 1 : -1);
-            goToStep(nextIndex, forward);
+            // Jumps straight to targetIndex on every tick, however far that
+            // is from currentStep — goToStep only animates the diff between
+            // the two (whatever needs to enter/exit), it doesn't play the
+            // steps in between, so this never shows more than one clean
+            // transition no matter how far a single scroll gesture goes.
+            // (A debounce was tried here, waiting for scroll to fully settle
+            // before committing — but Lenis's easing plus the snap keep
+            // onUpdate ticking almost continuously while scrolling normally,
+            // so nothing ever "settled" until the whole gesture was over,
+            // which just froze the reveal until the very end. Reacting
+            // immediately, every tick, is what keeps it responsive.)
+            goToStep(targetIndex, targetIndex > currentStep);
           },
         });
 
@@ -395,14 +408,14 @@ export function AboutFounder() {
                 return (
                   <div
                     key={stat.label}
-                    className={`flex w-full flex-col items-center px-[10px] py-6 text-center xl:w-[374.5px] xl:gap-2 xl:px-8 xl:py-10
+                    className={`flex w-full flex-col items-center px-[10px] py-6 text-center xl:w-[372px] xl:gap-2 xl:px-8 xl:py-10
                     ${index === 1 ? "xl:!translate-y-10 xl:border-x xl:border-smoky/20" : ""}
-                    ${index === 0 ? "xl:!translate-y-5 border-t xl:border-t-0 xl:border-l xl:border-smoky/20" : ""}
-                    ${index === 2 ? "xl:!translate-y-5 border-smoky/20 border-b xl:border-b-0 xl:border-r xl:border-smoky/20" : ""}
+                    ${index === 0 ? "xl:!-translate-y-5 border-t xl:border-t-0 xl:border-l xl:border-smoky/20" : ""}
+                    ${index === 2 ? "xl:!-translate-y-5 border-smoky/20 border-b xl:border-b-0 xl:border-r xl:border-smoky/20" : ""}
                     `}
                   >
                     <p className="font-serif uppercase leading-none">
-                      <span className="text-[70px] leading-none xl:text-8xl">
+                      <span className="text-[70px] leading-none xl:text-9xl">
                         {digits}
                       </span>
                       {hasPlus && (

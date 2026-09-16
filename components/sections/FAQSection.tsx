@@ -25,7 +25,14 @@ export function FAQSection() {
   return (
     <section
       id="faq"
-      className="bg-paper py-20 lg:flex lg:h-screen lg:items-center lg:py-0"
+      // Plain fixed padding, matching every other section — deliberately
+      // not flex/justify-content centering: that recomputes symmetrically
+      // whenever the content's height changes, so opening an accordion item
+      // would push the eyebrow/heading up along with the answer text
+      // growing down. A static offset never moves the top edge; only the
+      // space below (and the section's own height) grows when an item
+      // opens.
+      className="bg-paper py-20 lg:py-20"
       aria-labelledby="faq-heading"
     >
       <Container>

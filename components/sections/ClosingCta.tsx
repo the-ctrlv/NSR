@@ -58,13 +58,22 @@ export function ClosingCta() {
             "radial-gradient(ellipse 141vw 120vh at 20% 10%, #9aacba 0%, #5a6879 50%, #3a4658 75%, #2a3547 87.5%, #1a2437 100%)",
         }}
       />
-      <div className="absolute left-1/2 top-1/2 h-[160%] w-[160%] max-w-none -translate-x-[70%] -translate-y-1/2 motion-reduce:animate-none animate-[spin_60s_linear_infinite]">
+      {/* Same two-layer idea as Hero's bg-line/bg-line-2, same two assets,
+          just spun via plain CSS here instead of GSAP. */}
+      <div className="absolute left-[20%] top-1/2 h-[80%] w-[80%] max-w-none -translate-x-[70%] -translate-y-1/2">
         {/* eslint-disable-next-line @next/next/no-img-element -- decorative vector, next/image adds no value for local SVG */}
         <img
-          src="/icons/contact-bg-lines.svg"
+          src="/icons/bg-line.svg"
           alt=""
           aria-hidden="true"
-          className="h-full w-full opacity-50"
+          className="absolute inset-0 h-full w-full opacity-50 motion-reduce:animate-none animate-[spin_60s_linear_infinite]"
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element -- decorative vector, next/image adds no value for local SVG */}
+        <img
+          src="/icons/bg-line-2.svg"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full opacity-50 motion-reduce:animate-none animate-[spin_85s_linear_infinite]"
         />
       </div>
       {/* <GrainOverlay className="opacity-[0.12] mix-blend-overlay" /> */}

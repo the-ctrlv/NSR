@@ -160,14 +160,14 @@ export function PracticeCases() {
           vertical centering below — was previously part of the same
           centered flex column, which dragged it down with the stack
           instead of anchoring it to the top of the section. */}
-      <Container className="absolute inset-x-0 top-0 pt-10 md:pt-14 lg:pt-[5vh]">
+      <Container className="absolute inset-x-0 top-0 pt-20">
         <Eyebrow>{practiceCases.eyebrow}</Eyebrow>
       </Container>
 
       <Container className="absolute inset-0 flex items-center">
         <ul
           ref={stackRef}
-          className="relative flex min-h-[680px] flex-col gap-6 sm:min-h-[540px] w-[calc(100%+16px)] translate-x-[-8px] lg:translate-x-0 lg:w-auto"
+          className="relative flex min-h-[680px] flex-col gap-6 sm:min-h-[540px] w-[calc(100%+16px)] translate-x-[-8px] lg:translate-x-0 lg:w-full"
         >
           {practiceCases.cases.map((item) => (
             <li

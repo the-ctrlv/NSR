@@ -87,8 +87,7 @@ export const solution = {
 
 export const founderReveal = {
   eyebrow: "The Person Behind NSR",
-  intro:
-    "Founder-led, personal and accountable — with the local understanding to take responsibility for moving a situation forward.",
+  intro: "",
   name: "Nataliia Sychenko Romanova",
   stats: [
     { value: "12 +", label: "Years on Mallorca." },
@@ -150,7 +149,7 @@ export const serviceCategories = {
   categories: [
     {
       icon: "private",
-      title: "Privte Client Affairs",
+      title: "Private Client Affairs",
       body: "Personal and family matters that require attention on Mallorca — from individual issues to more complex situations involving several parties.",
       tagRows: [
         ["Administrative Matters", "Family Transition"],
