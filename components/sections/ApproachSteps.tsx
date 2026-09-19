@@ -15,37 +15,81 @@ export function ApproachSteps() {
 
     registerGsap();
     const ctx = gsap.context(() => {
-      const steps = gsap.utils.toArray<HTMLElement>("[data-approach-step]");
+      const mm = gsap.matchMedia();
 
-      steps.forEach((step, index) => {
-        // The numeral wrapper and text both start pushed down past the
-        // article's own overflow-hidden + bottom border, so they read as
-        // rising up out from behind the border line rather than fading in.
-        const numeral = step.querySelector<HTMLElement>(
-          "[data-approach-numeral]",
-        );
-        const text = step.querySelector<HTMLElement>("[data-approach-text]");
-        const targets = [numeral, text].filter(
-          (el): el is HTMLElement => el !== null,
-        );
-        gsap.set(targets, { y: 56 });
+      // Mobile/tablet also fade the numeral and text in alongside the
+      // rise — desktop's numeral sits large and stationary, so a pure
+      // y-move already reads clearly there; on the narrower layouts
+      // adding opacity makes the reveal read less abrupt.
+      const build = (fadeIn: boolean) => {
+        const steps = gsap.utils.toArray<HTMLElement>("[data-approach-step]");
+        const timelines: gsap.core.Timeline[] = [];
 
-        const timeline = gsap.timeline({
-          // A per-card delay so steps that cross the trigger threshold in
-          // the same scroll gesture still land one at a time, in order,
-          // instead of firing together.
-          delay: index * 0.15,
-          scrollTrigger: { trigger: step, start: "top 85%", once: true },
+        steps.forEach((step, index) => {
+          // The numeral wrapper and text both start pushed down past the
+          // article's own overflow-hidden + bottom border, so they read as
+          // rising up out from behind the border line rather than fading in.
+          const numeral = step.querySelector<HTMLElement>(
+            "[data-approach-numeral]",
+          );
+          const text = step.querySelector<HTMLElement>(
+            "[data-approach-text]",
+          );
+          const targets = [numeral, text].filter(
+            (el): el is HTMLElement => el !== null,
+          );
+          gsap.set(targets, { y: 56 });
+          if (fadeIn) gsap.set(targets, { opacity: 0 });
+
+          const timeline = gsap.timeline({
+            // A per-card delay so steps that cross the trigger threshold in
+            // the same scroll gesture still land one at a time, in order,
+            // instead of firing together.
+            delay: index * 0.15,
+            scrollTrigger: { trigger: step, start: "top 85%", once: true },
+          });
+          if (numeral) {
+            // Both start at the timeline's own t=0 — numeral and text rise
+            // together as one beat instead of the numeral landing first.
+            timeline.to(
+              numeral,
+              { y: 0, duration: 0.5, ease: "power3.out" },
+              0,
+            );
+            if (fadeIn) {
+              timeline.to(
+                numeral,
+                { opacity: 1, duration: 0.5, ease: "power3.out" },
+                0,
+              );
+            }
+          }
+          if (text) {
+            timeline.to(text, { y: 0, duration: 0.6, ease: "power3.out" }, 0);
+            if (fadeIn) {
+              timeline.to(
+                text,
+                { opacity: 1, duration: 0.6, ease: "power3.out" },
+                0,
+              );
+            }
+          }
+          timelines.push(timeline);
         });
-        if (numeral) {
-          // Both start at the timeline's own t=0 — numeral and text rise
-          // together as one beat instead of the numeral landing first.
-          timeline.to(numeral, { y: 0, duration: 0.5, ease: "power3.out" }, 0);
-        }
-        if (text) {
-          timeline.to(text, { y: 0, duration: 0.6, ease: "power3.out" }, 0);
-        }
-      });
+
+        return () => {
+          timelines.forEach((timeline) => {
+            timeline.scrollTrigger?.kill();
+            timeline.kill();
+          });
+          gsap.set("[data-approach-numeral], [data-approach-text]", {
+            clearProps: "y,opacity",
+          });
+        };
+      };
+
+      mm.add("(max-width: 1023px)", () => build(true));
+      mm.add("(min-width: 1024px)", () => build(false));
     }, list);
 
     return () => ctx.revert();
@@ -55,7 +99,7 @@ export function ApproachSteps() {
     <section
       id="approach"
       className="bg-paper-dim py-20 text-ink lg:py-20"
-      aria-labelledby="categories-heading"
+      aria-labelledby="approach-heading"
     >
       <Container>
         <div className="grid gap-8 lg:grid-cols-[380px_1fr] lg:gap-10 xl:grid-cols-[505px_1fr] xl:gap-20">
@@ -65,7 +109,7 @@ export function ApproachSteps() {
               {approach.eyebrow}
             </p>
             <TextFillReveal
-              id="categories-heading"
+              id="approach-heading"
               lines={["Different situations.", "One operational.", "approach"]}
               className="mt-24 max-w-[505px] font-serif text-4xl leading-[1.1] sm:text-5xl lg:text-[56px]"
             />

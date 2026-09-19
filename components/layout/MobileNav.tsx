@@ -3,7 +3,12 @@
 import { useEffect, useState } from "react";
 import { navLinks } from "@/lib/content";
 
-export function MobileNav() {
+type MobileNavProps = {
+  /** Hamburger line color for light (non-hero/ink) headers — the slide-out panel itself is always dark. */
+  dark?: boolean;
+};
+
+export function MobileNav({ dark = false }: MobileNavProps) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -32,14 +37,14 @@ export function MobileNav() {
         className="relative z-50 flex h-10 w-10 flex-col items-center justify-center gap-[5px]"
       >
         <span
-          className={`block h-px w-6 bg-alabaster transition-transform duration-300 ${
-            open ? "translate-y-[3px] rotate-45" : ""
-          }`}
+          className={`block h-px w-6 transition-transform duration-300 ${
+            dark && !open ? "bg-ink" : "bg-alabaster"
+          } ${open ? "translate-y-[3px] rotate-45" : ""}`}
         />
         <span
-          className={`block h-px w-6 bg-alabaster transition-transform duration-300 ${
-            open ? "-translate-y-[3px] -rotate-45" : ""
-          }`}
+          className={`block h-px w-6 transition-transform duration-300 ${
+            dark && !open ? "bg-ink" : "bg-alabaster"
+          } ${open ? "-translate-y-[3px] -rotate-45" : ""}`}
         />
       </button>
 

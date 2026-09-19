@@ -211,7 +211,7 @@ export function AboutFounder() {
                 opacity: 1,
                 y: 0,
                 filter: "blur(0px)",
-                duration: isBackgroundCopy ? 1.2 : 1,
+                duration: isBackgroundCopy ? 1.35 : 1.15,
                 stagger: noStagger ? 0 : 0.08,
                 ease: "power3.out",
                 overwrite: true,
@@ -221,11 +221,14 @@ export function AboutFounder() {
               // ago — one that's never been shown yet (e.g. everything
               // during the photo-only first frame) is already sitting
               // hidden off-screen, so there's nothing to animate out.
+              // A much smaller fraction of the entrance offset than before
+              // — retiring content only needs to read as "leaving", not
+              // travel nearly as far as it arrived.
               gsap.to(target, {
                 opacity: 0,
-                y: forward ? -offsetY * 0.6 : offsetY * 0.6,
+                y: forward ? -offsetY * 0.3 : offsetY * 0.3,
                 filter: "blur(10px)",
-                duration: isBackgroundCopy ? 0.9 : 0.75,
+                duration: isBackgroundCopy ? 1.05 : 0.95,
                 stagger: noStagger ? 0 : 0.05,
                 ease: "power2.inOut",
                 overwrite: true,
@@ -244,7 +247,7 @@ export function AboutFounder() {
           gsap.to(portrait, {
             opacity: 1,
             scale: 1,
-            duration: 0.8,
+            duration: 1,
             ease: "power2.out",
             overwrite: true,
           });
@@ -256,10 +259,9 @@ export function AboutFounder() {
         // changes, not a faster/slower animation.
         const PER_STEP_PERCENT = 160;
         // Extra pinned scroll held past the last step (background + quote)
-        // before the section releases — a full step's worth, so there's a
-        // real pause to keep scrolling through once that content has landed,
-        // not just a brief beat before unpinning.
-        const EXTRA_HOLD_PERCENT = 100;
+        // before the section releases — just a brief pause to let that
+        // content land before unpinning, not a full step's worth.
+        const EXTRA_HOLD_PERCENT = 40;
         const totalPercent =
           (STEP_COUNT - 1) * PER_STEP_PERCENT + EXTRA_HOLD_PERCENT;
         const segment = 100 / totalPercent;
@@ -378,7 +380,7 @@ export function AboutFounder() {
             >
               <Image
                 src="/images/portrait-founder.jpg"
-                alt="Nataliia Sychenko Romanova, founder of NSR Mallorca"
+                alt="Nataliia Sychenko Romanova, trusted local partner and founder of NSR Mallorca"
                 fill
                 sizes="(min-width: 1280px) 420px, 60vw"
                 className="object-cover object-center block"
@@ -389,12 +391,12 @@ export function AboutFounder() {
             {/* -37px pulls the name up into the portrait's own bottom fade,
                 exactly like the Figma mobile frame — the fade is solid ink
                 by that point, so it reads as a clean gap, not an overlap. */}
-            <p
+            <h2
               data-chapter="name"
               className="mt-15 xl:mt-[18vh] mx-auto max-w-2xl text-center font-serif text-[48px] leading-[0.9] sm:text-6xl xl:mt-0 xl:absolute xl:inset-x-0 xl:top-[54%] xl:text-display"
             >
               {name}
-            </p>
+            </h2>
 
             <div
               data-chapter="stats"
@@ -415,7 +417,9 @@ export function AboutFounder() {
                     `}
                   >
                     <p className="font-serif uppercase leading-none">
-                      <span className="text-[70px] leading-none xl:text-9xl">
+                      <span
+                        className={`text-[70px] leading-none xl:text-9xl ${index === 2 ? "-translate-x-2 md:translate-x-0 block" : ""}`}
+                      >
                         {digits}
                       </span>
                       {hasPlus && (

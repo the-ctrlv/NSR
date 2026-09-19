@@ -3,7 +3,7 @@ import { Bebas_Neue, Manrope } from "next/font/google";
 import localFont from "next/font/local";
 import { SmoothScroll } from "@/components/animations/SmoothScroll";
 import "./globals.css";
-import { siteConfig } from "@/lib/content";
+import { seoKeywords, siteConfig } from "@/lib/content";
 
 const displayFont = localFont({
   variable: "--font-display",
@@ -36,14 +36,8 @@ export const metadata: Metadata = {
     default: `${siteConfig.name} — ${siteConfig.tagline}`,
     template: `%s — ${siteConfig.name}`,
   },
-  description: siteConfig.description,
-  keywords: [
-    "Mallorca concierge",
-    "Mallorca relocation",
-    "local operating partner Mallorca",
-    "property management Mallorca",
-    "private client services Mallorca",
-  ],
+  description: siteConfig.metaDescription,
+  keywords: [...seoKeywords.primary, ...seoKeywords.secondary],
   alternates: {
     canonical: "/",
   },
@@ -55,9 +49,15 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     images: [
       {
-        url: "/images/hero-portrait.png",
+        // Dedicated OG asset (public/images/og-image.png) — the raw hero
+        // portrait is a tall, transparent-background cutout, wrong aspect
+        // ratio for a social card and inconsistent across platforms that
+        // don't composite alpha the same way. This is the same portrait
+        // flattened onto the brand ink color at the standard 1200x630
+        // OG/Twitter card ratio.
+        url: "/images/og-image.png",
         width: 1200,
-        height: 798,
+        height: 630,
         alt: siteConfig.name,
       },
     ],
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${siteConfig.name} — ${siteConfig.tagline}`,
     description: siteConfig.description,
-    images: ["/images/hero-portrait.png"],
+    images: ["/images/og-image.png"],
   },
   robots: {
     index: true,

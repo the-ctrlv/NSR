@@ -52,28 +52,30 @@ export function FAQSection() {
               const isOpen = openItems.has(i);
               return (
                 <div key={item.question} className="py-5">
-                  <button
-                    type="button"
-                    onClick={() => toggle(i)}
-                    aria-expanded={isOpen}
-                    className="flex w-full cursor-pointer items-center justify-between gap-6 text-left font-serif text-xl leading-[1.5] text-ink lg:text-[22px]"
-                  >
-                    <span>
-                      {String(i + 1).padStart(2, "0")} - {item.question}
-                    </span>
-                    <span
-                      aria-hidden="true"
-                      className={`block h-[11px] w-[11px] shrink-0 transition-transform duration-300 ${
-                        isOpen ? "-rotate-405" : ""
-                      }`}
+                  <h3>
+                    <button
+                      type="button"
+                      onClick={() => toggle(i)}
+                      aria-expanded={isOpen}
+                      className="flex w-full cursor-pointer items-center justify-between gap-6 text-left font-serif text-xl leading-[1.5] text-ink lg:text-[22px]"
                     >
-                      <img
-                        src="/icons/arrow-diagonal.svg"
-                        alt=""
-                        className="h-full w-full"
-                      />
-                    </span>
-                  </button>
+                      <span>
+                        {String(i + 1).padStart(2, "0")} - {item.question}
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className={`block h-[11px] w-[11px] shrink-0 transition-transform duration-300 ${
+                          isOpen ? "-rotate-405" : ""
+                        }`}
+                      >
+                        <img
+                          src="/icons/arrow-diagonal.svg"
+                          alt=""
+                          className="h-full w-full"
+                        />
+                      </span>
+                    </button>
+                  </h3>
                   <div
                     className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
                       isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"

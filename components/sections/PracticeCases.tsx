@@ -161,6 +161,10 @@ export function PracticeCases() {
           centered flex column, which dragged it down with the stack
           instead of anchoring it to the top of the section. */}
       <Container className="absolute inset-x-0 top-0 pt-20">
+        {/* No standalone title in this design (just the eyebrow label above
+            the card stack) — a visually-hidden h2 still gives the section a
+            real heading for screen readers and search engines. */}
+        <h2 className="sr-only">{practiceCases.eyebrow}</h2>
         <Eyebrow>{practiceCases.eyebrow}</Eyebrow>
       </Container>
 

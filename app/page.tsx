@@ -12,7 +12,7 @@ import { ClosingCta } from "@/components/sections/ClosingCta";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { FloatingCta } from "@/components/layout/FloatingCta";
 // import { StickyHeader } from "@/components/layout/StickyHeader";
-import { siteConfig } from "@/lib/content";
+import { faq, seoKeywords, siteConfig } from "@/lib/content";
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -20,14 +20,31 @@ const structuredData = {
   name: siteConfig.name,
   description: siteConfig.description,
   url: siteConfig.url,
-  areaServed: {
+  keywords: [...seoKeywords.primary, ...seoKeywords.secondary].join(", "),
+  areaServed: seoKeywords.geo.map((name) => ({
     "@type": "Place",
-    name: "Mallorca, Spain",
-  },
+    name,
+  })),
   founder: {
     "@type": "Person",
     name: "Nataliia Sychenko Romanova",
   },
+};
+
+// Mirrors the visible FAQSection content exactly (same questions, same
+// answers) rather than a separate hidden set — search engines expect
+// FAQPage markup to match what's actually on the page.
+const faqStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faq.items.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.answer,
+    },
+  })),
 };
 
 export default function Home() {
@@ -36,6 +53,12 @@ export default function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqStructuredData),
+        }}
       />
       <div id="top">
         <Hero />

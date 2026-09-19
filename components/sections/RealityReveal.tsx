@@ -69,7 +69,7 @@ export function RealityReveal() {
   const eyebrowRef = useRef<HTMLParagraphElement>(null);
   const introRef = useRef<HTMLDivElement>(null);
   const linesRef = useRef<HTMLUListElement>(null);
-  const statementRef = useRef<HTMLParagraphElement>(null);
+  const statementRef = useRef<HTMLHeadingElement>(null);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -357,12 +357,12 @@ export function RealityReveal() {
         >
           {/* <GrainOverlay className="-z-10 opacity-[0.12] mix-blend-overlay" /> */}
           <Heading tone="alabaster" />
-          <p
+          <h2
             ref={statementRef}
             className="mx-auto max-w-[825px] text-center font-serif text-[40px] uppercase leading-[1.2] text-alabaster sm:text-[42px] lg:text-statement"
           >
             {statement}
-          </p>
+          </h2>
         </div>
       </div>
     </section>

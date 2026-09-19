@@ -49,18 +49,22 @@ export function ClosingCta() {
             "radial-gradient(ellipse 60vw 40vh at 20% 10%, #9aacba 0%, #5a6879 50%, #3a4658 75%, #2a3547 87.5%, #1a2437 100%)",
         }}
       />
-      {/* Mobile/tablet: wider, taller ellipse for full-bleed coverage on a narrow viewport. */}
+      {/* Mobile/tablet: per the Figma mobile frame, a much tighter glow
+          centered near the top — the previous 141vw/120vh ellipse was so
+          large relative to a phone viewport that most of the screen never
+          reached the darker stops, reading as uniformly light instead of
+          fading to ink toward the edges. */}
       <div
         className="absolute inset-0 lg:hidden"
         style={{
           opacity: 0.62,
           background:
-            "radial-gradient(ellipse 141vw 120vh at 20% 10%, #9aacba 0%, #5a6879 50%, #3a4658 75%, #2a3547 87.5%, #1a2437 100%)",
+            "radial-gradient(ellipse 108vw 70vh at 50% 16%, #9aacba 0%, #5a6879 30%, #3a4658 50%, #2a3547 68%, #1a2437 85%)",
         }}
       />
       {/* Same two-layer idea as Hero's bg-line/bg-line-2, same two assets,
           just spun via plain CSS here instead of GSAP. */}
-      <div className="absolute left-[20%] top-1/2 h-[80%] w-[80%] max-w-none -translate-x-[70%] -translate-y-1/2">
+      <div className="absolute left-[20%] top-1/2 h-[60%] w-[60%] max-w-none -translate-x-[40%] -translate-y-1/2">
         {/* eslint-disable-next-line @next/next/no-img-element -- decorative vector, next/image adds no value for local SVG */}
         <img
           src="/icons/bg-line.svg"
@@ -83,7 +87,7 @@ export function ClosingCta() {
       <div className="absolute inset-y-0 left-0 hidden w-[43%] lg:block">
         <Image
           src="/images/contact-portrait.png"
-          alt="Nataliia Sychenko Romanova, founder of NSR Mallorca"
+          alt="Nataliia Sychenko Romanova, relocation coordinator and private client services contact at NSR Mallorca"
           fill
           sizes="43vw"
           className="object-cover object-top"
@@ -142,11 +146,11 @@ export function ClosingCta() {
       <div className="w-full relative -mt-20 lg:hidden">
         <Image
           src="/images/contact-portrait-scaled.png"
-          alt="Nataliia Sychenko Romanova, founder of NSR Mallorca"
+          alt="Nataliia Sychenko Romanova, relocation coordinator and private client services contact at NSR Mallorca"
           width={798}
           height={1200}
           sizes="100vw"
-          className="block h-auto w-full lg:p-[20vw] xl:p-0"
+          className="block h-auto w-full lg:p-[20vw] xl:p-0 md:max-w-[400px] xl:max-w-auto mx-auto"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-ink from-[8%] via-ink/60 via-[42%] to-transparent to-[72%]" />
       </div>

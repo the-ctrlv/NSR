@@ -1,12 +1,66 @@
 export const siteConfig = {
   name: "NSR Mallorca",
   tagline: "Complex matters on Mallorca",
-  tagline2: "Taking the lead on local matters",
+  // The site's only <h1> (see Hero.tsx) — previously had no geo keyword
+  // in it at all, the single most SEO-weighted line on the page.
+  tagline2: "Taking the lead on Mallorca's local matters",
   heroSubtext:
     "From finding a solution and the right people to coordinating execution and representing your interests on Mallorca.",
   description:
     "NSR Mallorca is an independent local operating partner who takes the lead on complex private, property and business matters on Mallorca — coordinating professionals and representing your interests on the ground.",
+  // Shorter, keyword-led variant for the <meta name="description"> tag
+  // specifically — search engines truncate around ~155-160 characters, so
+  // this leads with the highest-value terms instead of reusing the longer
+  // description above (still used as-is for Open Graph/Twitter/JSON-LD,
+  // where the full length reads fine).
+  metaDescription:
+    "NSR Mallorca — independent local operating partner and trusted local representative for private clients relocating, buying property or moving a business to Spain.",
   url: "https://www.nsrmallorca.com",
+};
+
+// Single source of truth for the site's target search terms, grouped by
+// intent/use — shared between page <meta keywords>, JSON-LD structured
+// data and any future landing copy. Kept separate from siteConfig since
+// these are SEO-facing, not user-facing, strings.
+export const seoKeywords = {
+  primary: [
+    "local representative Mallorca",
+    "relocation coordinator Mallorca",
+    "independent local operating partner Mallorca",
+    "private client services Mallorca",
+    "trusted local partner Mallorca",
+    "family relocation assistance Mallorca",
+    "buying property in Mallorca as a foreigner",
+    "moving business to Spain",
+    "business relocation Mallorca",
+  ],
+  secondary: [
+    "remote property management Mallorca",
+    "managing property in Mallorca while living abroad",
+    "reactivating a Spanish company",
+    "local fixer Mallorca",
+    "point of contact on Mallorca",
+    "property acquisition Mallorca foreign buyer",
+    "renovation coordination Mallorca",
+    "contractor management Mallorca",
+    "local business compliance Mallorca",
+    "company administration Mallorca foreign owner",
+  ],
+  geo: [
+    "Mallorca",
+    "Majorca",
+    "Palma de Mallorca",
+    "Balearic Islands",
+    "Spain",
+  ],
+  audience: [
+    "German expats Mallorca",
+    "British expats Mallorca",
+    "international family Mallorca",
+    "foreign property owner Mallorca",
+    "non-resident business owner Spain",
+  ],
+  brand: ["NSR Mallorca", "Nataliia Sychenko Romanova"],
 };
 
 export const navLinks = [
@@ -273,6 +327,26 @@ export const faq = {
       answer:
         "Fees depend on the scope and complexity of the matter and whether the engagement is project-based or ongoing. Once the scope of involvement is clear, the fee is agreed before the work begins.",
     },
+    {
+      question: "Who can represent me if I'm not based in Mallorca?",
+      answer:
+        "I act as your on-the-ground representative — coordinating professionals, communicating with local parties and keeping your matter moving even when you are not physically on the island.",
+    },
+    {
+      question: "Do I need to be in Mallorca to buy property here?",
+      answer:
+        "In most cases, no. With the right representation in place, viewings, due diligence and coordination with notaries and other professionals can proceed on your behalf — you stay informed and only need to be involved where your personal presence is legally required.",
+    },
+    {
+      question: "How does relocating to Mallorca work?",
+      answer:
+        "It starts with understanding your situation and priorities, then coordinating the practical steps — administration, property, schooling, healthcare or business matters — with the right local professionals, so nothing falls between the cracks.",
+    },
+    {
+      question: "Who can help coordinate multiple professionals in Mallorca?",
+      answer:
+        "As your local operating partner, I coordinate the different professionals involved in your matter — lawyers, agents, contractors and administrators — so you have one point of contact managing the process instead of juggling each relationship yourself.",
+    },
   ],
 };
 
@@ -284,7 +358,7 @@ export const closingCta = {
     "the outcome you need",
   ],
   body: "You stay informed. You make the decisions that matter. You don't have to manage everything in between.",
-  cta: { label: "Let's talk in WhatsApp", href: "https://wa.me/380737777777" },
+  cta: { label: "SHARE YOUR SITUATION", href: "https://wa.me/380737777777" },
   contacts: [
     {
       label: "WhatsApp",
@@ -300,7 +374,126 @@ export const footer = {
   copyright: `© ${new Date().getFullYear()} NSR Mallorca. All rights reserved.`,
   links: [
     { label: "Legal Notice", href: "#" },
-    { label: "Privacy Policy", href: "#" },
+    { label: "Privacy Policy", href: "/privacy-policy" },
     { label: "Cookie Policy", href: "#" },
   ],
+};
+
+type PolicyListItem = string | { label: string; text: string };
+
+type PolicySection = {
+  heading: string;
+  body?: string;
+  list?: PolicyListItem[];
+  after?: string;
+};
+
+export const privacyPolicy = {
+  title: "Privacy policy",
+  intro: [
+    `${siteConfig.name} ("we," "our," or "us") is an independent local operating partner based in Mallorca, Spain.`,
+    `This Privacy Policy explains how we collect, use, and protect personal information when you visit ${siteConfig.url.replace("https://www.", "")} or interact with our services.`,
+    "We are committed to protecting your privacy and handling your personal data transparently and in accordance with applicable data protection law, including the EU General Data Protection Regulation (GDPR) and Spain's LOPDGDD.",
+  ],
+  scope: {
+    heading: "Scope",
+    body: "This policy applies to personal information collected through our website and services. By using our site, you agree to the terms described in this Privacy Policy.",
+  },
+  sections: [
+    {
+      heading: "A. Information collected automatically",
+      body: "When you visit our website, we automatically collect certain technical information using tools such as Google Analytics, including:",
+      list: [
+        "IP address",
+        "Browser type and version",
+        "Device identifiers",
+        "Pages viewed and time spent on the site",
+        "Referring website addresses.",
+      ],
+    },
+    {
+      heading: "B. Information you provide voluntarily",
+      body: "You may choose to share personal information with us when:",
+      list: ["Filling out a contact form", "Communicating with us directly."],
+      after:
+        "This may include your name, email address, phone number, company name, and other business-related details.",
+    },
+    {
+      heading: "C. Information from other sources",
+      body: "We may receive limited business-related information from third-party sources, such as tools that provide aggregated or inferred data based on your IP address and public records.",
+      list: ["Filling out a contact form", "Communicating with us directly."],
+      after:
+        "This may include your name, email address, phone number, company name, and other business-related details.",
+    },
+    {
+      heading: "How we use your information",
+      body: "We use the information we collect to:",
+      list: [
+        "Provide and improve our services",
+        "Respond to inquiries and service requests",
+        "Analyze usage trends to improve user experience",
+        "Maintain security and prevent fraud.",
+      ],
+    },
+    {
+      heading: "Sharing of personal information",
+      body: "We may share your information with:",
+      list: [
+        {
+          label: "Service providers",
+          text: "who support the operation of our website and services (e.g., hosting, analytics), under confidentiality obligations",
+        },
+        {
+          label: "Law enforcement or regulators,",
+          text: "when required by applicable law or to protect legal rights",
+        },
+      ],
+    },
+    {
+      heading: "Your privacy rights",
+      body: "Depending on your location, you may have the following rights under applicable data protection law, including the GDPR:",
+      list: [
+        {
+          label: "Right to know:",
+          text: "You may request details about the categories and specific pieces of personal information we collect, use, or disclose.",
+        },
+        {
+          label: "Right to delete:",
+          text: "You may request that we delete personal information we have collected about you, subject to certain exceptions.",
+        },
+        {
+          label: "Right to correct:",
+          text: "You may request correction of inaccurate personal information we hold about you.",
+        },
+        {
+          label: "Right to opt out of sale or sharing:",
+          text: "We do not sell or share personal information for cross-context behavioral advertising.",
+        },
+        {
+          label: "Right to non-discrimination:",
+          text: "We will not discriminate against you for exercising any of your privacy rights.",
+        },
+      ],
+      after:
+        "To exercise your privacy rights, please email us at: NSR@gmail.com. Please include your name, the nature of your request, and sufficient information for us to process it. We may need to verify your identity before fulfilling certain requests.",
+    },
+    {
+      heading: "Data security and retention",
+      body: "We use reasonable administrative, technical, and physical safeguards to protect personal information from loss, misuse, or unauthorized access. Information is retained only as long as necessary for the purposes outlined in this policy, or as required by applicable law.",
+    },
+    {
+      heading: "Children's privacy",
+      body: "Our website is not intended for children under 13 years of age. We do not knowingly collect or maintain personal information from children. If you believe we have inadvertently collected data from a child, please contact us, and we will promptly delete it.",
+    },
+    {
+      heading: "Changes to this privacy policy",
+      body: "We may update this Privacy Policy from time to time. Your continued use of our website after such changes constitutes your acknowledgment of the updated policy.",
+    },
+    {
+      heading: "Contact us",
+      body: "If you have any questions, concerns, or requests regarding this Privacy Policy or your personal information, please contact us at: NSR@gmail.com.",
+    },
+  ] satisfies PolicySection[],
+  quote:
+    "Ipsum sit mattis nulla quam nulla. Gravida id gravida ac enim mauris id. Non pellentesque congue eget consectetur turpis. Sapien, dictum molestie sem tempor. Diam elit, orci, tincidunt aenean tempus.",
 };

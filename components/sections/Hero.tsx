@@ -51,14 +51,19 @@ export function Hero() {
             // scale (1, i.e. already settled) for a moment before hydration,
             // then visibly jumps up to 1.42 the instant gsap.fromTo() applies
             // its starting state, before easing back down.
-            className="absolute inset-x-0 top-[10%] isolate mx-auto h-[95%] w-full origin-[50%_15%] scale-[1.42] sm:w-[45%] min-w-[280px] overflow-hidden"
+            className="absolute inset-x-0 top-[10%] isolate mx-auto h-[95%] w-full origin-[50%_15%] scale-[1.42] sm:w-[45%] md:w-[64%] lg:w-[45%] min-w-[280px] overflow-hidden"
           >
             <Image
               src="/images/hero-portrait.png"
-              alt="Nataliia Sychenko Romanova, founder of NSR Mallorca"
+              alt="Nataliia Sychenko Romanova, independent local operating partner at NSR Mallorca"
               fill
               priority
-              // sizes="(min-width: 1024px) 45vw, 80vw"
+              // Matches the portrait wrapper's own breakpoints above
+              // (sm:w-[45%] md:w-[58%] lg:w-[45%]) — without this,
+              // next/image falls back to a 100vw sizes default and serves
+              // the largest breakpoint image at every viewport, which
+              // hurts LCP on this priority image.
+              sizes="(min-width: 1024px) 45vw, (min-width: 768px) 64vw, (min-width: 640px) 45vw, 100vw"
               className="object-contain"
             />
           </div>
@@ -152,13 +157,13 @@ export function Hero() {
               <p
                 data-hero="ghost"
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 flex select-none items-center justify-center text-center font-serif text-[clamp(2.25rem,calc(14vw_-_8px),3.125rem)] leading-none text-alabaster sm:text-6xl md:text-7xl lg:text-display lg:whitespace-nowrap"
+                className="pointer-events-none absolute inset-0 flex select-none items-center justify-center text-center font-serif text-[clamp(2.25rem,calc(14vw_-_8px),3.125rem)] leading-none text-alabaster sm:text-6xl md:text-6xl lg:text-display xl:whitespace-nowrap"
               >
                 {siteConfig.tagline}
               </p>
               <h1
                 data-hero="headline"
-                className="font-serif text-[clamp(2.25rem,calc(14vw_-_8px),3.125rem)] leading-none sm:text-6xl md:text-7xl lg:text-display"
+                className="font-serif text-[clamp(2.25rem,calc(14vw_-_8px),3.125rem)] leading-none sm:text-6xl md:text-6xl lg:text-display"
               >
                 {siteConfig.tagline2}
               </h1>

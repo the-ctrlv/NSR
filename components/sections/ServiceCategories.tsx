@@ -9,9 +9,28 @@ const stars = ["/icons/star-a.svg", "/icons/star-b.svg", "/icons/star-c.svg"];
 function TagRow({ tags }: { tags: readonly string[] }) {
   return (
     <div className="flex flex-wrap items-center justify-center gap-x-1 gap-y-2">
-      <img src={stars[0]} alt="" aria-hidden="true" className="size-[9px]" />
+      {/* Desktop: one shared star before the row, then a trailing star per
+          tag — fine since these rows don't wrap at desktop widths. Mobile
+          hides the row-level star: it doesn't survive a mid-row wrap
+          (whichever tag lands first on a new line ends up with no star
+          before it), so each tag gets its own leading star too, grouped
+          into the same flex item so both stars always travel with it —
+          every wrapped line then starts AND ends with a star, whichever
+          tags land on it. */}
+      <img
+        src={stars[0]}
+        alt=""
+        aria-hidden="true"
+        className="hidden size-[9px] sm:block"
+      />
       {tags.map((tag, index) => (
         <span key={tag} className="flex items-center gap-1">
+          <img
+            src={stars[index % stars.length]}
+            alt=""
+            aria-hidden="true"
+            className="size-[9px] sm:hidden"
+          />
           <span className="font-sans text-[15px] font-semibold text-alabaster/80">
             {tag}
           </span>
@@ -49,12 +68,12 @@ export function ServiceCategories() {
       <Container className="relative">
         <div className="mb-16 flex flex-col justify-between gap-6 lg:flex-row lg:items-start">
           <Eyebrow>{serviceCategories.eyebrow}</Eyebrow>
-          <p
+          <h2
             id="categories-heading"
             className="max-w-[381px] font-sans text-base font-medium leading-[1.4] lg:text-right"
           >
             {serviceCategories.intro}
-          </p>
+          </h2>
         </div>
 
         <Reveal
