@@ -43,14 +43,14 @@ export function SolutionDiagram() {
           start="top 180%"
           duration={0.3}
           pause={0.05}
-          className="mt-10 flex flex-col items-center gap-6 sm:gap-10 lg:mt-32 lg:flex-row lg:flex-nowrap lg:items-start lg:justify-center lg:gap-x-6 xl:gap-x-12"
+          className="mt-10 flex flex-col items-center gap-6 sm:gap-10 lg:mt-32 lg:flex-row lg:flex-nowrap lg:items-start lg:justify-center lg:gap-x-6 xl:gap-x-12 xl:justify-between"
         >
           {solution.flow.map((step, i) => (
             <div
               key={step}
               className={`flex flex-col items-center ${
                 i === solution.flow.length - 1 ? "gap-2" : "gap-6"
-              } lg:flex-row lg:!gap-4 xl:!gap-12 ${
+              } lg:flex-row lg:!gap-4 ${
                 i === solution.flow.length - 1
                   ? "lg:!flex-col lg:items-start"
                   : ""
@@ -78,7 +78,7 @@ export function SolutionDiagram() {
               {i === solution.flow.length - 1 && (
                 <ul
                   data-flow-list
-                  className="w-full list-none pl-0 text-center font-sans text-base leading-[2] text-ink/80 sm:text-lg lg:w-[260px] lg:list-disc lg:pl-5 lg:text-left lg:leading-[1.6] lg:text-sm xl:w-[383px] xl:text-lg"
+                  className="w-full list-none pl-0 text-center font-sans text-base leading-[2] text-ink/80 sm:text-lg lg:w-[260px] lg:list-disc lg:pl-5 lg:text-left lg:leading-[1.6] lg:text-sm xl:w-[383px]"
                 >
                   {solution.professionals.map((professional) => (
                     <li key={professional}>{professional}</li>

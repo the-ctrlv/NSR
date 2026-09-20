@@ -42,14 +42,17 @@ export default function CookiePolicyPage() {
     <>
       <PageHeader />
       <main className="bg-paper">
-        <Container as="section" className="pt-16 pb-20 sm:pt-20 lg:pt-24 lg:pb-24">
-          <Reveal className="flex flex-col gap-8 sm:gap-10">
+        <Container
+          as="section"
+          className="pt-16 pb-20 sm:pt-20 lg:pt-24 lg:pb-24"
+        >
+          <Reveal className="flex flex-col gap-6 max-w-[900px] mx-auto">
             <h1 className="font-serif text-4xl uppercase leading-[1.2] text-ink sm:text-h2 sm:leading-[1.3]">
               {cookiePolicy.title}
             </h1>
 
             <div className="flex max-w-[900px] flex-col gap-8 sm:gap-10">
-              <p className="font-serif text-2xl leading-[1.1] text-ink sm:text-[28px]">
+              <p className="font-sans font-semibold text-base leading-[1.1] text-ink">
                 Last updated: {cookiePolicy.lastUpdated}
               </p>
 

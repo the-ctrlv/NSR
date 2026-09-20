@@ -234,9 +234,7 @@ export const practiceCases = {
         "A German business owner established a company in Spain in 2019, with my involvement in its local administrative coordination from the early stages. Five years after suspending its activity, he decided to return to the Spanish market.",
       roleLabel: "My role",
       paragraphs: [
-        "I took responsibility for structuring and coordinating the process of resuming activity, aligning the administrative steps required with the client's timeline.",
-        "Where physical presence was required, I represented the client locally — liaising with the relevant local providers and following up on outstanding administrative matters.",
-        "Professional matters progressed through the relevant advisors, while I maintained oversight across the wider process and followed through locally.",
+        "I coordinated the review of the company’s status with the relevant professionals,helping to restore the necessary access, clarify outstanding obligations and establish the next steps towards reactivation. Today, I continue to coordinate selected business and private matters for the same client on Mallorca.",
       ],
       counter: "03 / 03",
     },
@@ -331,123 +329,188 @@ export const cookieConsent = {
   reject: "Reject",
 };
 
-type PolicyListItem = string | { label: string; text: string };
+type PrivacyParagraph =
+  | string
+  | { text: string; linkText: string; linkHref: string; after?: string };
+type PrivacyListItem = string | { label: string; text: string };
+type PrivacyBlock =
+  | { kind: "p"; content: PrivacyParagraph; bold?: boolean }
+  | { kind: "list"; items: PrivacyListItem[] };
+type PrivacySection = { heading: string; blocks: PrivacyBlock[] };
 
-type PolicySection = {
-  heading: string;
-  body?: string;
-  list?: PolicyListItem[];
-  after?: string;
-};
-
+// Real, specific policy for how this site actually works (no contact form,
+// WhatsApp/email/LinkedIn as the only data channels) — replaces an earlier
+// generic template that inaccurately implied automatic tracking (IP,
+// device identifiers, etc.) this site doesn't do. Bracketed placeholders
+// ([legal name — pending registration], [X months — to confirm], etc.)
+// are carried over verbatim from the approved copy — pending confirmation
+// from legal counsel, not something to guess at here.
 export const privacyPolicy = {
-  title: "Privacy policy",
-  intro: [
-    `${siteConfig.name} ("we," "our," or "us") is an independent local operating partner based in Mallorca, Spain.`,
-    `This Privacy Policy explains how we collect, use, and protect personal information when you visit ${siteConfig.url.replace("https://www.", "")} or interact with our services.`,
-    "We are committed to protecting your privacy and handling your personal data transparently and in accordance with applicable data protection law, including the EU General Data Protection Regulation (GDPR) and Spain's LOPDGDD.",
-  ],
-  scope: {
-    heading: "Scope",
-    body: "This policy applies to personal information collected through our website and services. By using our site, you agree to the terms described in this Privacy Policy.",
-  },
+  title: "Privacy Policy — NSR Mallorca",
+  lastUpdated: "September 2026",
+  intro:
+    "This Privacy Policy explains how NSR Mallorca handles personal data in connection with this website.",
   sections: [
     {
-      heading: "A. Information collected automatically",
-      body: "When you visit our website, we automatically collect certain technical information using tools such as Google Analytics, including:",
-      list: [
-        "IP address",
-        "Browser type and version",
-        "Device identifiers",
-        "Pages viewed and time spent on the site",
-        "Referring website addresses.",
-      ],
-    },
-    {
-      heading: "B. Information you provide voluntarily",
-      body: "You may choose to share personal information with us when:",
-      list: ["Filling out a contact form", "Communicating with us directly."],
-      after:
-        "This may include your name, email address, phone number, company name, and other business-related details.",
-    },
-    {
-      heading: "C. Information from other sources",
-      body: "We may receive limited business-related information from third-party sources, such as tools that provide aggregated or inferred data based on your IP address and public records.",
-      list: ["Filling out a contact form", "Communicating with us directly."],
-      after:
-        "This may include your name, email address, phone number, company name, and other business-related details.",
-    },
-    {
-      heading: "How we use your information",
-      body: "We use the information we collect to:",
-      list: [
-        "Provide and improve our services",
-        "Respond to inquiries and service requests",
-        "Analyze usage trends to improve user experience",
-        "Maintain security and prevent fraud.",
-      ],
-    },
-    {
-      heading: "Sharing of personal information",
-      body: "We may share your information with:",
-      list: [
+      heading: "1. Who is responsible for your data",
+      blocks: [
         {
-          label: "Service providers",
-          text: "who support the operation of our website and services (e.g., hosting, analytics), under confidentiality obligations",
+          kind: "p",
+          content:
+            "NSR Mallorca ([legal name — pending registration]) is the data controller responsible for the personal data described in this policy.",
         },
         {
-          label: "Law enforcement or regulators,",
-          text: "when required by applicable law or to protect legal rights",
+          kind: "p",
+          content: {
+            text: "Contact: ",
+            linkText: "contact@nsrmallorca.com",
+            linkHref: "mailto:contact@nsrmallorca.com",
+          },
         },
       ],
     },
     {
-      heading: "Your privacy rights",
-      body: "Depending on your location, you may have the following rights under applicable data protection law, including the GDPR:",
-      list: [
+      heading: "2. This website does not collect personal data",
+      blocks: [
         {
-          label: "Right to know:",
-          text: "You may request details about the categories and specific pieces of personal information we collect, use, or disclose.",
-        },
-        {
-          label: "Right to delete:",
-          text: "You may request that we delete personal information we have collected about you, subject to certain exceptions.",
-        },
-        {
-          label: "Right to correct:",
-          text: "You may request correction of inaccurate personal information we hold about you.",
-        },
-        {
-          label: "Right to opt out of sale or sharing:",
-          text: "We do not sell or share personal information for cross-context behavioral advertising.",
-        },
-        {
-          label: "Right to non-discrimination:",
-          text: "We will not discriminate against you for exercising any of your privacy rights.",
+          kind: "p",
+          content:
+            "This website has no contact form, account creation, or any mechanism that submits your data to us. It simply displays Nataliia's contact details and a button that opens a WhatsApp chat with her. Clicking that button does not transmit any information through the website itself — it only opens WhatsApp on your device or browser. Any data exchange happens directly between you and Nataliia, on WhatsApp.",
         },
       ],
-      after:
-        "To exercise your privacy rights, please email us at: NSR@gmail.com. Please include your name, the nature of your request, and sufficient information for us to process it. We may need to verify your identity before fulfilling certain requests.",
     },
     {
-      heading: "Data security and retention",
-      body: "We use reasonable administrative, technical, and physical safeguards to protect personal information from loss, misuse, or unauthorized access. Information is retained only as long as necessary for the purposes outlined in this policy, or as required by applicable law.",
+      heading: "3. What data we collect, and how",
+      blocks: [
+        {
+          kind: "p",
+          bold: true,
+          content:
+            "We only collect personal data if you choose to contact us directly, through one of the following channels:",
+        },
+        {
+          kind: "list",
+          items: [
+            {
+              label: "WhatsApp",
+              text: "— your phone number, your name as set in your WhatsApp profile, and the content of the messages you send.",
+            },
+            {
+              label: "Email",
+              text: "— your email address, your name if you provide it, and the content of your message.",
+            },
+            {
+              label: "LinkedIn",
+              text: "— information visible on your profile or shared in a message, governed by LinkedIn's own terms.",
+            },
+          ],
+        },
+        {
+          kind: "p",
+          content:
+            "We do not knowingly collect any special categories of data (such as health or religious information). Please avoid including this type of information in your messages unless it is directly relevant to your request.",
+        },
+      ],
     },
     {
-      heading: "Children's privacy",
-      body: "Our website is not intended for children under 13 years of age. We do not knowingly collect or maintain personal information from children. If you believe we have inadvertently collected data from a child, please contact us, and we will promptly delete it.",
+      heading: "4. Why we process this data",
+      blocks: [
+        {
+          kind: "list",
+          items: [
+            "To respond to your inquiry and determine whether and how NSR Mallorca can help — based on the steps you take to reach us, and our legitimate interest in responding.",
+            "To provide our services, if you go on to become a client — based on the performance of our agreement with you.",
+            "To meet legal or tax obligations, where applicable — based on legal obligation.",
+          ],
+        },
+      ],
     },
     {
-      heading: "Changes to this privacy policy",
-      body: "We may update this Privacy Policy from time to time. Your continued use of our website after such changes constitutes your acknowledgment of the updated policy.",
+      heading: "5. How long we keep it",
+      blocks: [
+        {
+          kind: "p",
+          content:
+            "We keep your data only as long as needed to respond to your inquiry, or, for clients, for the duration of our engagement plus any period required by legal, tax or accounting rules. If an inquiry doesn't lead to an engagement, we delete the related data within [X months — to confirm] of our last contact.",
+        },
+      ],
     },
     {
-      heading: "Contact us",
-      body: "If you have any questions, concerns, or requests regarding this Privacy Policy or your personal information, please contact us at: NSR@gmail.com.",
+      heading: "6. Who we share it with",
+      blocks: [
+        {
+          kind: "p",
+          bold: true,
+          content: "We do not sell personal data. It may be shared with:",
+        },
+        {
+          kind: "list",
+          items: [
+            "WhatsApp/Meta, or our email provider, simply as the channel the conversation takes place on.",
+            "Professionals we coordinate with on your behalf (e.g. lawyers, gestors, real estate agents) — only where relevant to your matter, and with your knowledge where appropriate.",
+            "Public authorities, where required by law.",
+          ],
+        },
+      ],
     },
-  ] satisfies PolicySection[],
-  quote:
-    "Ipsum sit mattis nulla quam nulla. Gravida id gravida ac enim mauris id. Non pellentesque congue eget consectetur turpis. Sapien, dictum molestie sem tempor. Diam elit, orci, tincidunt aenean tempus.",
+    {
+      heading: "7. About WhatsApp",
+      blocks: [
+        {
+          kind: "p",
+          content:
+            "WhatsApp is operated by Meta and has its own privacy policy governing how it handles data on its platform (message delivery, metadata, storage, etc.) — see WhatsApp's Privacy Policy at whatsapp.com/legal/privacy-policy. NSR Mallorca is responsible only for the content and use of the conversation itself, not for how WhatsApp/Meta operates its platform.",
+        },
+      ],
+    },
+    {
+      heading: "8. International transfers",
+      blocks: [
+        {
+          kind: "p",
+          content:
+            "NSR Mallorca works with clients based outside the European Economic Area (for example, in the UK or Ukraine). Where your data is processed or accessed from outside the EEA, we take reasonable steps to ensure an adequate level of protection — for example, through the European Commission's Standard Contractual Clauses. [To confirm the exact mechanism with legal counsel once service providers are finalized.]",
+        },
+      ],
+    },
+    {
+      heading: "9. Your rights",
+      blocks: [
+        {
+          kind: "p",
+          content: {
+            text: "Under the GDPR, you have the right to access, correct, delete, or restrict the use of your data, object to processing based on legitimate interest, request data portability, and withdraw consent at any time where processing relies on it. To exercise any of these rights, contact us at ",
+            linkText: "contact@nsrmallorca.com",
+            linkHref: "mailto:contact@nsrmallorca.com",
+            after: ".",
+          },
+        },
+        {
+          kind: "p",
+          content: {
+            text: "You also have the right to lodge a complaint with the Spanish Data Protection Agency (Agencia Española de Protección de Datos, ",
+            linkText: "www.aepd.es",
+            linkHref: "http://www.aepd.es",
+            after: ") or your local supervisory authority.",
+          },
+        },
+      ],
+    },
+    {
+      heading: "10. Cookies",
+      blocks: [
+        {
+          kind: "p",
+          content: {
+            text: "This website uses cookies, including Google Analytics, to help us understand how visitors use the site. See our ",
+            linkText: "Cookie Policy",
+            linkHref: "/cookie-policy",
+            after: " for full details on what is used and how to manage your preferences.",
+          },
+        },
+      ],
+    },
+  ] as PrivacySection[],
 };
 
 type CookiePolicyParagraph =
