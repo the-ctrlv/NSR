@@ -55,7 +55,7 @@ export function Hero() {
           >
             <Image
               src="/images/hero-portrait.png"
-              alt="Nataliia Sychenko Romanova, independent local operating partner at NSR Mallorca"
+              alt="Nataliia Sychenko Romanova, founder of NSR Mallorca"
               fill
               priority
               // Matches the portrait wrapper's own breakpoints above

@@ -174,7 +174,7 @@ export function PracticeCases() {
             {practiceCases.cases.map((item) => (
               <li
                 key={item.title}
-                className="relative isolate flex h-full flex-col justify-between overflow-hidden border border-hairline bg-paper px-4 pb-4 pt-6 sm:px-8 sm:pt-10 sm:pb-8 md:pt-14 md:pb-12 lg:block lg:py-20 lg:px-15"
+                className="relative isolate flex h-full flex-col justify-between overflow-hidden border border-hairline bg-paper px-4 pb-4 pt-6 sm:px-8 sm:pt-10 sm:pb-8 md:pt-14 md:pb-12 lg:block lg:py-15 lg:px-15"
               >
                 {/* <GrainOverlay className="opacity-[0.08] mix-blend-overlay" /> */}
                 <div className="relative flex flex-col gap-2 sm:gap-6 md:gap-9 lg:flex-row lg:justify-between lg:gap-6 xl:gap-14">

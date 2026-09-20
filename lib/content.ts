@@ -1,67 +1,31 @@
 export const siteConfig = {
   name: "NSR Mallorca",
   tagline: "Complex matters on Mallorca",
-  // The site's only <h1> (see Hero.tsx) — previously had no geo keyword
-  // in it at all, the single most SEO-weighted line on the page.
   tagline2: "Taking the lead on local matters",
   heroSubtext:
     "From finding a solution and the right people to coordinating execution and representing your interests on Mallorca.",
   description:
     "NSR Mallorca is an independent local operating partner who takes the lead on complex private, property and business matters on Mallorca — coordinating professionals and representing your interests on the ground.",
-  // Shorter, keyword-led variant for the <meta name="description"> tag
-  // specifically — search engines truncate around ~155-160 characters, so
-  // this leads with the highest-value terms instead of reusing the longer
-  // description above (still used as-is for Open Graph/Twitter/JSON-LD,
-  // where the full length reads fine).
+  // Shorter variant for the <meta name="description"> tag specifically —
+  // search engines truncate around ~155-160 characters (still used as-is
+  // for Open Graph/Twitter/JSON-LD, where the full length reads fine).
+  // Per the approved SEO brief: describes the actual positioning
+  // (independent local operating partner / representative) — no meta
+  // keywords tag, no unsupported-service claims.
   metaDescription:
-    "NSR Mallorca — independent local operating partner and trusted local representative for private clients relocating, buying property or moving a business to Spain.",
+    "NSR Mallorca — independent local operating partner and local representative for private clients on Mallorca, coordinating professionals across private, property and business matters.",
   url: "https://www.nsrmallorca.com",
 };
 
-// Single source of truth for the site's target search terms, grouped by
-// intent/use — shared between page <meta keywords>, JSON-LD structured
-// data and any future landing copy. Kept separate from siteConfig since
-// these are SEO-facing, not user-facing, strings.
-export const seoKeywords = {
-  primary: [
-    "local representative Mallorca",
-    "relocation coordinator Mallorca",
-    "independent local operating partner Mallorca",
-    "private client services Mallorca",
-    "trusted local partner Mallorca",
-    "family relocation assistance Mallorca",
-    "buying property in Mallorca as a foreigner",
-    "moving business to Spain",
-    "business relocation Mallorca",
-  ],
-  secondary: [
-    "remote property management Mallorca",
-    "managing property in Mallorca while living abroad",
-    "reactivating a Spanish company",
-    "local fixer Mallorca",
-    "point of contact on Mallorca",
-    "property acquisition Mallorca foreign buyer",
-    "renovation coordination Mallorca",
-    "contractor management Mallorca",
-    "local business compliance Mallorca",
-    "company administration Mallorca foreign owner",
-  ],
-  geo: [
-    "Mallorca",
-    "Majorca",
-    "Palma de Mallorca",
-    "Balearic Islands",
-    "Spain",
-  ],
-  audience: [
-    "German expats Mallorca",
-    "British expats Mallorca",
-    "international family Mallorca",
-    "foreign property owner Mallorca",
-    "non-resident business owner Spain",
-  ],
-  brand: ["NSR Mallorca", "Nataliia Sychenko Romanova"],
-};
+// Areas the practice actually serves, for JSON-LD `areaServed` only — not
+// a keyword list (see the approved SEO brief: no meta keywords tag, no
+// keyword-stuffed metadata anywhere on the site).
+export const serviceAreas = [
+  "Mallorca",
+  "Palma de Mallorca",
+  "Balearic Islands",
+  "Spain",
+];
 
 export const navLinks = [
   { label: "Matters", href: "#matters" },
@@ -326,26 +290,6 @@ export const faq = {
       question: "How are fees defined?",
       answer:
         "Fees depend on the scope and complexity of the matter and whether the engagement is project-based or ongoing. Once the scope of involvement is clear, the fee is agreed before the work begins.",
-    },
-    {
-      question: "Who can represent me if I'm not based in Mallorca?",
-      answer:
-        "I act as your on-the-ground representative — coordinating professionals, communicating with local parties and keeping your matter moving even when you are not physically on the island.",
-    },
-    {
-      question: "Do I need to be in Mallorca to buy property here?",
-      answer:
-        "In most cases, no. With the right representation in place, viewings, due diligence and coordination with notaries and other professionals can proceed on your behalf — you stay informed and only need to be involved where your personal presence is legally required.",
-    },
-    {
-      question: "How does relocating to Mallorca work?",
-      answer:
-        "It starts with understanding your situation and priorities, then coordinating the practical steps — administration, property, schooling, healthcare or business matters — with the right local professionals, so nothing falls between the cracks.",
-    },
-    {
-      question: "Who can help coordinate multiple professionals in Mallorca?",
-      answer:
-        "As your local operating partner, I coordinate the different professionals involved in your matter — lawyers, agents, contractors and administrators — so you have one point of contact managing the process instead of juggling each relationship yourself.",
     },
   ],
 };

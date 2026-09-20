@@ -1,11 +1,24 @@
+"use client";
+
 import Image from "next/image";
 import { Reveal } from "@/components/animations/Reveal";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 // import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { closingCta } from "@/lib/content";
+import { trackEvent } from "@/lib/analytics";
 
 const { labels, heading, body, cta, contacts } = closingCta;
+
+// Supporting conversion events per the approved SEO brief (no form on
+// this site yet, so no form_submit — wire that up the same way once one
+// exists). No-ops until analytics has actually loaded (i.e. consent was
+// accepted), and never carries message content or field values.
+const CONTACT_EVENT: Record<string, string> = {
+  WhatsApp: "whatsapp_click",
+  Email: "email_click",
+  LinkedIn: "linkedin_click",
+};
 
 function ContactItem({ contact }: { contact: (typeof contacts)[number] }) {
   return (
@@ -15,6 +28,10 @@ function ContactItem({ contact }: { contact: (typeof contacts)[number] }) {
       </p>
       <a
         href={contact.href}
+        onClick={() => {
+          const event = CONTACT_EVENT[contact.label];
+          if (event) trackEvent(event);
+        }}
         className="font-sans text-[15px] font-semibold whitespace-nowrap underline decoration-from-font underline-offset-2"
         {...(contact.href.startsWith("http")
           ? { target: "_blank", rel: "noopener noreferrer" }
@@ -32,15 +49,6 @@ export function ClosingCta() {
       id="contact"
       className="relative isolate overflow-hidden bg-ink text-alabaster"
     >
-      {/* One gradient spans the whole section (not just the portrait column) so there's no seam where a separately-sized layer would end. */}
-      {/* <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 60vw 90vh at 21% 38%, #9aacba 0%, #7a8a99 25%, #5a6879 50%, #3a4658 75%, #2a3547 87.5%, #1a2437 100%)",
-        }}
-      /> */}
-      {/* Desktop: tighter, more centered ellipse. */}
       <div
         className="absolute inset-0 hidden lg:block"
         style={{
@@ -64,7 +72,7 @@ export function ClosingCta() {
       />
       {/* Same two-layer idea as Hero's bg-line/bg-line-2, same two assets,
           just spun via plain CSS here instead of GSAP. */}
-      <div className="absolute left-[20%] top-1/2 h-[60%] w-[60%] max-w-none -translate-x-[40%] -translate-y-1/2">
+      <div className="absolute left-[20%] top-[30%] h-[60%] w-[60%] max-w-none -translate-x-[40%] -translate-y-1/2">
         {/* eslint-disable-next-line @next/next/no-img-element -- decorative vector, next/image adds no value for local SVG */}
         <img
           src="/icons/bg-line.svg"
@@ -87,14 +95,14 @@ export function ClosingCta() {
       <div className="absolute inset-y-0 left-0 hidden w-[43%] lg:block">
         <Image
           src="/images/contact-portrait.png"
-          alt="Nataliia Sychenko Romanova, relocation coordinator and private client services contact at NSR Mallorca"
+          alt="Nataliia Sychenko Romanova, founder of NSR Mallorca"
           fill
           sizes="43vw"
           className="object-cover object-top"
         />
       </div>
 
-      <Container className="!px-4 sm:px-8 relative pt-20 pb-10 lg:pb-10">
+      <Container className="px-4 sm:px-8 relative pt-20 pb-10 lg:pb-10">
         <Reveal className="flex flex-col items-center gap-10 text-center lg:ml-[49%] lg:items-start lg:gap-16 lg:text-left">
           <ul className="flex flex-row flex-wrap items-center justify-center gap-2 font-serif text-sm uppercase tracking-wide text-alabaster lg:flex-col lg:items-end lg:justify-normal lg:gap-2 lg:self-end lg:text-right">
             {labels.map((label, i) => (
@@ -127,6 +135,7 @@ export function ClosingCta() {
                 variant="light"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackEvent("whatsapp_click")}
                 className="w-full max-w-[280px] lg:max-w-[282px]"
               >
                 {cta.label}
@@ -146,7 +155,7 @@ export function ClosingCta() {
       <div className="w-full relative -mt-20 lg:hidden">
         <Image
           src="/images/contact-portrait-scaled.png"
-          alt="Nataliia Sychenko Romanova, relocation coordinator and private client services contact at NSR Mallorca"
+          alt="Nataliia Sychenko Romanova, founder of NSR Mallorca"
           width={798}
           height={1200}
           sizes="100vw"

@@ -4,7 +4,7 @@ import localFont from "next/font/local";
 import { SmoothScroll } from "@/components/animations/SmoothScroll";
 import { CookieConsent } from "@/components/layout/CookieConsent";
 import "./globals.css";
-import { seoKeywords, siteConfig } from "@/lib/content";
+import { siteConfig } from "@/lib/content";
 
 const displayFont = localFont({
   variable: "--font-display",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     template: `%s — ${siteConfig.name}`,
   },
   description: siteConfig.metaDescription,
-  keywords: [...seoKeywords.primary, ...seoKeywords.secondary],
+  // No meta keywords tag — per the approved SEO brief.
   alternates: {
     canonical: "/",
   },

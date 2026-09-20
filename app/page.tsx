@@ -12,16 +12,18 @@ import { ClosingCta } from "@/components/sections/ClosingCta";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { FloatingCta } from "@/components/layout/FloatingCta";
 // import { StickyHeader } from "@/components/layout/StickyHeader";
-import { faq, seoKeywords, siteConfig } from "@/lib/content";
+import { serviceAreas, siteConfig } from "@/lib/content";
 
+// Per the approved SEO brief: no `keywords` field, no FAQPage markup (not
+// used for rich results, and Google discontinued FAQ rich results in
+// 2026), no unsupported services — this only states what's on the page.
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
   name: siteConfig.name,
   description: siteConfig.description,
   url: siteConfig.url,
-  keywords: [...seoKeywords.primary, ...seoKeywords.secondary].join(", "),
-  areaServed: seoKeywords.geo.map((name) => ({
+  areaServed: serviceAreas.map((name) => ({
     "@type": "Place",
     name,
   })),
@@ -31,34 +33,12 @@ const structuredData = {
   },
 };
 
-// Mirrors the visible FAQSection content exactly (same questions, same
-// answers) rather than a separate hidden set — search engines expect
-// FAQPage markup to match what's actually on the page.
-const faqStructuredData = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faq.items.map((item) => ({
-    "@type": "Question",
-    name: item.question,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: item.answer,
-    },
-  })),
-};
-
 export default function Home() {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(faqStructuredData),
-        }}
       />
       <div id="top">
         <Hero />

@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { cookieConsent } from "@/lib/content";
+import { loadAnalytics } from "@/lib/analytics";
 
 const STORAGE_KEY = "nsr-cookie-consent";
 
@@ -14,6 +15,14 @@ function noConsentStored() {
     // Storage blocked (private mode, disabled) — treat as "no choice
     // stored", so the banner still offers the choice for this visit.
     return true;
+  }
+}
+
+function getStoredConsent() {
+  try {
+    return window.localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return null;
   }
 }
 
@@ -44,12 +53,20 @@ export function CookieConsent() {
   );
   const [dismissed, setDismissed] = useState(false);
 
+  // Loads analytics for a RETURNING visitor who already accepted on a
+  // previous visit — the click handler below only covers accepting just
+  // now, in this session.
+  useEffect(() => {
+    if (getStoredConsent() === "accepted") loadAnalytics();
+  }, []);
+
   const choose = (value: "accepted" | "rejected") => {
     try {
       window.localStorage.setItem(STORAGE_KEY, value);
     } catch {
       // Nothing to persist to — the banner will just reappear next visit.
     }
+    if (value === "accepted") loadAnalytics();
     setDismissed(true);
   };
 

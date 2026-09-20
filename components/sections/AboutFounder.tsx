@@ -327,6 +327,11 @@ export function AboutFounder() {
         // transition takes — bigger means a longer scroll before content
         // changes, not a faster/slower animation.
         const PER_STEP_PERCENT = 80;
+        // Just the very first frame (name + eyebrow only, nothing else
+        // competing for attention) reads as holding on screen far longer
+        // than the rest — half the usual scroll gets it out of the way,
+        // every other transition keeps the normal segment size.
+        const FIRST_STEP_PERCENT = 40;
         // Extra pinned scroll held past the last step (background + quote)
         // before the section releases — a full step's worth now, so there's
         // at least one more real swipe of hold after the last text lands
@@ -334,10 +339,15 @@ export function AboutFounder() {
         // next scroll tick.
         const EXTRA_HOLD_PERCENT = 130;
         const totalPercent =
-          (STEP_COUNT - 1) * PER_STEP_PERCENT + EXTRA_HOLD_PERCENT;
+          FIRST_STEP_PERCENT +
+          (STEP_COUNT - 2) * PER_STEP_PERCENT +
+          EXTRA_HOLD_PERCENT;
         // Fraction of the pin's own scroll progress (0-1) that one step
-        // occupies.
+        // occupies — `firstSegment` only gates leaving step 0 forward,
+        // everything else (including coming back to step 0) uses the
+        // normal `segment`.
         const segment = PER_STEP_PERCENT / totalPercent;
+        const firstSegment = FIRST_STEP_PERCENT / totalPercent;
 
         // No `snap` — that was GSAP itself auto-correcting scroll position
         // to the nearest threshold, a real programmatic jump, and it read
@@ -428,7 +438,8 @@ export function AboutFounder() {
           onUpdate: (self) => {
             if (Date.now() < debounceUntil) return;
             const delta = self.progress - baseProgress;
-            if (delta >= segment && currentStep < STEP_COUNT - 1) {
+            const forwardSegment = currentStep === 0 ? firstSegment : segment;
+            if (delta >= forwardSegment && currentStep < STEP_COUNT - 1) {
               baseProgress = self.progress;
               debounceUntil = Date.now() + MIN_STEP_VISIBLE_MS;
               goToStep(currentStep + 1, true);
@@ -504,7 +515,7 @@ export function AboutFounder() {
             >
               <Image
                 src="/images/portrait-founder.jpg"
-                alt="Nataliia Sychenko Romanova, trusted local partner and founder of NSR Mallorca"
+                alt="Nataliia Sychenko Romanova, founder of NSR Mallorca"
                 fill
                 sizes="(min-width: 1280px) 420px, 60vw"
                 className="object-cover object-center block"
