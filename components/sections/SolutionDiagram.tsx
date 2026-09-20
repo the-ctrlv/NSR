@@ -18,7 +18,7 @@ export function SolutionDiagram() {
           <TextFillReveal
             id="solution-heading"
             lines={solution.heading}
-            className="text-3xl font-serif md:text-4xl leading-[1.1] text-ink sm:text-h2"
+            className="text-3xl font-serif md:text-4xl leading-[1.1] text-ink sm:text-h2 xl:text-h2"
           />
           <div className="flex flex-col gap-2 pt-0 lg:gap-3 lg:pt-4">
             <p className="font-serif text-lg leading-[1.3] text-ink sm:text-xl lg:text-[22px]">
@@ -33,7 +33,7 @@ export function SolutionDiagram() {
                   </span>
                 ))}
             </p>
-            <p className="font-sans text-base leading-[1.4] text-ink/80 sm:text-lg">
+            <p className="font-sans text-base leading-[1.4] text-ink/80 sm:text-lg xl:text-base">
               {solution.paragraphs[1]}
             </p>
           </div>

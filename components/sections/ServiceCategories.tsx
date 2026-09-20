@@ -61,13 +61,15 @@ export function ServiceCategories() {
   return (
     <section
       data-hide-floating-cta-from
-      className="relative isolate overflow-hidden bg-ink py-20 text-alabaster lg:py-32"
+      className="relative isolate overflow-hidden bg-ink py-20 text-alabaster"
       aria-labelledby="categories-heading"
     >
       {/* <GrainOverlay className="opacity-[0.12] mix-blend-overlay" /> */}
-      <Container className="relative">
+      <Container className="relative h-full flex flex-col justify-between">
         <div className="mb-16 flex flex-col justify-between gap-6 lg:flex-row lg:items-start">
-          <Eyebrow>{serviceCategories.eyebrow}</Eyebrow>
+          <Eyebrow className="!text-alabaster">
+            {serviceCategories.eyebrow}
+          </Eyebrow>
           <h2
             id="categories-heading"
             className="max-w-[381px] font-sans text-base font-medium leading-[1.4] lg:text-right"
