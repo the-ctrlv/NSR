@@ -32,9 +32,7 @@ export function ApproachSteps() {
           const numeral = step.querySelector<HTMLElement>(
             "[data-approach-numeral]",
           );
-          const text = step.querySelector<HTMLElement>(
-            "[data-approach-text]",
-          );
+          const text = step.querySelector<HTMLElement>("[data-approach-text]");
           const targets = [numeral, text].filter(
             (el): el is HTMLElement => el !== null,
           );
@@ -104,14 +102,14 @@ export function ApproachSteps() {
       <Container>
         <div className="grid gap-8 lg:grid-cols-[380px_1fr] lg:gap-10 xl:grid-cols-[505px_1fr] xl:gap-20">
           <div>
-            <p className="flex items-center gap-3 font-sans text-eyebrow font-medium uppercase tracking-wide">
+            <p className="flex items-center gap-3 font-sans text-eyebrow font-medium uppercase tracking-wide mb-8">
               <span aria-hidden="true">→</span>
               {approach.eyebrow}
             </p>
             <TextFillReveal
               id="approach-heading"
               lines={["Different situations.", "One operational.", "approach"]}
-              className="mt-24 max-w-[505px] font-serif text-4xl leading-[1.1] sm:text-5xl lg:text-[56px]"
+              className="max-w-[505px] font-serif text-4xl leading-[1.1] sm:text-5xl lg:text-[52px]"
             />
           </div>
 

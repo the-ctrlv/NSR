@@ -41,7 +41,7 @@ export function FAQSection() {
           <TextFillReveal
             id="faq-heading"
             lines={faq.heading}
-            className="font-serif text-4xl leading-[1.1] text-ink sm:text-5xl lg:text-[56px]"
+            className="font-serif text-4xl leading-[1.1] text-ink sm:text-5xl lg:text-[52px]"
           />
           <Reveal
             as="div"
