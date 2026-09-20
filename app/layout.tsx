@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Bebas_Neue, Manrope } from "next/font/google";
 import localFont from "next/font/local";
 import { SmoothScroll } from "@/components/animations/SmoothScroll";
+import { CookieConsent } from "@/components/layout/CookieConsent";
 import "./globals.css";
 import { seoKeywords, siteConfig } from "@/lib/content";
 
@@ -95,6 +96,7 @@ export default function RootLayout({
     >
       <body className="bg-paper font-sans text-ink antialiased">
         <SmoothScroll>{children}</SmoothScroll>
+        <CookieConsent />
       </body>
     </html>
   );

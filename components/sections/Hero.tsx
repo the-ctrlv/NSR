@@ -137,7 +137,7 @@ export function Hero() {
         </div>
 
         {/* Main content */}
-        <div className="relative z-10 flex flex-1 flex-col justify-end px-4 pb-24 sm:px-10 lg:px-[50px]">
+        <div className="relative z-10 flex flex-1 flex-col justify-end px-4 pb-8 lg:pb-10 sm:px-10 lg:px-[50px]">
           {/* Partner info (mobile/tablet) — centered above the headline, matching the mobile layout */}
           <div
             data-hero="chrome"
@@ -154,10 +154,11 @@ export function Hero() {
           <div className="mx-auto flex max-w-[893px] flex-col items-center gap-2 text-center">
             <div className="relative">
               {/* Transient entrance line — blurs into view then dissolves as the real headline sharpens in its place. Mirrors the headline text/sizing exactly so the two align during the morph. */}
+
               <p
                 data-hero="ghost"
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 flex select-none items-center justify-center text-center font-serif text-[clamp(2.25rem,calc(14vw_-_8px),3.125rem)] leading-none text-alabaster sm:text-6xl md:text-6xl lg:text-display xl:whitespace-nowrap"
+                className="pointer-events-none absolute inset-0 flex select-none items-center justify-center text-center font-serif text-[clamp(2.25rem,calc(14vw_-_8px),3.125rem)] leading-none text-alabaster sm:text-6xl md:text-6xl lg:text-display xl:whitespace-nowrap -bottom-10"
               >
                 {siteConfig.tagline}
               </p>
@@ -180,7 +181,7 @@ export function Hero() {
         <a
           data-hero="chrome"
           href="#matters"
-          className="group absolute left-4 top-[100px] z-10 flex flex-col items-center gap-3 sm:left-6 sm:top-auto sm:bottom-8 lg:left-[50px]"
+          className="group absolute left-4 top-[100px] z-10 flex flex-col items-center gap-3 sm:left-6 sm:top-auto sm:bottom-8 lg:bott lg:left-[50px]"
           aria-label="Scroll to content"
         >
           <span className="font-sans text-sm leading-[1.6] text-alabaster [writing-mode:vertical-lr]">

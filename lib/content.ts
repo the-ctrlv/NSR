@@ -3,7 +3,7 @@ export const siteConfig = {
   tagline: "Complex matters on Mallorca",
   // The site's only <h1> (see Hero.tsx) — previously had no geo keyword
   // in it at all, the single most SEO-weighted line on the page.
-  tagline2: "Taking the lead on Mallorca's local matters",
+  tagline2: "Taking the lead on local matters",
   heroSubtext:
     "From finding a solution and the right people to coordinating execution and representing your interests on Mallorca.",
   description:
@@ -375,8 +375,16 @@ export const footer = {
   links: [
     { label: "Legal Notice", href: "#" },
     { label: "Privacy Policy", href: "/privacy-policy" },
-    { label: "Cookie Policy", href: "#" },
+    { label: "Cookie Policy", href: "/cookie-policy" },
   ],
+};
+
+export const cookieConsent = {
+  body: "We use cookies to understand how visitors use this site (Google Analytics). You can accept or reject non-essential cookies.",
+  policyLabel: "Cookies Policy",
+  policyHref: "/cookie-policy",
+  accept: "Accept",
+  reject: "Reject",
 };
 
 type PolicyListItem = string | { label: string; text: string };
@@ -496,4 +504,60 @@ export const privacyPolicy = {
   ] satisfies PolicySection[],
   quote:
     "Ipsum sit mattis nulla quam nulla. Gravida id gravida ac enim mauris id. Non pellentesque congue eget consectetur turpis. Sapien, dictum molestie sem tempor. Diam elit, orci, tincidunt aenean tempus.",
+};
+
+type CookiePolicyParagraph =
+  | string
+  | { text: string; linkText: string; linkHref: string };
+
+type CookiePolicySection = {
+  heading: string;
+  paragraphs: CookiePolicyParagraph[];
+};
+
+export const cookiePolicy = {
+  title: "Cookie Policy — NSR Mallorca",
+  lastUpdated: "September 2026",
+  sections: [
+    {
+      heading: "What are cookies",
+      paragraphs: [
+        "Cookies are small text files stored on your device when you visit a website. They help the website function correctly and, where used, help us understand how visitors interact with the site.",
+      ],
+    },
+    {
+      heading: "Cookies used on this website",
+      paragraphs: [
+        "This website uses two types of cookies. First, strictly necessary cookies, which are required for the website to function correctly — for example, remembering your cookie preferences. These are set by NSR Mallorca or our hosting provider and cannot be disabled, as the site would not work properly without them.",
+        "Second, analytics cookies from Google Analytics, which help us understand how many people visit the site, which pages they view, and how they found us, in aggregate form. These are set by Google and can be disabled at any time — see below for how.",
+      ],
+    },
+    {
+      heading: "About Google Analytics",
+      paragraphs: [
+        "This website uses Google Analytics, a web analytics service provided by Google. Google Analytics uses cookies to collect information such as pages visited, time spent on the site, general location at country or city level, device and browser type, and how you arrived at the site — for example, through a search engine or a direct link. This information is processed by Google on our behalf and helps us understand and improve the website. We do not use it to identify you personally.",
+        {
+          text: "Google may process this data on servers outside the European Economic Area. Google provides safeguards for this under the EU Standard Contractual Clauses. You can read more in Google's Privacy Policy at policies.google.com/privacy, and in Google's explanation of how it uses data from sites that use its services at ",
+          linkText: "policies.google.com/technologies/partner-sites.",
+          linkHref: "https://policies.google.com/technologies/partner-sites",
+        },
+      ],
+    },
+    {
+      heading: "Managing your cookie preferences",
+      paragraphs: [
+        {
+          text: "When you first visit this website, you will see a cookie banner asking you to accept or reject non-essential cookies, such as Google Analytics. You can change your choice at any time through the cookie settings link in the footer. You can also block or delete cookies directly through your browser settings, or opt out of Google Analytics specifically using Google's Analytics Opt-out Browser Add-on, available at ",
+          linkText: "tools.google.com/dlpage/gaoptout.",
+          linkHref: "https://tools.google.com/dlpage/gaoptout",
+        },
+      ],
+    },
+    {
+      heading: "Third-party cookies",
+      paragraphs: [
+        "Google Analytics is a third-party service with its own privacy practices, separate from NSR Mallorca's. We encourage you to review Google's own privacy policy for full details on how it handles data.",
+      ],
+    },
+  ] satisfies CookiePolicySection[],
 };

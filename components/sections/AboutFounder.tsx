@@ -10,7 +10,7 @@ import {
 } from "@/lib/gsap";
 // import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { founderReveal } from "@/lib/content";
-import { setScrollSnapping } from "@/lib/scrollSnapGuard";
+import { getLenisInstance } from "@/lib/lenisInstance";
 
 const { eyebrow, intro, name, stats, background, quote } = founderReveal;
 
@@ -27,18 +27,25 @@ type StepKey =
 // Discrete steps, not a scroll-scrubbed progress bar: each swipe/wheel tick
 // advances exactly one step, and that step's reveal plays on its own fixed
 // timing regardless of how far or fast the user scrolled — matching the
-// Figma storyboard's frames (photo + label → name → statistics →
-// background + quote) as content that "lands" one swipe at a time rather
-// than scrubbing continuously with the scrollbar. Frame 1 is the portrait
-// together with just the eyebrow label — nothing else yet. The intro copy
-// and name only land on the next swipe, as their own group. The eyebrow
-// itself then holds, unchanged, through the stats frame, before finally
-// swapping to the background chapter's own eyebrow ("My background") on
-// the last frame.
+// Figma storyboard's frames (photo + label + name → intro copy → statistics
+// → breather → background + quote) as content that "lands" one swipe at a
+// time rather than scrubbing continuously with the scrollbar. Frame 1 is
+// the portrait together with the eyebrow label AND her name — both read as
+// one identity beat with the photo, not a separate reveal. The intro copy
+// lands on the next swipe, with the name still holding; the name then
+// retires (along with the intro copy) once the stats swap in, clearing the
+// slot for them. The intro eyebrow leaves together with the stats — same
+// swipe, same beat, not lingering on its own — into a bare breather frame
+// with no text at all (just portrait) before the background chapter's own
+// eyebrow, its copy and the quote all land together on the final swipe, as
+// one fixed block. That breather is deliberate: the stats leaving and the
+// background copy arriving used to happen in the same swipe, which read as
+// one crashing straight into the other.
 const STEPS: StepKey[][] = [
-  ["introEyebrow"],
+  ["introEyebrow", "name"],
   ["introEyebrow", "introCopy", "name"],
   ["introEyebrow", "introCopy", "stats"],
+  [],
   ["backgroundEyebrow", "backgroundParagraphs", "quote"],
 ];
 
@@ -121,6 +128,25 @@ export function AboutFounder() {
         // reads as far too heavy a move for something this light. It gets
         // its own small, quick nudge instead.
         const eyebrowOffset = 24;
+        // The name lands in the very same beat as the portrait settling in
+        // (frame 1) — a full-viewport-height fly-in reads as arriving well
+        // after the photo instead of with it, so it gets a short nudge too,
+        // just a bit more than the eyebrow's since it's larger text.
+        const nameOffset = 148;
+        // Shared by both the exit tween itself and the maxExitDuration
+        // lookahead below, so they can never drift out of sync. Name
+        // retires faster than the rest — it's a short, light element, no
+        // need for it to linger as long as a full paragraph block does.
+        // The background eyebrow, its paragraphs and the closing quote all
+        // land on the same step and need to read as one fixed block
+        // arriving together, not independently-timed pieces of content —
+        // same duration and travel distance across all three, in and out.
+        const isBackgroundBlock = (key: StepKey) =>
+          key === "backgroundEyebrow" ||
+          key === "backgroundParagraphs" ||
+          key === "quote";
+        const exitDuration = (key: StepKey) =>
+          isBackgroundBlock(key) ? 1.05 : key === "name" ? 0.7 : 0.95;
 
         // Each key still gets its own entry in `targets` (and could still
         // carry a different offset per chapter if a future frame needs
@@ -138,11 +164,15 @@ export function AboutFounder() {
             els: introCopy ? [introCopy] : [],
             offsetY: enterDistance,
           },
-          name: { els: els.name ? [els.name] : [], offsetY: enterDistance },
+          name: { els: els.name ? [els.name] : [], offsetY: nameOffset },
           stats: { els: statItems, offsetY: enterDistance },
           backgroundEyebrow: {
             els: backgroundEyebrow ? [backgroundEyebrow] : [],
-            offsetY: eyebrowOffset,
+            // Part of the background block (see isBackgroundBlock below),
+            // not treated like the small quick-nudge intro eyebrow — it
+            // travels with its paragraphs and the quote as one fixed
+            // layout, not on its own light beat.
+            offsetY: enterDistance,
           },
           backgroundParagraphs: {
             els: backgroundParagraphs,
@@ -161,7 +191,7 @@ export function AboutFounder() {
           if (!target.length) return;
           gsap.set(target, { opacity: 0, y: offsetY, filter: "blur(10px)" });
         });
-        if (portrait) gsap.set(portrait, { opacity: 0.82, scale: 1.06 });
+        // if (portrait) gsap.set(portrait, { opacity: 0.82, scale: 1.06 });
 
         // Step index the pin is currently showing — advanced/retreated by
         // ScrollTrigger below, one step per swipe rather than continuously.
@@ -181,6 +211,22 @@ export function AboutFounder() {
           if (index === currentStep) return;
           currentStep = index;
           const visible = new Set(STEPS[index]);
+
+          // Retiring chapters and newly-arriving ones used to start at the
+          // exact same instant — while the outgoing text was still fading
+          // and blurring away, the incoming one was already flying in on
+          // top of it. Working out the slowest exit in THIS transition
+          // first lets every entrance wait for it, so the slot is actually
+          // clear before anything new lands in it.
+          let maxExitDuration = 0;
+          stepKeys.forEach((key) => {
+            const { els: target } = targets[key];
+            if (!target.length) return;
+            if (!visible.has(key) && previousVisible.has(key)) {
+              maxExitDuration = Math.max(maxExitDuration, exitDuration(key));
+            }
+          });
+
           stepKeys.forEach((key) => {
             const { els: target, offsetY } = targets[key];
             if (!target.length) return;
@@ -191,8 +237,8 @@ export function AboutFounder() {
             // the other. Both also get a touch more time than the rest —
             // slower still reads better without a stagger masking it.
             const isStats = key === "stats";
-            const isBackgroundCopy = key === "backgroundParagraphs";
-            const noStagger = isStats || isBackgroundCopy;
+            const isName = key === "name";
+            const noStagger = isStats || isBackgroundBlock(key);
             if (visible.has(key)) {
               // A chapter that's newly entering (wasn't shown a moment ago)
               // must always fly in from the side matching the current
@@ -204,17 +250,36 @@ export function AboutFounder() {
               // place. A chapter that's simply holding across consecutive
               // steps (already visible last step too) is left alone so it
               // doesn't jump.
-              if (!previousVisible.has(key)) {
-                gsap.set(target, { y: forward ? offsetY : -offsetY });
+              const isNewlyEntering = !previousVisible.has(key);
+              if (isNewlyEntering) {
+                // Stats coming back in on a reverse scroll (falling from
+                // above) used the full enterDistance like everything
+                // else — reads as much too far a drop from directly
+                // overhead. Only trimmed for this one direction; the
+                // normal forward entrance is untouched.
+                const enterOffset =
+                  isStats && !forward ? offsetY * 0.4 : offsetY;
+                gsap.set(target, { y: forward ? enterOffset : -enterOffset });
               }
               gsap.to(target, {
                 opacity: 1,
                 y: 0,
                 filter: "blur(0px)",
-                duration: isBackgroundCopy ? 1.35 : 1.15,
+                // Name gets a quicker entrance than the rest — it needs to
+                // finish arriving in step with the portrait's own ~1s
+                // settle, not the slower beat that suits content flying up
+                // the full viewport height.
+                duration: isBackgroundBlock(key) ? 1.35 : isName ? 0.85 : 1.15,
                 stagger: noStagger ? 0 : 0.08,
                 ease: "power3.out",
                 overwrite: true,
+                // Only a genuinely new arrival waits for the slot to
+                // clear — a chapter that's just holding across steps
+                // never had anything to wait for. Slightly less than the
+                // full exit duration: starting just before the outgoing
+                // content has completely finished still reads as clean,
+                // without the pause feeling as long.
+                delay: isNewlyEntering ? maxExitDuration * 0.8 : 0,
               });
             } else if (previousVisible.has(key)) {
               // Only actually retire a chapter that was visible a moment
@@ -223,12 +288,16 @@ export function AboutFounder() {
               // hidden off-screen, so there's nothing to animate out.
               // A much smaller fraction of the entrance offset than before
               // — retiring content only needs to read as "leaving", not
-              // travel nearly as far as it arrived.
+              // travel nearly as far as it arrived. The intro eyebrow
+              // leaves in the same swipe as stats, so it travels the same
+              // distance stats does here (not its own short entrance
+              // nudge) — the two move as one, in parallel, on the way out.
+              const exitTravel = key === "introEyebrow" ? enterDistance : offsetY;
               gsap.to(target, {
                 opacity: 0,
-                y: forward ? -offsetY * 0.3 : offsetY * 0.3,
+                y: forward ? -exitTravel * 0.3 : exitTravel * 0.3,
                 filter: "blur(10px)",
-                duration: isBackgroundCopy ? 1.05 : 0.95,
+                duration: exitDuration(key),
                 stagger: noStagger ? 0 : 0.05,
                 ease: "power2.inOut",
                 overwrite: true,
@@ -244,27 +313,84 @@ export function AboutFounder() {
         // content reveals happening over it.
         const settlePortrait = () => {
           if (!portrait) return;
-          gsap.to(portrait, {
-            opacity: 1,
-            scale: 1,
-            duration: 1,
-            ease: "power2.out",
-            overwrite: true,
-          });
+          // gsap.to(portrait, {
+          //   opacity: 1,
+          //   scale: 1,
+          //   duration: 1,
+          //   ease: "power2.out",
+          //   overwrite: true,
+          // });
         };
 
         const STEP_COUNT = STEPS.length;
         // How much scroll (in % of the section's own height) each step
         // transition takes — bigger means a longer scroll before content
         // changes, not a faster/slower animation.
-        const PER_STEP_PERCENT = 160;
+        const PER_STEP_PERCENT = 80;
         // Extra pinned scroll held past the last step (background + quote)
-        // before the section releases — just a brief pause to let that
-        // content land before unpinning, not a full step's worth.
-        const EXTRA_HOLD_PERCENT = 40;
+        // before the section releases — a full step's worth now, so there's
+        // at least one more real swipe of hold after the last text lands
+        // before the section lets go, instead of releasing on the very
+        // next scroll tick.
+        const EXTRA_HOLD_PERCENT = 130;
         const totalPercent =
           (STEP_COUNT - 1) * PER_STEP_PERCENT + EXTRA_HOLD_PERCENT;
-        const segment = 100 / totalPercent;
+        // Fraction of the pin's own scroll progress (0-1) that one step
+        // occupies.
+        const segment = PER_STEP_PERCENT / totalPercent;
+
+        // No `snap` — that was GSAP itself auto-correcting scroll position
+        // to the nearest threshold, a real programmatic jump, and it read
+        // as a jerk. Content is still fully threshold-driven; it just
+        // doesn't get an automatic scroll-position assist.
+        //
+        // `baseProgress` rebases to the current progress on every commit,
+        // so the next one always needs a full fresh segment of NEW scroll
+        // — never jumps more than one step per commit. But a plain JS
+        // debounce alone can only gate our OWN goToStep calls — it can't
+        // stop the pin itself from releasing. A hard/fast enough scroll
+        // (5 quick swipes) can physically carry real scroll position past
+        // the pin's entire `end` distance before our onUpdate even gets a
+        // chance to pace anything, and GSAP releases the pin the instant
+        // scroll crosses `end`, regardless of how our step logic wanted to
+        // gate it — that's a hard physical limit, not a logic bug, and no
+        // amount of JS-side debouncing fixes it. Real scroll has to
+        // actually be held back during each step's guaranteed dwell time.
+        //
+        // lenis.scrollTo(..., { lock: true }) holds scroll at (essentially)
+        // its current position for that dwell time — smoother than
+        // lenis.stop() (which hard-resets velocity to zero instantly and
+        // read as a jerk): momentum already in flight eases out on its own
+        // curve instead of being cut off. Deferred a frame via
+        // requestAnimationFrame because calling it straight from onUpdate
+        // means calling back into Lenis from inside Lenis's OWN "scroll"
+        // event handler (SmoothScroll.tsx's lenis.on("scroll", ...) is
+        // what drives ScrollTrigger's onUpdate in the first place) — that
+        // re-entrant call is the likely source of the jerk seen earlier;
+        // letting the current Lenis cycle finish first avoids it.
+        let baseProgress = 0;
+        let debounceUntil = 0;
+        // How long each step is guaranteed to stay up before the next one
+        // can commit — padded well past the entrance animation's own
+        // duration (~1.15s for most chapters), so there's real dwell time
+        // once content has actually landed, not just during it.
+        const MIN_STEP_VISIBLE_MS = 1000;
+
+        const holdScroll = () => {
+          requestAnimationFrame(() => {
+            const lenis = getLenisInstance();
+            if (!lenis) return;
+            // +0.5 rather than the exact current value — scrollTo() skips
+            // the lock entirely when the target already equals its own
+            // in-flight target, so this needs to read as a real, if
+            // imperceptible, move.
+            lenis.scrollTo(lenis.animatedScroll + 0.5, {
+              lock: true,
+              duration: MIN_STEP_VISIBLE_MS / 1000,
+              easing: (t: number) => t,
+            });
+          });
+        };
 
         const trigger = ScrollTrigger.create({
           trigger: section,
@@ -272,49 +398,47 @@ export function AboutFounder() {
           end: `+=${totalPercent}%`,
           pin,
           anticipatePin: 1,
-          snap: {
-            snapTo: [
-              ...Array.from({ length: STEP_COUNT }, (_, i) => i * segment),
-              1,
-            ],
-            duration: 0.45,
-            ease: "power2.inOut",
-            // This snap can correct the scroll position BACKWARD (if the
-            // user let go closer to the previous step than the next one) —
-            // a real, sizeable automatic scroll the user didn't initiate.
-            // StickyHeader watches scroll direction globally, so without
-            // this flag it would misread that correction as "user scrolled
-            // up" and flash in. See lib/scrollSnapGuard.ts.
-            onStart: () => setScrollSnapping(true),
-            onComplete: () => setScrollSnapping(false),
-            onInterrupt: () => setScrollSnapping(false),
-          },
-          onEnter: () => {
+          // No holdScroll() here — the section hasn't necessarily finished
+          // scrolling all the way into its pinned "top top" position yet
+          // at this exact instant, and locking scroll right now freezes
+          // it wherever it happens to be mid-transition (what read as the
+          // section not fully scrolling into view). There's also nothing
+          // to protect against on the very first reveal — no previous
+          // step for scroll to accidentally skip past. Locking only
+          // matters once there's an actual step-to-step transition to
+          // pace, which onUpdate below already covers.
+          onEnter: (self) => {
             settlePortrait();
+            baseProgress = self.progress;
+            // Plain JS debounce only, no holdScroll()/Lenis here — a
+            // short grace period so the very first frame (name + eyebrow)
+            // is guaranteed on screen a moment before any scroll can
+            // advance past it, without touching real scroll at all (that
+            // was what caused the section to freeze before fully
+            // scrolling into place, when this used the Lenis lock too).
+            debounceUntil = Date.now() + 200;
             goToStep(0, true);
           },
-          onEnterBack: () => {
+          onEnterBack: (self) => {
             settlePortrait();
+            baseProgress = self.progress;
+            debounceUntil = Date.now() + 200;
             goToStep(STEP_COUNT - 1, false);
           },
           onUpdate: (self) => {
-            const targetIndex = Math.min(
-              STEP_COUNT - 1,
-              Math.max(0, Math.round(self.progress / segment)),
-            );
-            if (targetIndex === currentStep) return;
-            // Jumps straight to targetIndex on every tick, however far that
-            // is from currentStep — goToStep only animates the diff between
-            // the two (whatever needs to enter/exit), it doesn't play the
-            // steps in between, so this never shows more than one clean
-            // transition no matter how far a single scroll gesture goes.
-            // (A debounce was tried here, waiting for scroll to fully settle
-            // before committing — but Lenis's easing plus the snap keep
-            // onUpdate ticking almost continuously while scrolling normally,
-            // so nothing ever "settled" until the whole gesture was over,
-            // which just froze the reveal until the very end. Reacting
-            // immediately, every tick, is what keeps it responsive.)
-            goToStep(targetIndex, targetIndex > currentStep);
+            if (Date.now() < debounceUntil) return;
+            const delta = self.progress - baseProgress;
+            if (delta >= segment && currentStep < STEP_COUNT - 1) {
+              baseProgress = self.progress;
+              debounceUntil = Date.now() + MIN_STEP_VISIBLE_MS;
+              goToStep(currentStep + 1, true);
+              holdScroll();
+            } else if (delta <= -segment && currentStep > 0) {
+              baseProgress = self.progress;
+              debounceUntil = Date.now() + MIN_STEP_VISIBLE_MS;
+              goToStep(currentStep - 1, false);
+              holdScroll();
+            }
           },
         });
 

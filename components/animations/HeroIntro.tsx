@@ -130,7 +130,7 @@ export function HeroIntro({ children }: { children: ReactNode }) {
       }
 
       gsap.set(chrome, { opacity: 0, y: 12 });
-      if (ghost) gsap.set(ghost, { opacity: 0, y: 24 });
+      if (ghost) gsap.set(ghost, { opacity: 0, y: 50 });
       if (headline) gsap.set(headline, { opacity: 0, y: 24 });
       gsap.set(rest, { opacity: 0, y: 20 });
 

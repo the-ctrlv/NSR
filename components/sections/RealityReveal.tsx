@@ -40,7 +40,7 @@ function Heading({
         <div
           ref={ballRef}
           className={`absolute left-1/2 top-[-124px] z-10 aspect-square w-[204px] -translate-x-1/2 rounded-full lg:top-1/2 lg:w-[280px] lg:-translate-y-1/2 ${
-            tone === "ink" ? "bg-alabaster" : "bg-ink"
+            tone === "ink" ? "bg-paper-dim" : "bg-ink"
           }`}
         />
       )}
@@ -126,8 +126,42 @@ export function RealityReveal() {
 
         setRevealOrigin();
 
+        // Independent of the pin/wipe sequence below — previously this
+        // text only faded in once scroll progress inside the pin reached
+        // 18%, which meant the section had to already be fully pinned
+        // (100% in view) before it appeared. Fires when the section is
+        // about half scrolled into view, well before the pin ever
+        // engages — "top 70%" fired too early (the section is barely
+        // peeking in), so the fade played out before it was actually in
+        // clear view and just read as already-appeared by the time it was
+        // looked at. Not `once` — reverses on the way back out too, so
+        // scrolling past it again (either direction) replays the same
+        // fade instead of it just staying visible forever after the
+        // first time.
+        const linesRevealTrigger = ScrollTrigger.create({
+          trigger: section,
+          start: "top 40%",
+          onEnter: () => {
+            gsap.to(lineTexts, {
+              opacity: 1,
+              y: 0,
+              duration: 0.35,
+              ease: "power2.out",
+              overwrite: true,
+            });
+          },
+          onLeaveBack: () => {
+            gsap.to(lineTexts, {
+              opacity: 0,
+              y: 28,
+              duration: 0.3,
+              ease: "power2.inOut",
+              overwrite: true,
+            });
+          },
+        });
+
         const radius = { value: 76 };
-        let contentShown = false;
         let statementShown = false;
         const trigger = ScrollTrigger.create({
           trigger: section,
@@ -142,19 +176,8 @@ export function RealityReveal() {
             const revealProgress = gsap.utils.clamp(
               0,
               1,
-              (self.progress - 0.45) / 0.55,
+              (self.progress - 0.38) / 0.55,
             );
-            const shouldShowContent = self.progress >= 0.18;
-            if (shouldShowContent !== contentShown) {
-              contentShown = shouldShowContent;
-              gsap.to(lineTexts, {
-                opacity: shouldShowContent ? 1 : 0,
-                y: shouldShowContent ? 0 : 28,
-                duration: 0.35,
-                ease: "power2.out",
-                overwrite: true,
-              });
-            }
             const shouldShowStatement = revealProgress >= 0.08;
             if (shouldShowStatement !== statementShown) {
               statementShown = shouldShowStatement;
@@ -191,6 +214,7 @@ export function RealityReveal() {
 
         return () => {
           trigger.kill();
+          linesRevealTrigger.kill();
           gsap.set(after, { clearProps: "position,inset,visibility,clipPath" });
           gsap.set([eyebrowRef.current, introRef.current, ballRef.current], {
             clearProps: "opacity,scale,y,transformOrigin",
@@ -236,8 +260,34 @@ export function RealityReveal() {
 
         setRevealOrigin();
 
+        // Same early, independent, reversible reveal as desktop — fires
+        // when the section is about half scrolled into view, instead of
+        // waiting for the pin to fully engage first, and reverses on the
+        // way back out so it replays on re-entry.
+        const linesRevealTrigger = ScrollTrigger.create({
+          trigger: section,
+          start: "top 40%",
+          onEnter: () => {
+            gsap.to(lineTexts, {
+              opacity: 1,
+              y: 0,
+              duration: 0.25,
+              ease: "power2.out",
+              overwrite: true,
+            });
+          },
+          onLeaveBack: () => {
+            gsap.to(lineTexts, {
+              opacity: 0,
+              y: 28,
+              duration: 0.2,
+              ease: "power2.inOut",
+              overwrite: true,
+            });
+          },
+        });
+
         const radius = { value: 76 };
-        let contentShown = false;
         let statementShown = false;
         const trigger = ScrollTrigger.create({
           trigger: section,
@@ -252,19 +302,8 @@ export function RealityReveal() {
             const revealProgress = gsap.utils.clamp(
               0,
               1,
-              (self.progress - 0.22) / 0.55,
+              (self.progress - 0.16) / 0.55,
             );
-            const shouldShowContent = self.progress >= 0.05;
-            if (shouldShowContent !== contentShown) {
-              contentShown = shouldShowContent;
-              gsap.to(lineTexts, {
-                opacity: shouldShowContent ? 1 : 0,
-                y: shouldShowContent ? 0 : 28,
-                duration: 0.25,
-                ease: "power2.out",
-                overwrite: true,
-              });
-            }
             const shouldShowStatement = revealProgress >= 0.2;
             if (shouldShowStatement !== statementShown) {
               statementShown = shouldShowStatement;
@@ -303,6 +342,7 @@ export function RealityReveal() {
 
         return () => {
           trigger.kill();
+          linesRevealTrigger.kill();
           gsap.set(after, { clearProps: "position,inset,visibility,clipPath" });
           gsap.set([eyebrowRef.current, introRef.current, ballRef.current], {
             clearProps: "opacity,y",
@@ -324,7 +364,7 @@ export function RealityReveal() {
     >
       <div ref={pinRef} className="relative isolate overflow-hidden">
         {/* Before: light state — the fragmented reality */}
-        <div className="flex min-h-[100lvh] flex-col justify-between gap-16 bg-paper-dim px-4 pt-[120px] pb-20 sm:px-10 lg:px-[50px] lg:pt-20">
+        <div className="flex min-h-[100lvh] flex-col justify-between gap-16 bg-paper-dim px-4 pt-[70px] pb-20 sm:px-10 lg:px-[50px] lg:pt-20">
           <Heading
             tone="ink"
             ballRef={ballRef}
@@ -353,16 +393,23 @@ export function RealityReveal() {
             flow before JS (or under prefers-reduced-motion) takes over. */}
         <div
           ref={afterRef}
-          className="invisible absolute inset-0 isolate flex flex-col justify-between bg-ink px-4 pt-[120px] pb-[70px] sm:px-10 lg:justify-normal lg:gap-40 lg:px-[50px] lg:py-20"
+          className="invisible absolute inset-0 isolate flex flex-col justify-between gap-16 bg-ink px-4 pt-[70px] pb-[70px] sm:px-10 lg:justify-between lg:gap-20 lg:px-[50px] lg:py-20"
         >
           {/* <GrainOverlay className="-z-10 opacity-[0.12] mix-blend-overlay" /> */}
           <Heading tone="alabaster" />
+          {/* `justify-center` on the parent centers the whole flex group
+              (Heading + statement + anything else) as one block — no
+              per-item space distribution, no flex-1/absolute tricks to
+              fight with content overflow or flex-shrink collapsing empty
+              spacers. Whatever's in this column just stacks with a normal
+              gap and the group centers together. */}
           <h2
             ref={statementRef}
             className="mx-auto max-w-[825px] text-center font-serif text-[40px] uppercase leading-[1.2] text-alabaster sm:text-[42px] lg:text-statement"
           >
             {statement}
           </h2>
+          <div className="hidden lg:block h-[54px]"></div>
         </div>
       </div>
     </section>
