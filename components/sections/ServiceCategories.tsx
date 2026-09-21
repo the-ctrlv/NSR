@@ -81,7 +81,7 @@ export function ServiceCategories() {
         <Reveal
           as="ul"
           stagger={0.15}
-          className="grid grid-cols-1 border border-ink-dim/60 sm:grid-cols-1 lg:grid-cols-3"
+          className="grid grid-cols-1 border-y border-ink-dim/60 sm:grid-cols-1 lg:grid-cols-3"
         >
           {serviceCategories.categories.map((category, index) => {
             const isLast = index === serviceCategories.categories.length - 1;
