@@ -102,7 +102,7 @@ export function ApproachSteps() {
       <Container>
         <div className="grid gap-8 lg:grid-cols-[380px_1fr] lg:gap-10 xl:grid-cols-[505px_1fr] xl:gap-20">
           <div>
-            <p className="flex items-center gap-3 font-sans text-eyebrow font-medium uppercase tracking-wide mb-8">
+            <p className="flex items-center gap-3 font-sans text-eyebrow font-medium uppercase tracking-wide mb-16">
               <span aria-hidden="true">→</span>
               {approach.eyebrow}
             </p>

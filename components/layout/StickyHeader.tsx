@@ -30,11 +30,11 @@ export function StickyHeader() {
       // motion we skip the scroll-driven show/hide logic entirely below,
       // so nothing else would ever bring it back. Restore the same
       // "visible at rest" state this had before that CSS default existed.
-      gsap.set(el, { yPercent: 0 });
+      gsap.set(el, { y: 0, yPercent: 0 });
       return;
     }
 
-    gsap.set(el, { yPercent: -100 });
+    gsap.set(el, { y: 0, yPercent: -100 });
 
     registerGsap();
     const hero = document.querySelector<HTMLElement>("[data-hero-root]");
@@ -124,7 +124,7 @@ export function StickyHeader() {
       // instead of relying on gsap.set() to hide it after mount — otherwise
       // it paints at rest (fully visible, overlapping the hero) for a
       // moment on a fresh load before JS ever runs.
-      className="fixed inset-x-0 top-0 z-40 hidden -translate-y-full items-center justify-between gap-6 border-b border-alabaster/20 bg-ink/95 px-6 pt-5 pb-4 text-alabaster backdrop-blur-sm lg:flex lg:px-[50px]"
+      className="fixed inset-x-0 top-0 z-40 hidden [transform:translateY(-100%)] items-center justify-between gap-6 border-b border-alabaster/20 bg-ink/95 px-4 pt-6 pb-3 text-alabaster backdrop-blur-sm sm:px-10 lg:flex lg:px-[50px]"
     >
       <a
         href="#top"
@@ -136,7 +136,7 @@ export function StickyHeader() {
           src="/icons/logo.svg"
           alt=""
           aria-hidden="true"
-          className="h-11 w-auto sm:h-9"
+          className="h-[25px] w-auto sm:h-7"
         />
       </a>
       <nav aria-label="Primary" className="hidden lg:block">

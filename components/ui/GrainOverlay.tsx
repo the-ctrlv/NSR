@@ -7,6 +7,8 @@ type GrainOverlayProps = {
   className?: string;
   baseFrequency?: number;
   numOctaves?: number;
+  /** Speckle colour as 0-1 RGB. White by default; darker values stop the grain from brightening the surface. */
+  tint?: [number, number, number];
 };
 
 /**
@@ -20,6 +22,7 @@ export function GrainOverlay({
   className = "",
   baseFrequency = 0.85,
   numOctaves = 3,
+  tint = [1, 1, 1],
 }: GrainOverlayProps) {
   const filterId = useId();
   const [seed, setSeed] = useState(0);
@@ -77,8 +80,9 @@ export function GrainOverlay({
           stitchTiles="stitch"
           result="noise"
         />
-        {/* White speckles, alpha channel pushed to higher contrast so the grain actually reads. */}
-        <feColorMatrix in="noise" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 3 -1" />
+        {/* Speckles (white unless `tint` says otherwise), alpha channel pushed to higher contrast so the grain actually reads. */}
+        <feColorMatrix in="noise" type="matrix" values={`0 0 0 0 ${tint[0]}  0 0 0 0 ${tint[1]}  0 0 0 0 ${tint[2]}  0 0 0 3 -1`}
+        />
       </filter>
       <rect width="100%" height="100%" filter={`url(#${filterId})`} />
     </svg>

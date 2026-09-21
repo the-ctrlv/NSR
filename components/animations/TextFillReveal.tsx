@@ -42,7 +42,7 @@ export function TextFillReveal({
       lineElements.forEach((line, index) => {
         const updateLine = () => {
           const progress = progressValues[index].value * 100;
-          line.style.backgroundImage = `linear-gradient(to right, #1a2437 0%, #1a2437 ${progress}%, #8693a0 ${progress}%, #8693a0 100%)`;
+          line.style.backgroundImage = `linear-gradient(to right, #141c2c 0%, #141c2c ${progress}%, #8693a0 ${progress}%, #8693a0 100%)`;
         };
 
         gsap.set(line, {

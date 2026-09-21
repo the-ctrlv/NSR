@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Reveal } from "@/components/animations/Reveal";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-// import { GrainOverlay } from "@/components/ui/GrainOverlay";
+import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { closingCta } from "@/lib/content";
 import { trackEvent } from "@/lib/analytics";
 
@@ -54,7 +54,7 @@ export function ClosingCta() {
         style={{
           opacity: 0.62,
           background:
-            "radial-gradient(ellipse 60vw 40vh at 20% 10%, #9aacba 0%, #5a6879 50%, #3a4658 75%, #2a3547 87.5%, #1a2437 100%)",
+            "radial-gradient(ellipse 60vw 40vh at 20% 10%, #9aacba 0%, #5a6879 50%, #3a4658 75%, #2a3547 87.5%, #141c2c 100%)",
         }}
       />
       {/* Mobile/tablet: per the Figma mobile frame, a much tighter glow
@@ -67,28 +67,28 @@ export function ClosingCta() {
         style={{
           opacity: 0.62,
           background:
-            "radial-gradient(ellipse 108vw 70vh at 50% 16%, #9aacba 0%, #5a6879 30%, #3a4658 50%, #2a3547 68%, #1a2437 85%)",
+            "radial-gradient(ellipse 108vw 70vh at 50% 16%, #9aacba 0%, #5a6879 30%, #3a4658 50%, #2a3547 68%, #141c2c 85%)",
         }}
       />
       {/* Same two-layer idea as Hero's bg-line/bg-line-2, same two assets,
           just spun via plain CSS here instead of GSAP. */}
-      <div className="absolute left-[20%] top-[30%] h-[60%] w-[60%] max-w-none -translate-x-[40%] -translate-y-1/2">
+      <div className="absolute left-[10%] top-[50%] h-full w-full max-w-none -translate-x-[40%] -translate-y-1/2">
         {/* eslint-disable-next-line @next/next/no-img-element -- decorative vector, next/image adds no value for local SVG */}
         <img
           src="/icons/bg-line.svg"
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full opacity-50 motion-reduce:animate-none animate-[spin_60s_linear_infinite]"
+          className="absolute inset-0 h-full w-full opacity-30 rotate-45 motion-reduce:animate-none animate-[spin_90s_linear_infinite]"
         />
         {/* eslint-disable-next-line @next/next/no-img-element -- decorative vector, next/image adds no value for local SVG */}
         <img
           src="/icons/bg-line-2.svg"
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full opacity-50 motion-reduce:animate-none animate-[spin_85s_linear_infinite]"
+          className="absolute inset-0 h-full w-full opacity-30 motion-reduce:animate-none animate-[spin-reverse_130s_linear_infinite]"
         />
       </div>
-      {/* <GrainOverlay className="opacity-[0.12] mix-blend-overlay" /> */}
+      <GrainOverlay className="opacity-[0.16] mix-blend-overlay" />
 
       {/* Portrait — desktop only: absolute left column. Mobile/tablet gets its own
           full-bleed treatment further down, with the contacts overlaid on it. */}
@@ -136,7 +136,7 @@ export function ClosingCta() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackEvent("whatsapp_click")}
-                className="w-full max-w-[280px] lg:max-w-[282px]"
+                className="w-full max-w-[280px] lg:max-w-[300px]"
               >
                 {cta.label}
               </Button>

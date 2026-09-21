@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { SequentialFlowReveal } from "@/components/animations/SequentialFlowReveal";
 import { TextFillReveal } from "@/components/animations/TextFillReveal";
 import { Container } from "@/components/ui/Container";
@@ -7,7 +8,6 @@ import { solution } from "@/lib/content";
 export function SolutionDiagram() {
   return (
     <section
-      id="about"
       className="bg-paper pt-20 pb-16 lg:pb-20"
       aria-labelledby="solution-heading"
     >
@@ -43,19 +43,11 @@ export function SolutionDiagram() {
           start="top 180%"
           duration={0.3}
           pause={0.05}
-          className="mt-10 flex flex-col items-center gap-6 sm:gap-10 lg:mt-32 lg:flex-row lg:flex-nowrap lg:items-start lg:justify-center lg:gap-x-6 xl:gap-x-12 xl:justify-between"
+          className="mt-10 flex flex-col items-center gap-6 sm:gap-10 lg:mt-32 lg:flex-row lg:flex-nowrap lg:items-start lg:gap-x-4 xl:gap-x-6"
         >
-          {solution.flow.map((step, i) => (
-            <div
-              key={step}
-              className={`flex flex-col items-center ${
-                i === solution.flow.length - 1 ? "gap-2" : "gap-6"
-              } lg:flex-row lg:!gap-4 ${
-                i === solution.flow.length - 1
-                  ? "lg:!flex-col lg:items-start"
-                  : ""
-              }`}
-            >
+          {solution.flow.map((step, i) => {
+            const isLast = i === solution.flow.length - 1;
+            const label = (
               <span
                 className={`font-serif text-4xl leading-none text-ink sm:text-6xl lg:text-4xl xl:text-[64px] ${
                   step === "NSR Mallorca" ? "uppercase" : ""
@@ -64,8 +56,33 @@ export function SolutionDiagram() {
               >
                 {step}
               </span>
-              {i < solution.flow.length - 1 && (
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center sm:h-24 sm:w-24 lg:h-auto lg:w-12 xl:w-[88px]">
+            );
+
+            if (isLast) {
+              return (
+                <div
+                  key={step}
+                  className="flex flex-col items-center gap-2 lg:items-start"
+                >
+                  {label}
+                  <ul
+                    data-flow-list
+                    className="w-full list-none pl-0 text-center font-sans text-base leading-[2] text-ink/80 lg:w-[260px] lg:list-disc lg:pl-5 lg:text-left lg:leading-[1.6] xl:w-[383px]"
+                  >
+                    {solution.professionals.map((professional) => (
+                      <li key={professional}>{professional}</li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            }
+
+            return (
+              <Fragment key={step}>
+                {label}
+                {/* flex-1 on lg+: arrows share the leftover width equally, so
+                    each one sits centred with the same gap to both neighbours */}
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center sm:h-24 sm:w-24 lg:h-9 xl:h-16 lg:w-auto lg:min-w-12 lg:flex-1 lg:shrink">
                   <img
                     src="/icons/arrow.svg"
                     alt=""
@@ -74,19 +91,9 @@ export function SolutionDiagram() {
                     className="h-auto w-16 rotate-90 sm:w-24 lg:w-12 lg:rotate-0 xl:w-[88px]"
                   />
                 </div>
-              )}
-              {i === solution.flow.length - 1 && (
-                <ul
-                  data-flow-list
-                  className="w-full list-none pl-0 text-center font-sans text-base leading-[2] text-ink/80 sm:text-lg lg:w-[260px] lg:list-disc lg:pl-5 lg:text-left lg:leading-[1.6] lg:text-sm xl:w-[383px]"
-                >
-                  {solution.professionals.map((professional) => (
-                    <li key={professional}>{professional}</li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          ))}
+              </Fragment>
+            );
+          })}
         </SequentialFlowReveal>
       </Container>
     </section>

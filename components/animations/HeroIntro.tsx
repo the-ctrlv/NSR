@@ -98,8 +98,9 @@ export function HeroIntro({ children }: { children: ReactNode }) {
 
     const ctx = gsap.context(() => {
       // Ambient background motion — slow, endless, independent of the
-      // entrance timeline. Two layers spinning at different speeds instead
-      // of one flat rotation, so they drift in and out of alignment.
+      // entrance timeline. Two layers spinning at different speeds AND
+      // opposite directions instead of one flat rotation, so they drift
+      // in and out of alignment.
       if (bgLines1) {
         gsap.to(bgLines1, {
           rotation: 360,
@@ -111,7 +112,7 @@ export function HeroIntro({ children }: { children: ReactNode }) {
       }
       if (bgLines2) {
         gsap.to(bgLines2, {
-          rotation: 360,
+          rotation: -360,
           duration: 260,
           repeat: -1,
           ease: "none",

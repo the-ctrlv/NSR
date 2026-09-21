@@ -46,7 +46,7 @@ export function SequentialFlowReveal({
       texts.forEach((text, index) => {
         const updateFill = () => {
           const progress = fillStates[index].value * 100;
-          text.style.backgroundImage = `linear-gradient(to right, #1a2437 0%, #1a2437 ${progress}%, #8693a0 ${progress}%, #8693a0 100%)`;
+          text.style.backgroundImage = `linear-gradient(to right, #141c2c 0%, #141c2c ${progress}%, #8693a0 ${progress}%, #8693a0 100%)`;
         };
 
         gsap.set(text, {
@@ -81,7 +81,7 @@ export function SequentialFlowReveal({
             ease: "none",
             onUpdate: () => {
               const progress = fillStates[textIndex].value * 100;
-              element.style.backgroundImage = `linear-gradient(to right, #1a2437 0%, #1a2437 ${progress}%, #8693a0 ${progress}%, #8693a0 100%)`;
+              element.style.backgroundImage = `linear-gradient(to right, #141c2c 0%, #141c2c ${progress}%, #8693a0 ${progress}%, #8693a0 100%)`;
             },
           });
         }

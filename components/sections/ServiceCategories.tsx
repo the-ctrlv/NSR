@@ -1,7 +1,7 @@
 import { Reveal } from "@/components/animations/Reveal";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-// import { GrainOverlay } from "@/components/ui/GrainOverlay";
+import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { serviceCategories } from "@/lib/content";
 
 const stars = ["/icons/star-a.svg", "/icons/star-b.svg", "/icons/star-c.svg"];
@@ -64,7 +64,7 @@ export function ServiceCategories() {
       className="relative isolate overflow-hidden bg-ink py-20 text-alabaster"
       aria-labelledby="categories-heading"
     >
-      {/* <GrainOverlay className="opacity-[0.12] mix-blend-overlay" /> */}
+      <GrainOverlay className="opacity-[0.16] mix-blend-overlay" />
       <Container className="relative h-full flex flex-col justify-between">
         <div className="mb-16 flex flex-col justify-between gap-6 lg:flex-row lg:items-start">
           <Eyebrow className="!text-alabaster">
@@ -88,7 +88,7 @@ export function ServiceCategories() {
             return (
               <li
                 key={category.title}
-                className={`flex flex-col items-center justify-between gap-8 border-ink-dim/60 bg-ink px-6 py-10 text-center sm:px-10 sm:py-14 lg:px-6 lg:py-10 ${
+                className={`flex flex-col items-center justify-between gap-8 border-ink-dim/60 px-6 py-10 text-center sm:px-10 sm:py-14 lg:px-6 lg:py-10 ${
                   isLast ? "" : "border-b lg:border-b-0 lg:border-r"
                 }`}
               >

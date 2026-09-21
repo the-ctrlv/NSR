@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { HeroIntro } from "@/components/animations/HeroIntro";
-// import { GrainOverlay } from "@/components/ui/GrainOverlay";
+import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { audienceLabels, navLinks, siteConfig } from "@/lib/content";
 
 export function Hero() {
@@ -16,33 +16,27 @@ export function Hero() {
             className="absolute inset-0"
             style={{
               background:
-                "radial-gradient(ellipse 620px 470px at 50% 41%, #9aacba 0%, #7a8a99 25%, #5a6879 50%, #3a4658 75%, #2a3547 87.5%, #1a2437 100%)",
+                "radial-gradient(ellipse 620px 470px at 50% 41%, #9aacba 0%, #7a8a99 25%, #5a6879 50%, #3a4658 75%, #2a3547 87.5%, #141c2c 100%)",
             }}
           />
-          <div className="absolute left-1/2 top-[80%] h-[80%] w-[80%] max-w-none -translate-x-1/2 -translate-y-[40%]">
-            {/* Two independent line graphics layered in the same spot,
-                each spun by HeroIntro at its own speed (see data-hero
-                below) for a subtle multi-speed parallax instead of one
-                flat rotation. */}
-            {/* eslint-disable-next-line @next/next/no-img-element -- decorative vector, next/image adds no value for local SVG */}
+          <div className="absolute left-1/2 top-[60%] h-[90%] w-[90%] max-w-none -translate-x-1/2 -translate-y-[40%]">
             <img
               src="/icons/bg-line.svg"
               alt=""
               aria-hidden="true"
               data-hero="bg-lines-1"
-              className="absolute inset-0 block h-full w-full opacity-60"
+              className="absolute inset-0 block h-full w-full opacity-30"
             />
-            {/* eslint-disable-next-line @next/next/no-img-element -- decorative vector, next/image adds no value for local SVG */}
             <img
               src="/icons/bg-line-2.svg"
               alt=""
               aria-hidden="true"
               data-hero="bg-lines-2"
-              className="absolute inset-0 block h-full w-full opacity-60"
+              className="absolute inset-0 block h-full w-full opacity-30"
             />
           </div>
           {/* Grain sits under the portrait so it only shows on the blue background — the portrait PNG is a transparent cutout and occludes it wherever she is opaque. */}
-          {/* <GrainOverlay className="opacity-[0.25] mix-blend-overlay" /> */}
+          <GrainOverlay className="opacity-[0.25] mix-blend-overlay" />
           <div
             data-hero="portrait"
             // Starts at the same scale/origin GSAP's fromTo() below animates

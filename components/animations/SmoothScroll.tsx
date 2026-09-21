@@ -32,13 +32,11 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       // ScrollTrigger sections on real phones and reads as a jumpy
       // "slideshow" while scrolling.
       syncTouch: false,
-      // Nav links (#matters, #about, etc.) go through Lenis's own animated
-      // scrollTo instead of the browser's instant hash jump. This has to be
-      // Lenis's scroll, not a separate gsap.to(window, {scrollTo}) tween —
-      // Lenis already owns the scroll position every frame via the ticker
-      // above, so a second RAF loop writing to window.scrollY at the same
-      // time would fight it and stutter.
-      anchors: { duration: 1.2 },
+      // Nav links (#matters, #about, etc.) jump straight to the target, no
+      // animation. They still go through Lenis (not the browser's native
+      // hash jump) so Lenis's own scroll position stays in sync and doesn't
+      // snap back on the next frame.
+      anchors: { immediate: true },
     });
     setLenisInstance(lenis);
 

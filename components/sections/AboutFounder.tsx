@@ -8,7 +8,7 @@ import {
   registerGsap,
   prefersReducedMotion,
 } from "@/lib/gsap";
-// import { GrainOverlay } from "@/components/ui/GrainOverlay";
+import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { founderReveal } from "@/lib/content";
 import { getLenisInstance } from "@/lib/lenisInstance";
 
@@ -470,6 +470,7 @@ export function AboutFounder() {
 
   return (
     <section
+      id="about"
       ref={sectionRef}
       className="relative bg-ink text-alabaster"
       aria-label="The person behind NSR"
@@ -478,7 +479,7 @@ export function AboutFounder() {
         ref={pinRef}
         className="relative isolate overflow-hidden pt-20 pb-16 xl:h-screen xl:py-0"
       >
-        {/* <GrainOverlay className="opacity-[0.12] mix-blend-overlay" /> */}
+        <GrainOverlay tint={[0.4, 0.45, 0.52]} className="opacity-[0.12] mix-blend-overlay" />
 
         {/* Not <Container>: its shared px-6 can't be reliably overridden by
             a second utility class of equal specificity (Tailwind's output
