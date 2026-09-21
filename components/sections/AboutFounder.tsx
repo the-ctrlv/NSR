@@ -395,7 +395,7 @@ export function AboutFounder() {
         // can commit — padded well past the entrance animation's own
         // duration (~1.15s for most chapters), so there's real dwell time
         // once content has actually landed, not just during it.
-        const MIN_STEP_VISIBLE_MS = 1000;
+        const MIN_STEP_VISIBLE_MS = 300;
 
         const holdScroll = () => {
           requestAnimationFrame(() => {

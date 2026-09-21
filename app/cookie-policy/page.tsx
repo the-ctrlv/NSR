@@ -7,7 +7,7 @@ import { cookiePolicy } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Cookie Policy",
-  alternates: { canonical: "/cookie-policy" },
+  alternates: { canonical: "/cookie-policy/" },
 };
 
 function SectionParagraph({

@@ -7,7 +7,7 @@ import { privacyPolicy } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  alternates: { canonical: "/privacy-policy" },
+  alternates: { canonical: "/privacy-policy/" },
 };
 
 type Section = (typeof privacyPolicy.sections)[number];
