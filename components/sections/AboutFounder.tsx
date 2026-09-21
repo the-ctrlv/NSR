@@ -378,7 +378,18 @@ export function AboutFounder() {
         // what drives ScrollTrigger's onUpdate in the first place) — that
         // re-entrant call is the likely source of the jerk seen earlier;
         // letting the current Lenis cycle finish first avoids it.
+        // Which step a given pin progress corresponds to — used wherever the
+        // page lands somewhere without scrolling through the steps in
+        // order (nav-link jumps, re-entering from either end).
+        const stepAt = (progress: number) =>
+          progress < firstSegment
+            ? 0
+            : Math.min(
+                STEP_COUNT - 1,
+                1 + Math.floor((progress - firstSegment) / segment),
+              );
         let baseProgress = 0;
+        let lastProgress = 0;
         let debounceUntil = 0;
         // How long each step is guaranteed to stay up before the next one
         // can commit — padded well past the entrance animation's own
@@ -420,6 +431,7 @@ export function AboutFounder() {
           onEnter: (self) => {
             settlePortrait();
             baseProgress = self.progress;
+            lastProgress = self.progress;
             // Plain JS debounce only, no holdScroll()/Lenis here — a
             // short grace period so the very first frame (name + eyebrow)
             // is guaranteed on screen a moment before any scroll can
@@ -427,17 +439,50 @@ export function AboutFounder() {
             // was what caused the section to freeze before fully
             // scrolling into place, when this used the Lenis lock too).
             debounceUntil = Date.now() + 200;
-            goToStep(0, true);
+            goToStep(stepAt(self.progress), true);
           },
           onEnterBack: (self) => {
             settlePortrait();
             baseProgress = self.progress;
+            lastProgress = self.progress;
             debounceUntil = Date.now() + 200;
-            goToStep(STEP_COUNT - 1, false);
+            // Normally re-entering from below lands at the very end (last
+            // step) — but a nav jump to #about lands at the START of the
+            // pin, and must show the first step (the person), not
+            // whatever step the visitor last saw here.
+            goToStep(stepAt(self.progress), false);
+          },
+          // A jump straight to the pin's very start (progress exactly 0)
+          // is reported as leaving the trigger backward, not as an
+          // enter-back — without this the section would keep showing
+          // whichever step was last on screen.
+          onLeaveBack: () => {
+            lastProgress = 0;
+            baseProgress = 0;
+            goToStep(0, false);
           },
           onUpdate: (self) => {
-            if (Date.now() < debounceUntil) return;
+            // Per-update movement, tracked even during the debounce below —
+            // a genuine wheel/touch scroll moves a sliver per frame, so a
+            // big single-update move can only be a programmatic jump.
+            const frameMove = self.progress - lastProgress;
+            lastProgress = self.progress;
+            const isJump = Math.abs(frameMove) > segment * 0.75;
+            if (!isJump && Date.now() < debounceUntil) return;
             const delta = self.progress - baseProgress;
+            // A nav-link jump (instant scroll) lands many steps away in a
+            // single update. Treating that as one ordinary step commit
+            // would fire holdScroll(), freezing scroll for a full second
+            // at wherever the jump landed (or just past the pin) — the
+            // "can't scroll after navigating" freeze. Snap straight to the
+            // step matching the landing position instead, with no lock.
+            if (isJump) {
+              baseProgress = self.progress;
+              debounceUntil = Date.now() + 200;
+              const landed = stepAt(self.progress);
+              goToStep(landed, delta > 0);
+              return;
+            }
             const forwardSegment = currentStep === 0 ? firstSegment : segment;
             if (delta >= forwardSegment && currentStep < STEP_COUNT - 1) {
               baseProgress = self.progress;

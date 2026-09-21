@@ -81,38 +81,31 @@ export function FloatingCta() {
     );
     zones.forEach((zone) => zoneObserver.observe(zone));
 
-    // Fires whenever a HIDE_FROM_SELECTOR element's top edge crosses the
-    // viewport's top edge (in either scroll direction). rootMargin shrinks
-    // the observed root to a 0px sliver at the very top of the viewport, so
-    // this fires right at that crossing even for a section taller than the
-    // viewport — without it, a tall section stays "intersecting" (ratio > 0)
-    // all the way through the middle of its own scroll, and the observer
-    // would never fire again until the section fully exits, which is much
-    // too late. boundingClientRect is read fresh each time, so "top <= 0"
-    // always reflects which side of that line we're on, not which edge
-    // triggered this particular call.
+    // Read from the scroll position directly instead of an IntersectionObserver
+    // on a 0px sliver: an instant jump (nav anchor links no longer animate)
+    // can carry a section's top edge across the viewport top between two
+    // frames without it ever intersecting the sliver, so the observer never
+    // fired and the button stayed visible. "Top edge at or above the
+    // viewport top" is a pure function of the current position, so it can't
+    // be missed however the scroll got there.
     const fromEls = document.querySelectorAll(HIDE_FROM_SELECTOR);
-    const pastFrom = new Set<Element>();
-    const fromObserver = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.boundingClientRect.top <= 0) {
-            pastFrom.add(entry.target);
-          } else {
-            pastFrom.delete(entry.target);
-          }
-        }
-        pastHideFrom = pastFrom.size > 0;
-        applyState();
-      },
-      { threshold: 0, rootMargin: "0px 0px -100% 0px" },
-    );
-    fromEls.forEach((from) => fromObserver.observe(from));
+    const updatePastFrom = () => {
+      const next = Array.from(fromEls).some(
+        (el) => el.getBoundingClientRect().top <= 0,
+      );
+      if (next === pastHideFrom) return;
+      pastHideFrom = next;
+      applyState();
+    };
+    updatePastFrom();
+    window.addEventListener("scroll", updatePastFrom, { passive: true });
+    window.addEventListener("resize", updatePastFrom);
 
     return () => {
       window.removeEventListener(HERO_REVEAL_EVENT, handleReveal);
       zoneObserver.disconnect();
-      fromObserver.disconnect();
+      window.removeEventListener("scroll", updatePastFrom);
+      window.removeEventListener("resize", updatePastFrom);
     };
   }, []);
 

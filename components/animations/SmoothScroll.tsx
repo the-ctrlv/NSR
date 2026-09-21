@@ -52,21 +52,48 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     lenis.on("scroll", updateScrollTrigger);
     gsap.ticker.lagSmoothing(0);
 
-    // ScrollTrigger.config({ ignoreMobileResize: true }) freezes pin
-    // measurements against mobile Safari's per-scroll-tick resize events
-    // (that's what kills the jumpy "slideshow" jank) — but that also means
-    // whatever it measures on the very first pass sticks for the whole
-    // session. Right after load, Safari's address bar is often still
-    // animating into its resting state, so that first measurement can be
-    // taken against a viewport that's momentarily too short, permanently
-    // undersizing every pinned section. One refresh after things settle
-    // fixes that without reintroducing per-scroll recalculation.
-    const settleTimer = window.setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 500);
+    // Every pinned section (Hero, RealityReveal x2, AboutFounder,
+    // PracticeCases) measures its start/end from the page layout at the
+    // moment it was created. If anything above it changes height afterwards
+    // — web fonts swapping in, lazy images settling, a section re-flowing —
+    // those measurements go stale, and the pins fire at the wrong scroll
+    // positions: content "teleports" you into a later section's animation.
+    // So re-measure whenever the page's total height actually changes, plus
+    // once fonts and the load event have settled. Debounced, and deferred
+    // while a scroll is in flight so a refresh never lands mid-gesture.
+    let refreshTimer = 0;
+    let lastHeight = document.documentElement.scrollHeight;
+    const scheduleRefresh = (delay = 250) => {
+      window.clearTimeout(refreshTimer);
+      refreshTimer = window.setTimeout(() => {
+        if (lenis.isScrolling) {
+          scheduleRefresh(250);
+          return;
+        }
+        lastHeight = document.documentElement.scrollHeight;
+        ScrollTrigger.refresh();
+      }, delay);
+    };
+
+    // ScrollTrigger.config({ ignoreMobileResize: true }) (see lib/gsap.ts)
+    // freezes pin measurements against mobile Safari's per-scroll-tick
+    // resize events, so whatever it measures first sticks — which is why
+    // this refresh has to be triggered explicitly rather than by resize.
+    scheduleRefresh(500);
+    window.addEventListener("load", () => scheduleRefresh(100), { once: true });
+    void document.fonts?.ready.then(() => scheduleRefresh(100));
+
+    const heightObserver = new ResizeObserver(() => {
+      const height = document.documentElement.scrollHeight;
+      // Pin spacers legitimately grow the page once; only react to real
+      // changes since the last refresh, not to our own refresh's output.
+      if (Math.abs(height - lastHeight) > 2) scheduleRefresh();
+    });
+    heightObserver.observe(document.body);
 
     return () => {
-      window.clearTimeout(settleTimer);
+      window.clearTimeout(refreshTimer);
+      heightObserver.disconnect();
       lenis.off("scroll", updateScrollTrigger);
       gsap.ticker.remove(updateScroll);
       lenis.destroy();

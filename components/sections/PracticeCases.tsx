@@ -35,7 +35,7 @@ export function PracticeCases() {
         // Per original card: tilt applied once it's no longer the active
         // (front) card — card 1 tilts one way, card 2 the other, card 3
         // never recedes so its own entry here is unused.
-        const rotations = [3, -3, 0];
+        const rotations = [1.5, -1.5, 0];
         // A full viewport height below (not just the stack's own, often
         // shorter, height) — otherwise the incoming card starts close
         // enough to its resting spot that flipping it to visible reads as

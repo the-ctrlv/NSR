@@ -36,7 +36,14 @@ export function Reveal({
 
   useLayoutEffect(() => {
     const node = ref.current;
-    if (!node || prefersReducedMotion()) return;
+    if (!node) return;
+    if (prefersReducedMotion()) {
+      // Drop the pre-hidden inline state below — no animation is coming to
+      // reveal it.
+      node.style.opacity = "";
+      node.style.transform = "";
+      return;
+    }
 
     registerGsap();
     const ctx = gsap.context(() => {
@@ -71,9 +78,17 @@ export function Reveal({
     return () => ctx.revert();
   }, [y, duration, delay, stagger, drawSelector, start]);
 
+  // Rendered already hidden (and offset) so the server HTML never paints the
+  // content at rest before hydration runs gsap.set() — that paint-then-hide
+  // is the visible flash/jump on load. Stagger mode animates the children
+  // instead of the wrapper, so it can't be pre-hidden this way.
+  const style = stagger
+    ? undefined
+    : { opacity: 0, transform: `translateY(${y}px)` };
+
   if (as === "ul") {
     return (
-      <ul ref={ref} className={className}>
+      <ul ref={ref} className={className} style={style}>
         {children}
       </ul>
     );
@@ -81,14 +96,14 @@ export function Reveal({
 
   if (as === "ol") {
     return (
-      <ol ref={ref} className={className}>
+      <ol ref={ref} className={className} style={style}>
         {children}
       </ol>
     );
   }
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} className={className} style={style}>
       {children}
     </div>
   );
