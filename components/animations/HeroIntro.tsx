@@ -104,7 +104,7 @@ export function HeroIntro({ children }: { children: ReactNode }) {
       if (bgLines1) {
         gsap.to(bgLines1, {
           rotation: 360,
-          duration: 180,
+          duration: 30,
           repeat: -1,
           ease: "none",
           transformOrigin: "50% 50%",
@@ -113,7 +113,7 @@ export function HeroIntro({ children }: { children: ReactNode }) {
       if (bgLines2) {
         gsap.to(bgLines2, {
           rotation: -360,
-          duration: 260,
+          duration: 30,
           repeat: -1,
           ease: "none",
           transformOrigin: "50% 50%",

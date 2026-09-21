@@ -25,14 +25,14 @@ export function Hero() {
               alt=""
               aria-hidden="true"
               data-hero="bg-lines-1"
-              className="absolute inset-0 block h-full w-full opacity-30"
+              className="absolute inset-0  block h-full w-full opacity-30"
             />
             <img
               src="/icons/bg-line-2.svg"
               alt=""
               aria-hidden="true"
               data-hero="bg-lines-2"
-              className="absolute inset-0 block h-full w-full opacity-30"
+              className="absolute inset-0 -rotate-45 block h-full w-full opacity-30"
             />
           </div>
           {/* Grain sits under the portrait so it only shows on the blue background — the portrait PNG is a transparent cutout and occludes it wherever she is opaque. */}
