@@ -477,9 +477,9 @@ export function AboutFounder() {
     >
       <div
         ref={pinRef}
-        className="relative isolate overflow-hidden pt-20 pb-16 xl:h-screen xl:py-0"
+        className="relative isolate overflow-hidden bg-ink pt-20 pb-16 xl:h-screen xl:py-0"
       >
-        <GrainOverlay tint={[0.4, 0.45, 0.52]} className="opacity-[0.12] mix-blend-overlay" />
+        <GrainOverlay className="opacity-[0.22] mix-blend-overlay" />
 
         {/* Not <Container>: its shared px-6 can't be reliably overridden by
             a second utility class of equal specificity (Tailwind's output

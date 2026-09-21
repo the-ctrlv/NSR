@@ -88,7 +88,7 @@ export function ClosingCta() {
           className="absolute inset-0 h-full w-full opacity-30 motion-reduce:animate-none animate-[spin-reverse_130s_linear_infinite]"
         />
       </div>
-      <GrainOverlay className="opacity-[0.16] mix-blend-overlay" />
+      <GrainOverlay className="opacity-[0.22] mix-blend-overlay" />
 
       {/* Portrait — desktop only: absolute left column. Mobile/tablet gets its own
           full-bleed treatment further down, with the contacts overlaid on it. */}

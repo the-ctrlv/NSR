@@ -36,7 +36,7 @@ export function Hero() {
             />
           </div>
           {/* Grain sits under the portrait so it only shows on the blue background — the portrait PNG is a transparent cutout and occludes it wherever she is opaque. */}
-          <GrainOverlay className="opacity-[0.25] mix-blend-overlay" />
+          <GrainOverlay className="opacity-[0.22] mix-blend-overlay" />
           <div
             data-hero="portrait"
             // Starts at the same scale/origin GSAP's fromTo() below animates

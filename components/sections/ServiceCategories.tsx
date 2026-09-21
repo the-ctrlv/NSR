@@ -64,7 +64,7 @@ export function ServiceCategories() {
       className="relative isolate overflow-hidden bg-ink py-20 text-alabaster"
       aria-labelledby="categories-heading"
     >
-      <GrainOverlay className="opacity-[0.16] mix-blend-overlay" />
+      <GrainOverlay className="opacity-[0.22] mix-blend-overlay" />
       <Container className="relative h-full flex flex-col justify-between">
         <div className="mb-16 flex flex-col justify-between gap-6 lg:flex-row lg:items-start">
           <Eyebrow className="!text-alabaster">

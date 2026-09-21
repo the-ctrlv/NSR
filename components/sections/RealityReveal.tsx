@@ -395,7 +395,7 @@ export function RealityReveal() {
           ref={afterRef}
           className="invisible absolute inset-0 isolate flex flex-col justify-between gap-16 bg-ink px-4 pt-[70px] pb-[70px] sm:px-10 lg:justify-between lg:gap-20 lg:px-[50px] lg:py-20"
         >
-          <GrainOverlay className="-z-10 opacity-[0.16] mix-blend-overlay" />
+          <GrainOverlay className="-z-10 opacity-[0.22] mix-blend-overlay" />
           <Heading tone="alabaster" />
           {/* `justify-center` on the parent centers the whole flex group
               (Heading + statement + anything else) as one block — no

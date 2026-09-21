@@ -1,6 +1,7 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
+import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { navLinks, siteConfig } from "@/lib/content";
 import {
@@ -126,6 +127,7 @@ export function StickyHeader() {
       // moment on a fresh load before JS ever runs.
       className="fixed inset-x-0 top-0 z-40 hidden [transform:translateY(-100%)] items-center justify-between gap-6 border-b border-alabaster/20 bg-ink/95 px-4 pt-6 pb-3 text-alabaster backdrop-blur-sm sm:px-10 lg:flex lg:px-[50px]"
     >
+      <GrainOverlay className="-z-10 opacity-[0.22] mix-blend-overlay" />
       <a
         href="#top"
         className="flex items-center gap-3"
