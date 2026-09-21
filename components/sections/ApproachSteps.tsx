@@ -100,7 +100,7 @@ export function ApproachSteps() {
       aria-labelledby="approach-heading"
     >
       <Container>
-        <div className="grid gap-8 lg:grid-cols-[380px_1fr] lg:gap-10 xl:grid-cols-[505px_1fr] xl:gap-20">
+        <div className="grid gap-8 lg:grid-cols-[380px_1fr] lg:gap-10 xl:grid-cols-[505px_1fr] xl:gap-20 ">
           <div>
             <p className="flex items-center gap-3 font-sans text-eyebrow font-medium uppercase tracking-wide mb-16">
               <span aria-hidden="true">→</span>
@@ -113,7 +113,7 @@ export function ApproachSteps() {
             />
           </div>
 
-          <div ref={listRef} className="flex flex-col">
+          <div ref={listRef} className="flex flex-col mt-12">
             {approachSteps.map((step, index) => (
               <article
                 key={step.number}

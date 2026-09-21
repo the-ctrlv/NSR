@@ -60,7 +60,16 @@ export function StickyHeader() {
         let upAccum = 0;
         const SHOW_AFTER_UP_PX = 150;
 
-        const setVisible = (next: boolean) => {
+        // Two independent reasons to show the header: a sustained scroll up,
+        // or the pointer resting at the top edge of the screen. It's visible
+        // if either holds, so scrolling down with the mouse parked at the
+        // top keeps it out, and vice versa.
+        let scrollWants = false;
+        let hoverWants = false;
+        const HOVER_ZONE_PX = 40;
+
+        const apply = () => {
+          const next = scrollWants || hoverWants;
           if (next === visible) return;
           visible = next;
           gsap.to(el, {
@@ -70,6 +79,31 @@ export function StickyHeader() {
             overwrite: true,
           });
         };
+        const setVisible = (next: boolean) => {
+          scrollWants = next;
+          apply();
+        };
+
+        const onMouseMove = (e: MouseEvent) => {
+          const heroHeight = hero?.offsetHeight ?? 0;
+          // The hero already shows its own header copy.
+          if (window.scrollY < heroHeight) {
+            hoverWants = false;
+            return;
+          }
+          // Open at the very top edge; once open, stay open while the
+          // pointer is anywhere over the header itself.
+          hoverWants = e.clientY <= (visible ? el.offsetHeight : HOVER_ZONE_PX);
+          apply();
+        };
+        // Pointer leaving the window through the top edge stops firing
+        // mousemove, so treat it as leaving the zone.
+        const onMouseLeave = () => {
+          hoverWants = false;
+          apply();
+        };
+        window.addEventListener("mousemove", onMouseMove, { passive: true });
+        document.documentElement.addEventListener("mouseleave", onMouseLeave);
 
         const trigger = ScrollTrigger.create({
           start: 0,
@@ -81,6 +115,7 @@ export function StickyHeader() {
             lastScroll = scroll;
 
             if (scroll < heroHeight) {
+              hoverWants = false;
               setVisible(false);
               upAccum = 0;
               return;
@@ -111,6 +146,11 @@ export function StickyHeader() {
 
         return () => {
           trigger.kill();
+          window.removeEventListener("mousemove", onMouseMove);
+          document.documentElement.removeEventListener(
+            "mouseleave",
+            onMouseLeave,
+          );
         };
       });
     });

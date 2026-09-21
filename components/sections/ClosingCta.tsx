@@ -78,14 +78,14 @@ export function ClosingCta() {
           src="/icons/bg-line.svg"
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full opacity-30 rotate-45 motion-reduce:animate-none animate-[spin_90s_linear_infinite]"
+          className="absolute inset-0 h-full w-full opacity-20 rotate-45 motion-reduce:animate-none animate-[spin_90s_linear_infinite]"
         />
         {/* eslint-disable-next-line @next/next/no-img-element -- decorative vector, next/image adds no value for local SVG */}
         <img
           src="/icons/bg-line-2.svg"
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full opacity-30 motion-reduce:animate-none animate-[spin-reverse_130s_linear_infinite]"
+          className="absolute inset-0 h-full w-full opacity-20 motion-reduce:animate-none animate-[spin-reverse_130s_linear_infinite]"
         />
       </div>
       <GrainOverlay className="opacity-[0.22] mix-blend-overlay" />
