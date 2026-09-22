@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { cookieConsent } from "@/lib/content";
-import { loadAnalytics } from "@/lib/analytics";
+import { initAnalytics, updateConsent } from "@/lib/analytics";
 
 const STORAGE_KEY = "nsr-cookie-consent";
 
@@ -53,11 +53,18 @@ export function CookieConsent() {
   );
   const [dismissed, setDismissed] = useState(false);
 
-  // Loads analytics for a RETURNING visitor who already accepted on a
-  // previous visit — the click handler below only covers accepting just
-  // now, in this session.
+  // The gtag script itself always loads, consent state or not — Consent
+  // Mode needs it present to receive a consent signal at all, and its
+  // default (set inside initAnalytics) is denied, so this alone sends no
+  // cookies and identifies no one. A returning visitor's stored choice is
+  // applied right after, in the same effect, before the very first ping —
+  // a first-time visitor stays denied until they answer the banner below.
   useEffect(() => {
-    if (getStoredConsent() === "accepted") loadAnalytics();
+    initAnalytics();
+    const stored = getStoredConsent();
+    if (stored === "accepted" || stored === "rejected") {
+      updateConsent(stored === "accepted");
+    }
   }, []);
 
   const choose = (value: "accepted" | "rejected") => {
@@ -66,7 +73,7 @@ export function CookieConsent() {
     } catch {
       // Nothing to persist to — the banner will just reappear next visit.
     }
-    if (value === "accepted") loadAnalytics();
+    updateConsent(value === "accepted");
     setDismissed(true);
   };
 

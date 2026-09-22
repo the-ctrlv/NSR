@@ -300,22 +300,29 @@ export const closingCta = {
     "the outcome you need",
   ],
   body: "You stay informed. You make the decisions that matter. You don't have to manage everything in between.",
-  cta: { label: "SHARE YOUR SITUATION", href: "https://wa.me/380737777777" },
+  cta: { label: "SHARE YOUR SITUATION", href: "https://wa.me/34656356628" },
   contacts: [
     {
       label: "WhatsApp",
-      value: "+380 73-777-77-77",
-      href: "https://wa.me/380737777777",
+      value: "+34 656 356 628",
+      href: "https://wa.me/34656356628",
     },
-    { label: "Email", value: "NSR@gmail.com", href: "mailto:NSR@gmail.com" },
-    { label: "LinkedIn", value: "Nataliia Sychenko Romanova", href: "#" },
+    {
+      label: "Email",
+      value: "contact@nsrmallorca.com",
+      href: "mailto:contact@nsrmallorca.com",
+    },
+    {
+      label: "LinkedIn",
+      value: "Nataliia Sychenko Romanova",
+      href: "https://www.linkedin.com/in/nataliia-sychenko-romanova/",
+    },
   ],
 };
 
 export const footer = {
   copyright: `© ${new Date().getFullYear()} NSR Mallorca. All rights reserved.`,
   links: [
-    { label: "Legal Notice", href: "#" },
     { label: "Privacy Policy", href: "/privacy-policy" },
     { label: "Cookie Policy", href: "/cookie-policy" },
   ],
@@ -469,7 +476,7 @@ export const privacyPolicy = {
         {
           kind: "p",
           content:
-            "NSR Mallorca works with clients based outside the European Economic Area (for example, in the UK or Ukraine). Where your data is processed or accessed from outside the EEA, we take reasonable steps to ensure an adequate level of protection — for example, through the European Commission's Standard Contractual Clauses. [To confirm the exact mechanism with legal counsel once service providers are finalized.]",
+            "NSR Mallorca works with clients based outside the European Economic Area (for example, in the UK or Ukraine). Where your data is processed or accessed from outside the EEA, we take reasonable steps to ensure an adequate level of protection — for example, through the European Commission's Standard Contractual Clauses.",
         },
       ],
     },
@@ -505,7 +512,8 @@ export const privacyPolicy = {
             text: "This website uses cookies, including Google Analytics, to help us understand how visitors use the site. See our ",
             linkText: "Cookie Policy",
             linkHref: "/cookie-policy",
-            after: " for full details on what is used and how to manage your preferences.",
+            after:
+              " for full details on what is used and how to manage your preferences.",
           },
         },
       ],
