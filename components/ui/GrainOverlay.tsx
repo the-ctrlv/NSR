@@ -58,6 +58,16 @@ export function GrainOverlay({
   useEffect(() => {
     if (!isVisible || prefersReducedMotion()) return;
     const id = window.setInterval(() => {
+      // Safari recomputes an SVG filter (feTurbulence) far more expensively
+      // than Chrome/Firefox — reseeding it on this timer while Lenis is
+      // also mid-scroll compounded into visible scroll lag on Safari only.
+      // Lenis flags active scrolling with this class on <html>; skipping
+      // the reseed during that window costs nothing visually (attention is
+      // on the moving content, not a static grain) and resumes the instant
+      // scrolling settles.
+      if (document.documentElement.classList.contains("lenis-scrolling")) {
+        return;
+      }
       setSeed((s) => (s + 1) % 100);
     }, 90);
     return () => window.clearInterval(id);
