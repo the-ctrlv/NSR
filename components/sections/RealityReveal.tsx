@@ -39,7 +39,7 @@ function Heading({
       {ballRef && (
         <div
           ref={ballRef}
-          className={`absolute left-1/2 top-[-124px] z-10 aspect-square w-[204px] -translate-x-1/2 rounded-full lg:top-1/2 lg:w-[280px] lg:-translate-y-1/2 ${
+          className={`absolute left-1/2 top-[-124px] z-10 aspect-square w-[154px] -translate-x-1/2 rounded-full lg:top-1/2 lg:w-[280px] lg:-translate-y-1/2 ${
             tone === "ink" ? "bg-paper-dim" : "bg-ink"
           }`}
         />
@@ -292,7 +292,10 @@ export function RealityReveal() {
         const trigger = ScrollTrigger.create({
           trigger: section,
           start: "top top",
-          end: "+=65%",
+          // Was +=65% — the whole wipe played out in roughly one swipe's
+          // worth of scroll, which read as overly sensitive/instant.
+          // Tripled so it takes about 2-3 swipes to complete instead.
+          end: "+=195%",
           scrub: 0.25,
           pin,
           anticipatePin: 1,
@@ -373,7 +376,7 @@ export function RealityReveal() {
           />
           <ul
             ref={linesRef}
-            className="mx-auto flex w-full max-w-[863px] flex-col text-ink"
+            className="mx-auto flex w-full max-w-[863px] flex-col text-ink mb-10 lg:mb-0"
           >
             {lines.map((line) => (
               <li
@@ -409,7 +412,7 @@ export function RealityReveal() {
           >
             {statement}
           </h2>
-          <div className="hidden lg:block h-[54px]"></div>
+          <div className="block h-[54px]"></div>
         </div>
       </div>
     </section>

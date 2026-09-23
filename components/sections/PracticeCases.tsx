@@ -160,16 +160,16 @@ export function PracticeCases() {
           vertical centering below — was previously part of the same
           centered flex column, which dragged it down with the stack
           instead of anchoring it to the top of the section. */}
-      <Container className="h-screen py-20 pb-5 sm:pb-10 xl:pb-20 flex flex-col">
+      <Container className="h-screen py-10 lg:py-20 pb-5 sm:pb-10 xl:pb-20 flex flex-col">
         {/* No standalone title in this design (just the eyebrow label above
             the card stack) — a visually-hidden h2 still gives the section a
             real heading for screen readers and search engines. */}
         <h2 className="sr-only">{practiceCases.eyebrow}</h2>
-        <Eyebrow className="mb-4 lg:mb-8">{practiceCases.eyebrow}</Eyebrow>
+        <Eyebrow className="mb-2 lg:mb-8">{practiceCases.eyebrow}</Eyebrow>
         <div className="flex flex-grow items-center justify-center">
           <ul
             ref={stackRef}
-            className="relative flex min-h-[680px] flex-col gap-6 sm:min-h-[540px] w-[calc(100%+16px)] translate-x-[-8px] lg:translate-x-0 lg:w-full"
+            className="relative flex min-h-[600px] h-fit lg:min-h-[680px] flex-col gap-6 sm:min-h-[540px] w-[calc(100%+16px)] translate-x-[-8px] lg:translate-x-0 lg:w-full"
           >
             {practiceCases.cases.map((item) => (
               <li
@@ -178,12 +178,12 @@ export function PracticeCases() {
               >
                 {/* <GrainOverlay className="opacity-[0.08] mix-blend-overlay" /> */}
                 <div className="relative flex flex-col gap-2 sm:gap-6 md:gap-9 lg:flex-row lg:justify-between lg:gap-6 xl:gap-14">
-                  <h3 className="font-serif text-[32px] leading-[1.1] text-ink sm:text-[40px] lg:max-w-sm lg:text-[48px]">
+                  <h3 className="font-serif text-2xl sm:text-[32px] leading-[1.1] text-ink sm:text-[40px] lg:max-w-sm lg:text-[48px]">
                     {item.title}
                   </h3>
 
                   <div className="flex flex-col gap-4 lg:gap-14 max-w-[708px]">
-                    <p className="font-serif indent-[100px] text-lg leading-[1.2] text-ink sm:text-xl lg:text-2xl">
+                    <p className="font-serif indent-[100px] text-base sm:text-lg leading-[1.2] text-ink sm:text-xl lg:text-2xl">
                       {item.intro}
                     </p>
 
@@ -191,7 +191,7 @@ export function PracticeCases() {
                       <p className="font-serif text-lg leading-none text-ink sm:w-[100px] sm:shrink-0">
                         {item.roleLabel}
                       </p>
-                      <div className="flex flex-col gap-3 border-l border-hairline pl-3 font-sans text-[14px] leading-[1.5] text-ink sm:pl-5">
+                      <div className="flex flex-col gap-3 lg:border-l lg:border-hairline font-sans text-[14px] leading-[1.5] text-ink lg:pl-5">
                         {"lead" in item && item.lead && (
                           <p className="font-semibold">{item.lead}</p>
                         )}

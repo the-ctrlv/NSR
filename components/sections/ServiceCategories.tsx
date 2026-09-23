@@ -9,28 +9,17 @@ const stars = ["/icons/star-a.svg", "/icons/star-b.svg", "/icons/star-c.svg"];
 function TagRow({ tags }: { tags: readonly string[] }) {
   return (
     <div className="flex flex-wrap items-center justify-center gap-x-1 gap-y-2">
-      {/* Desktop: one shared star before the row, then a trailing star per
-          tag — fine since these rows don't wrap at desktop widths. Mobile
-          hides the row-level star: it doesn't survive a mid-row wrap
-          (whichever tag lands first on a new line ends up with no star
-          before it), so each tag gets its own leading star too, grouped
-          into the same flex item so both stars always travel with it —
-          every wrapped line then starts AND ends with a star, whichever
-          tags land on it. */}
-      <img
-        src={stars[0]}
-        alt=""
-        aria-hidden="true"
-        className="hidden size-[9px] sm:block"
-      />
+      {/* One star before the row, then a single trailing star per tag —
+          same on every breakpoint. That trailing star doubles as the
+          separator before the next tag, so there's always exactly one
+          star between two tags, never two stuck together. (A per-tag
+          leading star used to run alongside this on mobile, guaranteeing
+          a star at the start of every wrapped line — but paired with this
+          same trailing star it put two stars back to back mid-row, which
+          is the actual bug being fixed here.) */}
+      <img src={stars[0]} alt="" aria-hidden="true" className="size-[9px]" />
       {tags.map((tag, index) => (
         <span key={tag} className="flex items-center gap-1">
-          <img
-            src={stars[index % stars.length]}
-            alt=""
-            aria-hidden="true"
-            className="size-[9px] sm:hidden"
-          />
           <span className="font-sans text-[15px] font-semibold text-alabaster/80">
             {tag}
           </span>

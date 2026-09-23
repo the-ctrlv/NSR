@@ -72,7 +72,7 @@ export function ClosingCta() {
       />
       {/* Same two-layer idea as Hero's bg-line/bg-line-2, same two assets,
           just spun via plain CSS here instead of GSAP. */}
-      <div className="absolute left-[10%] top-[50%] h-full w-full max-w-none -translate-x-[40%] -translate-y-1/2">
+      <div className="absolute top-[65%] left-[30%] lg:left-[10%] lg:top-[50%] h-full w-full max-w-none -translate-x-[40%] -translate-y-1/2">
         {/* eslint-disable-next-line @next/next/no-img-element -- decorative vector, next/image adds no value for local SVG */}
         <img
           src="/icons/bg-line.svg"

@@ -292,7 +292,8 @@ export function AboutFounder() {
               // leaves in the same swipe as stats, so it travels the same
               // distance stats does here (not its own short entrance
               // nudge) — the two move as one, in parallel, on the way out.
-              const exitTravel = key === "introEyebrow" ? enterDistance : offsetY;
+              const exitTravel =
+                key === "introEyebrow" ? enterDistance : offsetY;
               gsap.to(target, {
                 opacity: 0,
                 y: forward ? -exitTravel * 0.3 : exitTravel * 0.3,
@@ -432,13 +433,11 @@ export function AboutFounder() {
             settlePortrait();
             baseProgress = self.progress;
             lastProgress = self.progress;
-            // Plain JS debounce only, no holdScroll()/Lenis here — a
-            // short grace period so the very first frame (name + eyebrow)
-            // is guaranteed on screen a moment before any scroll can
-            // advance past it, without touching real scroll at all (that
-            // was what caused the section to freeze before fully
-            // scrolling into place, when this used the Lenis lock too).
-            debounceUntil = Date.now() + 200;
+            // No grace period here — the very first frame (name + eyebrow)
+            // used to be held on screen for a moment before scroll could
+            // advance past it, but that read as an extra delay on entering
+            // the section. Scroll can move on immediately now.
+            debounceUntil = Date.now();
             goToStep(stepAt(self.progress), true);
           },
           onEnterBack: (self) => {
@@ -574,7 +573,7 @@ export function AboutFounder() {
                 by that point, so it reads as a clean gap, not an overlap. */}
             <h2
               data-chapter="name"
-              className="mt-15 xl:mt-[18vh] mx-auto max-w-2xl text-center font-serif text-[48px] leading-[0.9] sm:text-6xl xl:mt-0 xl:absolute xl:inset-x-0 xl:top-[54%] xl:text-display"
+              className="z-10 -mt-20 xl:mt-[18vh] mx-auto max-w-2xl text-center font-serif text-[48px] leading-[0.9] sm:text-6xl xl:mt-0 xl:absolute xl:inset-x-0 xl:top-[54%] xl:text-display"
             >
               {name}
             </h2>
