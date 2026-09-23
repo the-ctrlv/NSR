@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     template: `%s — ${siteConfig.name}`,
   },
   description: siteConfig.metaDescription,
-  // No meta keywords tag — per the approved SEO brief.
+  keywords: siteConfig.metaKeywords,
   alternates: {
     canonical: "/",
   },

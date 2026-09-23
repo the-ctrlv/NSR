@@ -165,7 +165,16 @@ export function StickyHeader() {
       // instead of relying on gsap.set() to hide it after mount — otherwise
       // it paints at rest (fully visible, overlapping the hero) for a
       // moment on a fresh load before JS ever runs.
-      className="fixed inset-x-0 top-0 z-40 hidden [transform:translateY(-100%)] items-center justify-between gap-6 border-b border-alabaster/20 bg-ink/95 px-4 pt-6 pb-3 text-alabaster backdrop-blur-sm sm:px-10 lg:flex lg:px-[50px]"
+      //
+      // No backdrop-blur-sm — a `position: fixed` + `backdrop-filter`
+      // element forces Safari to resample everything behind it on every
+      // scroll frame (Chrome/Firefox handle this far more cheaply), and
+      // this header sits fixed for the entire scroll range below the hero.
+      // That was a real, sitewide source of the Safari-only scroll lag.
+      // bg-ink/95 is already near-opaque, so the frosted-glass effect the
+      // blur added was subtle; dropped the opacity further to /97 to keep
+      // the same "barely see-through" read without the blur itself.
+      className="fixed inset-x-0 top-0 z-40 hidden [transform:translateY(-100%)] items-center justify-between gap-6 border-b border-alabaster/20 bg-ink/97 px-4 pt-6 pb-3 text-alabaster sm:px-10 lg:flex lg:px-[50px]"
     >
       <GrainOverlay className="-z-10 opacity-[0.22] mix-blend-overlay" />
       <a

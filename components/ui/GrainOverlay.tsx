@@ -31,11 +31,29 @@ export function GrainOverlay({
   // TEMP: mobile jank test — grain fully suppressed below lg to see whether
   // it's a contributor. Remove this once the test is done either way.
   const [suppressedForTest, setSuppressedForTest] = useState(false);
+  // Safari recomputes an SVG filter (feTurbulence) far more expensively
+  // than Chrome/Firefox — pausing the reseed during scroll (below) wasn't
+  // enough on its own, so the whole overlay is skipped there rather than
+  // just slowed down. There are up to six of these on the page at once,
+  // and Safari is the one browser where that stays janky either way.
+  const [suppressedForSafari, setSuppressedForSafari] = useState(false);
 
   useEffect(() => {
     if (window.matchMedia("(max-width: 1023px)").matches) {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time client-only viewport check for a temporary diagnostic toggle
       setSuppressedForTest(true);
+    }
+    // "Safari" also matches Chrome/Firefox/Edge's own UA strings (they all
+    // include the word for compatibility), so it only counts as Safari
+    // when none of those other engines' own markers are present too —
+    // catches both desktop Safari and iOS Safari, not Chrome-on-iOS/
+    // Firefox-on-iOS (which still use Safari's underlying engine there,
+    // but don't expose this same filter-repaint cost pattern in practice).
+    const ua = navigator.userAgent;
+    const isSafari =
+      /Safari/.test(ua) && !/Chrome|CriOS|FxiOS|EdgiOS|OPiOS|Android/.test(ua);
+    if (isSafari) {
+      setSuppressedForSafari(true);
     }
   }, []);
 
@@ -73,7 +91,7 @@ export function GrainOverlay({
     return () => window.clearInterval(id);
   }, [isVisible]);
 
-  if (suppressedForTest) return null;
+  if (suppressedForTest || suppressedForSafari) return null;
 
   return (
     <svg

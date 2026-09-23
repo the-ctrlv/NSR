@@ -521,7 +521,7 @@ export function AboutFounder() {
     >
       <div
         ref={pinRef}
-        className="relative isolate overflow-hidden bg-ink pt-20 pb-16 xl:h-screen xl:py-0"
+        className="relative pt-20 pb-16 overflow-hidden isolate bg-ink xl:h-screen xl:py-0"
       >
         <GrainOverlay className="opacity-[0.22] mix-blend-overlay" />
 
@@ -563,7 +563,7 @@ export function AboutFounder() {
                 alt="Nataliia Sychenko Romanova, founder of NSR Mallorca"
                 fill
                 sizes="(min-width: 1280px) 420px, 60vw"
-                className="object-cover object-center block"
+                className="block object-cover object-top"
               />
               <div className="absolute inset-0 bg-gradient-to-b from-ink/0 from-[53.313%] to-ink xl:from-[50%] xl:to-ink/80" />
             </div>
@@ -596,7 +596,7 @@ export function AboutFounder() {
                     ${index === 2 ? "xl:!-translate-y-5 border-smoky/20 border-b xl:border-b-0 xl:border-r xl:border-smoky/20" : ""}
                     `}
                   >
-                    <p className="font-serif uppercase leading-none">
+                    <p className="font-serif leading-none uppercase">
                       <span
                         className={`text-[70px] leading-none xl:text-9xl ${index === 2 ? "-translate-x-2 md:translate-x-0 block" : ""}`}
                       >
