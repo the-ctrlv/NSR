@@ -183,7 +183,16 @@ export function PracticeCases() {
                   </h3>
 
                   <div className="flex flex-col gap-4 lg:gap-14 max-w-[708px]">
-                    <p className="font-serif indent-[100px] text-base sm:text-lg leading-[1.2] text-ink sm:text-xl lg:text-2xl">
+                    <p
+                      className={
+                        // The "Experience" case's opening sentence used to
+                        // stand out in large serif type — same style as the
+                        // body text below it now, no separate emphasis.
+                        item.roleLabel === "Experience"
+                          ? "font-sans text-[14px] leading-[1.5] text-ink/80"
+                          : "font-serif indent-[100px] text-base sm:text-lg leading-[1.2] text-ink sm:text-xl lg:text-2xl"
+                      }
+                    >
                       {item.intro}
                     </p>
 

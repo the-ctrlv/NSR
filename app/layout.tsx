@@ -34,11 +34,11 @@ const numeralFont = Bebas_Neue({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} — ${siteConfig.tagline}`,
+    default: siteConfig.metaTitle,
     template: `%s — ${siteConfig.name}`,
   },
   description: siteConfig.metaDescription,
-  keywords: siteConfig.metaKeywords,
+  // No `keywords` field — per the final approved SEO Developer Brief.
   alternates: {
     canonical: "/",
   },

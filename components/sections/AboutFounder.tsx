@@ -556,7 +556,7 @@ export function AboutFounder() {
                 height-driven sizing). */}
             <div
               data-chapter="portrait"
-              className="relative mx-auto mt-20 h-[392px] w-[313px] overflow-hidden sm:h-[500px] sm:w-[400px] xl:mx-0 xl:mt-0 xl:h-[70%] xl:w-auto xl:absolute xl:left-1/2 xl:top-[13%] xl:aspect-[557/726] xl:max-w-[370px] xl:-translate-x-1/2"
+              className="relative mx-auto mt-20 h-[500px] w-[313px] overflow-hidden sm:w-[400px] xl:mx-0 xl:mt-0 xl:h-[70%] xl:w-auto xl:absolute xl:left-1/2 xl:top-[13%] xl:aspect-[557/726] xl:max-w-[370px] xl:-translate-x-1/2"
             >
               <Image
                 src="/images/portrait-founder.jpg"

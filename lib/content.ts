@@ -1,65 +1,25 @@
 export const siteConfig = {
   name: "NSR Mallorca",
   tagline: "Complex matters on Mallorca",
+  // H1 — per the final approved SEO Developer Brief (section 2, "Exact
+  // implementation"). Was "Taking the lead on local matters".
   tagline2: "Taking the lead on local matters",
   heroSubtext:
     "From finding a solution and the right people to coordinating execution and representing your interests on Mallorca.",
   description:
     "NSR Mallorca is an independent local operating partner who takes the lead on complex private, property and business matters on Mallorca — coordinating professionals and representing your interests on the ground.",
-  // Shorter variant for the <meta name="description"> tag specifically —
-  // search engines truncate around ~155-160 characters (still used as-is
-  // for Open Graph/Twitter/JSON-LD, where the full length reads fine).
-  // Describes the actual positioning (independent local operating partner
-  // / representative).
+  // <title> — exact text from the final approved SEO Developer Brief
+  // (section 2). Was "NSR Mallorca — Complex matters on Mallorca".
+  metaTitle: "Private Client Services and Local Representation | NSR Mallorca",
+  // <meta name="description"> — exact text from the final approved SEO
+  // Developer Brief (section 2). Kept separate from `description` above
+  // (still used as-is for Open Graph/Twitter/JSON-LD) since the brief only
+  // specifies this one element.
   metaDescription:
-    "NSR Mallorca — independent local operating partner and local representative for private clients on Mallorca, coordinating professionals across private, property and business matters.",
-  // <meta name="keywords"> — Google has ignored this tag for ranking since
-  // 2009 and most other crawlers do too, so it's SEO-inert either way; kept
-  // here only because it was explicitly requested. NOT a place any of this
-  // ever shows to a real visitor, so the handful of terms here that
-  // overstate NSR's actual scope (property management, contractor
-  // management, business compliance, local fixer, business relocation)
-  // are NOT mirrored anywhere in visible copy or alt text — see the
-  // per-image alt text and body copy elsewhere in this file, which stay
-  // accurate to what NSR actually does.
-  metaKeywords: [
-    // Primary
-    "local representative Mallorca",
-    "relocation coordinator Mallorca",
-    "independent local operating partner Mallorca",
-    "private client services Mallorca",
-    "trusted local partner Mallorca",
-    "family relocation assistance Mallorca",
-    "buying property in Mallorca as a foreigner",
-    "moving business to Spain",
-    "business relocation Mallorca",
-    // Secondary
-    "remote property management Mallorca",
-    "managing property in Mallorca while living abroad",
-    "reactivating a Spanish company",
-    "local fixer Mallorca",
-    "point of contact on Mallorca",
-    "property acquisition Mallorca foreign buyer",
-    "renovation coordination Mallorca",
-    "contractor management Mallorca",
-    "local business compliance Mallorca",
-    "company administration Mallorca foreign owner",
-    // Geo modifiers
-    "Mallorca",
-    "Majorca",
-    "Palma de Mallorca",
-    "Balearic Islands",
-    "Spain",
-    // Audience modifiers
-    "German expats Mallorca",
-    "British expats Mallorca",
-    "international family Mallorca",
-    "foreign property owner Mallorca",
-    "non-resident business owner Spain",
-    // Brand
-    "NSR Mallorca",
-    "Nataliia Sychenko Romanova",
-  ],
+    "Independent private client services and local representation in Mallorca for international families, property owners and business owners who need trusted coordination.",
+  // No <meta name="keywords"> tag — per the final approved SEO Developer
+  // Brief (section 2): Google hasn't used it for ranking since 2009, and
+  // it must never be used to smuggle in services NSR doesn't offer.
   url: "https://www.nsrmallorca.com",
 };
 
@@ -165,7 +125,7 @@ export const founderReveal = {
   background: {
     eyebrow: "My background",
     paragraphs: [
-      "My background spans international operations, procurement and logistics - managing multiple parties, deadlines and negotiations, with a strong focus on getting things done.",
+      "My background spans international operations, procurement and logistics — managing multiple parties, deadlines and negotiations, with a strong focus on getting things done.",
       "Today, I bring that experience together with deep local understanding of Mallorca to find practical solutions to complex matters and ensure consistent follow-through.",
     ],
   },
@@ -263,7 +223,7 @@ export const practiceCases = {
       counter: "01 / 03",
     },
     {
-      title: "Managing a family relocation",
+      title: "Managing a family transition",
       intro:
         "An international family needed to establish a new base on Mallorca while remaining abroad during much of the process. What initially appeared to be a series of separate matters quickly became one interconnected project involving property, education, administration and multiple local parties.",
       roleLabel: "My role",
@@ -299,7 +259,7 @@ export const workingTogether = {
     },
     {
       index: "02",
-      title: "Trusted Local Partner",
+      title: "Ongoing Local Partner",
       body: "For clients who need trusted local involvement across different matters over time. This creates continuity, retained context and a reliable local point of contact as new situations arise.",
     },
   ],
@@ -315,11 +275,6 @@ export const faq = {
         "The first conversation is confidential and exploratory. We discuss your situation, what is already in place and what you would like to achieve. If NSR is a good fit, we will then define the scope of involvement and the most appropriate working format.",
     },
     {
-      question: "Who can represent me if I'm not in Mallorca?",
-      answer:
-        "I act as your local representative — attending meetings, coordinating professionals and following through on the ground when you can't be here yourself. You stay informed and make the decisions; I make sure things keep moving locally.",
-    },
-    {
       question:
         "Can you work with my existing professionals — or find new ones if needed?",
       answer:
@@ -329,16 +284,6 @@ export const faq = {
       question: "Do you provide legal, tax or other professional advice?",
       answer:
         "No. Legal, tax, technical and other professional advice is provided by the relevant professionals. Where such expertise is required, I work alongside them while coordinating the wider process from the client's side.",
-    },
-    {
-      question: "Can you help me buy property in Mallorca as a foreigner?",
-      answer:
-        "Yes. I coordinate the process around your acquisition — connecting you with the right local professionals (real estate agents, lawyers, gestors) and keeping the steps aligned, from viewings through to completion. The legal and tax aspects of buying property in Mallorca as a foreigner are handled by the relevant professionals; I make sure the overall process stays on track.",
-    },
-    {
-      question: "How does relocating to Mallorca work?",
-      answer:
-        "It depends on your situation, but typically involves property, administration and, for families, education — often progressing in parallel while you're still abroad. I coordinate these strands and the professionals involved so they stay aligned, and represent you locally wherever your presence would otherwise be needed.",
     },
     {
       question: "Do you work only with clients who live on Mallorca?",
@@ -358,7 +303,7 @@ export const closingCta = {
   heading: [
     "You bring the situation.",
     "I build the process around",
-    "the outcome you need",
+    "the outcome you need.",
   ],
   body: "You stay informed. You make the decisions that matter. You don't have to manage everything in between.",
   cta: { label: "SHARE YOUR SITUATION", href: "https://wa.me/34656356628" },

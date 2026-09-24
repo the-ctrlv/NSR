@@ -1,3 +1,6 @@
+"use client";
+
+import { useLayoutEffect, useRef, useState } from "react";
 import { Reveal } from "@/components/animations/Reveal";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -7,28 +10,64 @@ import { serviceCategories } from "@/lib/content";
 const stars = ["/icons/star-a.svg", "/icons/star-b.svg", "/icons/star-c.svg"];
 
 function TagRow({ tags }: { tags: readonly string[] }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const tagRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  // Which tag indices are the LAST tag on their own visual line — only
+  // knowable by actually measuring the wrapped layout in the browser, not
+  // from the data alone. Every tag already carries its own leading star
+  // (below), so a wrapped line's start always has one; a wrapped line's
+  // END only gets one if its last tag is in this set. Defaults to just the
+  // final tag (correct for the common case: everything fits on one line,
+  // including the very first paint before this effect runs).
+  const [lineEnds, setLineEnds] = useState<Set<number>>(
+    () => new Set([tags.length - 1]),
+  );
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      const tops = tagRefs.current.map((el) => el?.offsetTop ?? 0);
+      const ends = new Set<number>();
+      tops.forEach((top, i) => {
+        if (i === tops.length - 1 || top !== tops[i + 1]) ends.add(i);
+      });
+      setLineEnds(ends);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (containerRef.current) ro.observe(containerRef.current);
+    return () => ro.disconnect();
+  }, [tags]);
+
   return (
-    <div className="flex flex-wrap items-center justify-center gap-x-1 gap-y-2">
-      {/* One star before the row, then a single trailing star per tag —
-          same on every breakpoint. That trailing star doubles as the
-          separator before the next tag, so there's always exactly one
-          star between two tags, never two stuck together. (A per-tag
-          leading star used to run alongside this on mobile, guaranteeing
-          a star at the start of every wrapped line — but paired with this
-          same trailing star it put two stars back to back mid-row, which
-          is the actual bug being fixed here.) */}
-      <img src={stars[0]} alt="" aria-hidden="true" className="size-[9px]" />
+    <div
+      ref={containerRef}
+      className="flex flex-wrap items-center justify-center gap-x-1 gap-y-2"
+    >
       {tags.map((tag, index) => (
-        <span key={tag} className="flex items-center gap-1">
-          <span className="font-sans text-[15px] font-semibold text-alabaster/80">
-            {tag}
-          </span>
+        <span
+          key={tag}
+          ref={(el) => {
+            tagRefs.current[index] = el;
+          }}
+          className="flex items-center gap-1"
+        >
           <img
-            src={stars[(index + 1) % stars.length]}
+            src={stars[index % stars.length]}
             alt=""
             aria-hidden="true"
             className="size-[9px]"
           />
+          <span className="font-sans text-[15px] font-semibold text-alabaster/80">
+            {tag}
+          </span>
+          {lineEnds.has(index) && (
+            <img
+              src={stars[(index + 1) % stars.length]}
+              alt=""
+              aria-hidden="true"
+              className="size-[9px]"
+            />
+          )}
         </span>
       ))}
     </div>
@@ -113,7 +152,21 @@ export function ServiceCategories() {
                     className="h-[50px] w-px bg-ink-dim"
                     aria-hidden="true"
                   />
-                  <div className="flex min-h-[75px] flex-col items-center gap-1">
+                  {/* The card's outer height is already equal for all three
+                      (CSS grid stretches every <li> to the tallest one),
+                      and `justify-between` above puts 100% of the leftover
+                      space between the top content and this divider+tags
+                      group — so the divider's vertical position works out
+                      to (card height − this group's own height), which
+                      depends only on THIS block, never on how tall the top
+                      content above happens to be. "Private Client Affairs"
+                      has the most tags and wraps to the most lines at
+                      narrower widths (e.g. iPad landscape, 1024px) — a
+                      fixed min-height sized for that worst case, applied to
+                      every card, keeps this block (and so the divider)
+                      the same height everywhere regardless of how few tags
+                      a given category actually has. */}
+                  <div className="flex min-h-[75px] flex-col items-center gap-1 lg:min-h-[160px]">
                     {category.tagRows.map((row, index) => (
                       <TagRow key={index} tags={row} />
                     ))}

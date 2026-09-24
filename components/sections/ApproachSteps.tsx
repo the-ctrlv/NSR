@@ -108,7 +108,7 @@ export function ApproachSteps() {
             </p>
             <TextFillReveal
               id="approach-heading"
-              lines={["Different situations.", "One operational.", "approach"]}
+              lines={["Different situations.", "One operational", "approach."]}
               className="max-w-[505px] font-serif text-4xl leading-[1.1] sm:text-5xl lg:text-[52px]"
             />
           </div>

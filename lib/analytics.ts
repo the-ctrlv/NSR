@@ -21,6 +21,11 @@ declare global {
 let initialized = false;
 
 function gtag(...args: unknown[]) {
+  // TEMP — debugging why no hits show up in Realtime. Logs every gtag call
+  // as it's queued, live, instead of having to dump window.dataLayer by
+  // hand. Remove once confirmed working.
+  // eslint-disable-next-line no-console -- temporary debugging aid
+  console.log("[gtag]", ...args);
   window.dataLayer!.push(args);
 }
 
@@ -56,6 +61,11 @@ export function initAnalytics() {
   window.gtag("js", new Date());
   window.gtag("config", GA_MEASUREMENT_ID, {
     anonymize_ip: true,
+    // TEMP — debugging why no hits show up in Realtime. debug_mode makes
+    // every hit from this browser show up instantly in GA4's DebugView
+    // (Admin → DebugView), tagged as a debug event, regardless of Realtime's
+    // own slower/pickier aggregation. Remove once confirmed working.
+    debug_mode: true,
   });
 
   const script = document.createElement("script");
@@ -70,6 +80,19 @@ export function updateConsent(granted: boolean) {
   window.gtag("consent", "update", {
     analytics_storage: granted ? "granted" : "denied",
   });
+
+  // A consent update alone sends nothing over the network — it only
+  // changes what gtag.js does with the NEXT hit. initAnalytics()'s own
+  // config call already fired the page's one automatic page_view at load
+  // time, under whatever consent applied in that 500ms `wait_for_update`
+  // window (almost always still denied, since accepting takes a human
+  // longer than 500ms) — so accepting later here would otherwise produce
+  // no visible request at all, ever, for this page load. Firing an
+  // explicit page_view now, right as consent turns granted, is what
+  // actually shows up in Realtime and in reports.
+  if (granted) {
+    window.gtag("event", "page_view");
+  }
 }
 
 // Supporting-event tracking — WhatsApp/email/LinkedIn clicks etc. This

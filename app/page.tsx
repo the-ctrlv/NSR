@@ -12,40 +12,61 @@ import { ClosingCta } from "@/components/sections/ClosingCta";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { FloatingCta } from "@/components/layout/FloatingCta";
 import { StickyHeader } from "@/components/layout/StickyHeader";
-import { faq, serviceAreas, siteConfig } from "@/lib/content";
+import { serviceAreas, siteConfig } from "@/lib/content";
 
-// No unsupported services here — states only what's actually on the page.
+// Per the final approved SEO Developer Brief (section 7): real service
+// names and verified facts only — no SEO-keyword arrays, and none of the
+// explicitly excluded entities (Property Management, Legal Services, Tax
+// Services, Business Compliance, Construction Management). No FAQPage
+// entity either — the brief explicitly says not to (Google dropped the FAQ
+// rich-result snippet).
+const areaServed = serviceAreas.map((name) => ({ "@type": "Place", name }));
+const organizationId = `${siteConfig.url}/#organization`;
+const founderId = `${siteConfig.url}/#founder`;
+
 const structuredData = {
   "@context": "https://schema.org",
-  "@type": "ProfessionalService",
-  name: siteConfig.name,
-  description: siteConfig.description,
-  url: siteConfig.url,
-  areaServed: serviceAreas.map((name) => ({
-    "@type": "Place",
-    name,
-  })),
-  founder: {
-    "@type": "Person",
-    name: "Nataliia Sychenko Romanova",
-  },
-};
-
-// FAQPage — Google dropped the FAQ rich-result snippet in the SERPs, but
-// the markup itself is otherwise harmless and mirrors FAQSection.tsx's own
-// questions/answers exactly (never diverges from what's visibly on the
-// page).
-const faqStructuredData = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faq.items.map((item) => ({
-    "@type": "Question",
-    name: item.question,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: item.answer,
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteConfig.url}/#website`,
+      name: siteConfig.name,
+      url: siteConfig.url,
     },
-  })),
+    {
+      "@type": "Organization",
+      "@id": organizationId,
+      name: siteConfig.name,
+      url: siteConfig.url,
+      logo: `${siteConfig.url}/icons/logo.svg`,
+      email: "contact@nsrmallorca.com",
+      telephone: "+34656356628",
+      areaServed,
+      availableLanguage: ["English", "Spanish", "Russian", "Ukrainian"],
+      founder: { "@id": founderId },
+    },
+    {
+      "@type": "Person",
+      "@id": founderId,
+      name: "Nataliia Sychenko Romanova",
+      jobTitle: "Founder, NSR Mallorca",
+      image: `${siteConfig.url}/images/portrait-founder.jpg`,
+      sameAs: ["https://www.linkedin.com/in/nataliia-sychenko-romanova/"],
+      worksFor: { "@id": organizationId },
+    },
+    ...[
+      "Private Client Services",
+      "Local Representation",
+      "Property Project Coordination",
+      "Family Relocation Coordination",
+      "Local Business Support",
+    ].map((name) => ({
+      "@type": "Service",
+      name,
+      provider: { "@id": organizationId },
+      areaServed,
+    })),
+  ],
 };
 
 export default function Home() {
@@ -54,10 +75,6 @@ export default function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
       />
       <div id="top">
         <Hero />
