@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { PictureImage } from "@/components/ui/PictureImage";
 import { HeroIntro } from "@/components/animations/HeroIntro";
 import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { audienceLabels, navLinks, siteConfig } from "@/lib/content";
@@ -19,20 +19,20 @@ export function Hero() {
                 "radial-gradient(ellipse 620px 470px at 50% 41%, #9aacba 0%, #7a8a99 25%, #5a6879 50%, #3a4658 75%, #2a3547 87.5%, #141c2c 100%)",
             }}
           />
-          <div className="absolute left-1/2 top-[60%] h-[90%] w-[90%] max-w-none -translate-x-1/2 -translate-y-[40%]">
+          <div className="absolute left-1/2 top-[40%] xl:top-[60%] h-[90%] w-[90%] max-w-none -translate-x-1/2 -translate-y-[40%]">
             <img
               src="/icons/bg-line.svg"
               alt=""
               aria-hidden="true"
               data-hero="bg-lines-1"
-              className="absolute inset-0  block h-full w-full opacity-30"
+              className="absolute inset-0  block h-full w-full opacity-40 xl:opacity-30"
             />
             <img
               src="/icons/bg-line-2.svg"
               alt=""
               aria-hidden="true"
               data-hero="bg-lines-2"
-              className="absolute inset-0 -rotate-45 block h-full w-full opacity-30"
+              className="absolute inset-0 -rotate-45 block h-full w-full opacity-40 xl:opacity-30"
             />
           </div>
           {/* Grain sits under the portrait so it only shows on the blue background — the portrait PNG is a transparent cutout and occludes it wherever she is opaque. */}
@@ -47,8 +47,9 @@ export function Hero() {
             // its starting state, before easing back down.
             className="absolute inset-x-0 top-[10%] isolate mx-auto h-[95%] w-full origin-[50%_15%] scale-[1.42] sm:w-[45%] md:w-[64%] lg:w-[45%] min-w-[280px] overflow-hidden"
           >
-            <Image
-              src="/images/hero-portrait.png"
+            <PictureImage
+              src="/images/hero-portrait.webp"
+              fallbackSrc="/images/hero-portrait.png"
               alt="Nataliia Sychenko Romanova, founder of NSR Mallorca"
               fill
               priority

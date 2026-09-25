@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { PictureImage } from "@/components/ui/PictureImage";
 import { Reveal } from "@/components/animations/Reveal";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -93,8 +93,9 @@ export function ClosingCta() {
       {/* Portrait — desktop only: absolute left column. Mobile/tablet gets its own
           full-bleed treatment further down, with the contacts overlaid on it. */}
       <div className="absolute inset-y-0 left-0 hidden w-[43%] lg:block">
-        <Image
-          src="/images/contact-portrait.png"
+        <PictureImage
+          src="/images/contact-portrait.webp"
+          fallbackSrc="/images/contact-portrait.png"
           alt="Nataliia Sychenko Romanova, founder of NSR Mallorca"
           fill
           sizes="43vw"
@@ -102,7 +103,7 @@ export function ClosingCta() {
         />
       </div>
 
-      <Container className="px-4 sm:px-8 relative pt-20 pb-10 lg:pb-10">
+      <Container className="px-4 sm:px-8 relative pt-20 pb-10 lg:pb-10 z-10">
         <Reveal className="flex flex-col items-center gap-10 text-center lg:ml-[49%] lg:items-start lg:gap-16 lg:text-left">
           <ul className="flex flex-row flex-wrap items-center justify-center gap-2 font-serif text-sm uppercase tracking-wide text-alabaster lg:flex-col lg:items-end lg:justify-normal lg:gap-2 lg:self-end lg:text-right">
             {labels.map((label, i) => (
@@ -153,8 +154,9 @@ export function ClosingCta() {
         </Reveal>
       </Container>
       <div className="w-full relative -mt-20 lg:hidden">
-        <Image
-          src="/images/contact-portrait-scaled.png"
+        <PictureImage
+          src="/images/contact-portrait-scaled.webp"
+          fallbackSrc="/images/contact-portrait-scaled.png"
           alt="Nataliia Sychenko Romanova, founder of NSR Mallorca"
           width={798}
           height={1200}

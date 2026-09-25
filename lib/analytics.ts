@@ -20,13 +20,17 @@ declare global {
 
 let initialized = false;
 
-function gtag(...args: unknown[]) {
+// gtag.js only processes the `arguments` object pushed onto dataLayer — a
+// real Array (e.g. from rest params) is treated as a plain data-layer
+// message and silently ignored, so no hit is ever sent. Must stay a
+// regular function pushing `arguments`, exactly like Google's snippet.
+function gtag(..._args: unknown[]) {
   // TEMP — debugging why no hits show up in Realtime. Logs every gtag call
   // as it's queued, live, instead of having to dump window.dataLayer by
   // hand. Remove once confirmed working.
-  // eslint-disable-next-line no-console -- temporary debugging aid
-  console.log("[gtag]", ...args);
-  window.dataLayer!.push(args);
+  console.log("[gtag]", ..._args);
+  // eslint-disable-next-line prefer-rest-params
+  window.dataLayer!.push(arguments);
 }
 
 /**

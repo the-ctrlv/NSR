@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { PictureImage } from "@/components/ui/PictureImage";
 import { useLayoutEffect, useRef } from "react";
 import {
   gsap,
@@ -558,8 +558,9 @@ export function AboutFounder() {
               data-chapter="portrait"
               className="relative mx-auto mt-20 h-[500px] w-[313px] overflow-hidden sm:w-[400px] xl:mx-0 xl:mt-0 xl:h-[70%] xl:w-auto xl:absolute xl:left-1/2 xl:top-[13%] xl:aspect-[557/726] xl:max-w-[370px] xl:-translate-x-1/2"
             >
-              <Image
-                src="/images/portrait-founder.jpg"
+              <PictureImage
+                src="/images/portrait-founder.webp"
+                fallbackSrc="/images/portrait-founder.jpg"
                 alt="Nataliia Sychenko Romanova, founder of NSR Mallorca"
                 fill
                 sizes="(min-width: 1280px) 420px, 60vw"
