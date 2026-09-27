@@ -172,7 +172,7 @@ export function FloatingCta() {
     // GSAP owns the inner element's transform (the y slide), so centering
     // it with a translate-x class would get overwritten. Mobile: centered
     // along the bottom edge; sm and up: bottom-right corner.
-    <div className="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center sm:inset-x-auto sm:bottom-8 sm:right-8 lg:bottom-10 lg:right-[50px]">
+    <div className="pointer-events-none fixed inset-x-0 bottom-4 z-50 flex justify-center sm:inset-x-auto sm:bottom-8 sm:right-8 lg:bottom-10 lg:right-[50px]">
       <div
         ref={ref}
         // Starts hidden via plain CSS (opacity-0, translate-y-5, no pointer

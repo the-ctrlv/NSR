@@ -132,7 +132,7 @@ export function Hero() {
         </div>
 
         {/* Main content */}
-        <div className="relative z-10 flex flex-1 flex-col justify-end px-4 pb-8 lg:pb-10 sm:px-10 lg:px-[50px] mb-20 xl:mb-0">
+        <div className="relative z-10 flex flex-1 flex-col justify-end px-4 pb-8 lg:pb-10 sm:px-10 lg:px-[50px] mb-22 xl:mb-0">
           {/* Partner info (mobile/tablet) — centered above the headline, matching the mobile layout */}
           <div
             data-hero="chrome"
