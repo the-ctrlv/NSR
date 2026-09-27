@@ -132,7 +132,7 @@ export function Hero() {
         </div>
 
         {/* Main content */}
-        <div className="relative z-10 flex flex-1 flex-col justify-end px-4 pb-8 lg:pb-10 sm:px-10 lg:px-[50px] mb-15 xl:mb-0">
+        <div className="relative z-10 flex flex-1 flex-col justify-end px-4 pb-8 lg:pb-10 sm:px-10 lg:px-[50px] mb-20 xl:mb-0">
           {/* Partner info (mobile/tablet) — centered above the headline, matching the mobile layout */}
           <div
             data-hero="chrome"
@@ -153,7 +153,7 @@ export function Hero() {
               <p
                 data-hero="ghost"
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 flex select-none items-center justify-center text-center font-serif text-[clamp(2.25rem,calc(14vw_-_8px),3.125rem)] leading-none text-alabaster sm:text-6xl md:text-6xl lg:text-display xl:whitespace-nowrap -bottom-10"
+                className="pointer-events-none absolute inset-0 flex select-none items-center justify-center text-center font-serif text-[clamp(2.25rem,calc(14vw_-_8px),3.125rem)] leading-none text-alabaster sm:text-6xl md:text-6xl lg:text-display xl:whitespace-nowrap lg:-bottom-10"
               >
                 {siteConfig.tagline}
               </p>
