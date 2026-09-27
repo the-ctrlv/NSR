@@ -38,7 +38,6 @@ export function PageHeader() {
           ))}
         </ul>
       </nav>
-      <MobileNav dark />
     </header>
   );
 }

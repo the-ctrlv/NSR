@@ -396,9 +396,18 @@ export function AboutFounder() {
         // can commit — padded well past the entrance animation's own
         // duration (~1.15s for most chapters), so there's real dwell time
         // once content has actually landed, not just during it.
-        const MIN_STEP_VISIBLE_MS = 300;
+        const MIN_STEP_VISIBLE_MS = 500;
+        // The very first frame (portrait + name) is an identity beat, not
+        // content to dwell on — the transition out of it (and back into it)
+        // gets no hold at all.
+        const FIRST_STEP_VISIBLE_MS = 0;
+        const holdMsFor = (from: number, to: number) =>
+          from === 0 || to === 0 ? FIRST_STEP_VISIBLE_MS : MIN_STEP_VISIBLE_MS;
 
-        const holdScroll = () => {
+        const holdScroll = (ms: number) => {
+          // Nothing to hold — a zero-length lock would still fire a Lenis
+          // scrollTo for no reason.
+          if (ms <= 0) return;
           requestAnimationFrame(() => {
             const lenis = getLenisInstance();
             if (!lenis) return;
@@ -408,7 +417,7 @@ export function AboutFounder() {
             // imperceptible, move.
             lenis.scrollTo(lenis.animatedScroll + 0.5, {
               lock: true,
-              duration: MIN_STEP_VISIBLE_MS / 1000,
+              duration: ms / 1000,
               easing: (t: number) => t,
             });
           });
@@ -484,15 +493,17 @@ export function AboutFounder() {
             }
             const forwardSegment = currentStep === 0 ? firstSegment : segment;
             if (delta >= forwardSegment && currentStep < STEP_COUNT - 1) {
+              const holdMs = holdMsFor(currentStep, currentStep + 1);
               baseProgress = self.progress;
-              debounceUntil = Date.now() + MIN_STEP_VISIBLE_MS;
+              debounceUntil = Date.now() + holdMs;
               goToStep(currentStep + 1, true);
-              holdScroll();
+              holdScroll(holdMs);
             } else if (delta <= -segment && currentStep > 0) {
+              const holdMs = holdMsFor(currentStep, currentStep - 1);
               baseProgress = self.progress;
-              debounceUntil = Date.now() + MIN_STEP_VISIBLE_MS;
+              debounceUntil = Date.now() + holdMs;
               goToStep(currentStep - 1, false);
-              holdScroll();
+              holdScroll(holdMs);
             }
           },
         });

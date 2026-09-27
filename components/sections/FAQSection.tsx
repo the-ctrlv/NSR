@@ -25,6 +25,9 @@ export function FAQSection() {
   return (
     <section
       id="faq"
+      // On desktop the button is already gone from ServiceCategories on;
+      // this is the mobile cut-off point.
+      data-hide-floating-cta-from
       // Plain fixed padding, matching every other section — deliberately
       // not flex/justify-content centering: that recomputes symmetrically
       // whenever the content's height changes, so opening an accordion item

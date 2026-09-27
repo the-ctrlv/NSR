@@ -142,7 +142,7 @@ export function PracticeCases() {
         };
       };
 
-      mm.add("(max-width: 639px)", () => build(680));
+      mm.add("(max-width: 639px)", () => build(600));
       mm.add("(min-width: 640px)", () => build(540));
     }, section);
 
@@ -160,7 +160,7 @@ export function PracticeCases() {
           vertical centering below — was previously part of the same
           centered flex column, which dragged it down with the stack
           instead of anchoring it to the top of the section. */}
-      <Container className="h-screen py-10 lg:py-20 pb-5 sm:pb-10 xl:pb-20 flex flex-col">
+      <Container className="h-screen py-5 lg:py-20 pb-5 sm:pb-10 xl:pb-20 flex flex-col">
         {/* No standalone title in this design (just the eyebrow label above
             the card stack) — a visually-hidden h2 still gives the section a
             real heading for screen readers and search engines. */}
@@ -169,7 +169,7 @@ export function PracticeCases() {
         <div className="flex flex-grow items-center justify-center">
           <ul
             ref={stackRef}
-            className="relative flex min-h-[600px] h-fit lg:min-h-[680px] flex-col gap-6 sm:min-h-[540px] w-[calc(100%+16px)] translate-x-[-8px] lg:translate-x-0 lg:w-full"
+            className="relative flex min-h-[600px] h-fit lg:min-h-[680px] flex-col gap-6 sm:min-h-[480px] w-[calc(100%+16px)] translate-x-[-8px] lg:translate-x-0 lg:w-full"
           >
             {practiceCases.cases.map((item) => (
               <li
@@ -201,9 +201,7 @@ export function PracticeCases() {
                         {item.roleLabel}
                       </p>
                       <div className="flex flex-col gap-3 lg:border-l lg:border-hairline font-sans text-[14px] leading-[1.5] text-ink lg:pl-5">
-                        {"lead" in item && item.lead && (
-                          <p className="font-semibold">{item.lead}</p>
-                        )}
+                        {"lead" in item && item.lead && <p>{item.lead}</p>}
                         {"list" in item && item.list && (
                           <ul className="list-disc pl-5 text-ink">
                             {item.list.map((point) => (

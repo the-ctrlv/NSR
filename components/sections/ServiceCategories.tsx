@@ -88,7 +88,9 @@ function PropertyIcon() {
 export function ServiceCategories() {
   return (
     <section
-      data-hide-floating-cta-from
+      // Desktop only — on mobile the button stays through here and the
+      // following sections, and is only cut off from the FAQ onwards.
+      data-hide-floating-cta-from="desktop"
       className="relative isolate overflow-hidden bg-ink py-20 text-alabaster"
       aria-labelledby="categories-heading"
     >

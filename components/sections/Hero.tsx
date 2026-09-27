@@ -105,10 +105,10 @@ export function Hero() {
           className="relative z-10 hidden items-start justify-between gap-6 px-6 pt-8 sm:px-10 lg:flex lg:px-[50px]"
         >
           <div className="max-w-[363px] font-serif text-alabaster">
-            <p className="font-sans text-[15px] leading-[1.7]">
+            <p className="font-sans text-[15px] leading-[1.4] xl:leading-[1.7]">
               Independent Local Operating Partner
             </p>
-            <p className="text-lg uppercase leading-[1.7] tracking-[0.02em]">
+            <p className="text-lg uppercase leading-[1.4] xl:leading-[1.7] tracking-[0.02em]">
               Nataliia Sychenko Romanova
             </p>
           </div>
@@ -132,16 +132,16 @@ export function Hero() {
         </div>
 
         {/* Main content */}
-        <div className="relative z-10 flex flex-1 flex-col justify-end px-4 pb-8 lg:pb-10 sm:px-10 lg:px-[50px]">
+        <div className="relative z-10 flex flex-1 flex-col justify-end px-4 pb-8 lg:pb-10 sm:px-10 lg:px-[50px] mb-15 xl:mb-0">
           {/* Partner info (mobile/tablet) — centered above the headline, matching the mobile layout */}
           <div
             data-hero="chrome"
-            className="mx-auto mb-5 max-w-[277px] text-center font-serif text-alabaster lg:hidden"
+            className="mx-auto mb-2 xl:mb-5 max-w-[277px] text-center font-serif text-alabaster lg:hidden"
           >
-            <p className="font-sans text-[15px] leading-[1.7]">
+            <p className="font-sans text-[15px] leading-[1.4] xl:leading-[1.7]">
               Independent Local Operating Partner
             </p>
-            <p className="text-lg uppercase leading-[1.7] tracking-[0.02em]">
+            <p className="text-lg uppercase leading-[1.4] xl:leading-[1.7] tracking-[0.02em]">
               Nataliia Sychenko Romanova
             </p>
           </div>
@@ -166,7 +166,7 @@ export function Hero() {
             </div>
             <p
               data-hero="subtext"
-              className="max-w-[521px] font-sans text-base leading-[1.4] text-alabaster/90 sm:text-lg"
+              className="max-w-[521px] font-sans text-base leading-[1.4] xl:leading-[1.7] text-alabaster/90 sm:text-lg"
             >
               {siteConfig.heroSubtext}
             </p>
